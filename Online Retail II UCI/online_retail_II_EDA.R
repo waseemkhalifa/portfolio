@@ -146,6 +146,7 @@ revenue_per_country <- data.table(
 	# we don't want a legend for the fill
 	guides(fill = 'none') +
 	coord_flip() 
+# UK is the biggest market, owning 85% of all revenue
 
 
 # ----------------- revenue per country (minus UK)
@@ -174,6 +175,86 @@ revenue_per_country_minus_UK <- data.table(
 	# we don't want a legend for the fill
 	guides(fill = 'none') +
 	coord_flip() 
+# the next biggest markets are EIRE, Netherlands, Germany and France
+# We'll concentrate our analysis on these core 5 markets
+
+top_5_markets <- c('United Kingdom', 'EIRE', 'Netherlands', 'Germany', 'France')
+
+
+
+# ----------------- AOV by Top 5 Markets
+# all orders which are returns (negative revenue)
+# start with A, 'C' in their invoice_id
+# so we'll remove these
+top5_aov <- data.table(
+	dataset %>%
+		filter(country %in% top_5_markets) %>%
+		# remove returns
+		filter(!(substr(invoice_id, 1, 1) %in% c('C', 'A'))) %>%
+		group_by(country) %>%
+		summarise(revenue = sum(product_revenue),
+							orders = n_distinct(invoice_id)) %>%
+		ungroup() %>%
+		mutate(aov = revenue / orders)
+) %>%
+	ggplot(aes(x = reorder(country, desc(aov)), y = aov, fill = country)) +
+	geom_bar(stat = 'identity') +
+	ggtitle('AOV by Country',
+					'Top 5 Markets, no outliers removed') +
+	labs(x = 'Country', y = 'AOV (£)') +
+	# text for the conversion
+	geom_text(aes(label = paste0('£', round(aov))), 
+	          color = 'white', size = 4, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	# we don't want a legend for the fill
+	guides(fill = 'none')
+# Netherlands looks to have the highest AOV by far, with UK having the lowest
+# though outliers may be causing this
+
+
+# ----------------- Order Values Top 5 Markets Boxplot
+top5_ov_boxplot <- data.table(
+	dataset %>%
+		filter(country %in% top_5_markets) %>%
+		# remove returns
+		filter(!(substr(invoice_id, 1, 1) %in% c('C', 'A'))) %>%
+		group_by(country, invoice_id) %>%
+		summarise(order_value = sum(product_revenue))
+) %>%
+	ggplot(aes(x = country, y = order_value, fill = country)) +
+	geom_boxplot() +
+	ggtitle('Order values by Country',
+					'Top 5 Markets, with outliers removed') +
+	labs(x = 'Country', y = 'Order Value (£)') +
+	# we don't want a legend for the fill
+	guides(fill = 'none') +
+	scale_y_continuous(breaks = seq(0, 1800, 100), limits = c(0, 1800))
+
+
+# ----------------- Order Values Top 5 Markets Histogram
+top5_ov_hist <- data.table(
+	dataset %>%
+		filter(country %in% top_5_markets) %>%
+		# remove returns
+		filter(!(substr(invoice_id, 1, 1) %in% c('C', 'A'))) %>%
+		group_by(country, invoice_id) %>%
+		summarise(order_value = sum(product_revenue))
+) %>%
+	ggplot(aes(x = order_value, fill = country)) +
+	geom_histogram(binwidth = 50, colour = 'black') + 
+	ggtitle('Order values by Country',
+					'Top 5 Markets, in £50 bins') +
+	labs(x = 'Order Value (£)', y = 'No. of Orders') + 
+	guides(fill = 'none') +
+	scale_x_continuous(breaks = seq(0, 3000, 250), lim = c(-50, 3000)) +
+ 	# xlim(-50, 3000) + 
+	facet_wrap(country ~ ., scales = 'free') +
+	scale_y_continuous(labels = scales::comma)
+
+
+
 
 
 # AOV by country
