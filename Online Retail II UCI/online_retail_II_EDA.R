@@ -255,10 +255,81 @@ top5_ov_hist <- data.table(
 
 
 
+# ----------------- Total customers by Country
+top5_customers_nums <- data.table(
+	dataset %>%
+		filter(country %in% top_5_markets) %>%
+		# remove returns
+		filter(!(substr(invoice_id, 1, 1) %in% c('C', 'A'))) %>%
+		# remove NULL customer_ids
+		filter(is.na(customer_id) == F) %>%
+		group_by(country) %>%
+		summarise(customers = n_distinct(customer_id))
+) %>%
+	ggplot(aes(x = reorder(country, customers), y = customers, fill = country)) +
+	geom_bar(stat = 'identity') +
+	ggtitle('Number of Customers',
+					'Top 5 Markets') +
+	labs(x = 'Country', y = 'Number of Customers') +
+	# text for the conversion
+	geom_text(aes(label = customers), 
+	          color = 'black', size = 4, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	# we don't want a legend for the fill
+	guides(fill = 'none') +
+	coord_flip()
+# amazingly Eire only has 5 customers
 
 
-# AOV by country
-# orders by country
-# % revenue minus UK
-# total customers by country
+# ----------------- Customer Order Value by Top 5 Markets
+# all orders which are returns (negative revenue)
+# start with A, 'C' in their invoice_id
+# so we'll remove these
+top5_cv <- data.table(
+	dataset %>%
+		filter(country %in% top_5_markets) %>%
+		group_by(country) %>%
+		summarise(revenue = sum(product_revenue),
+							customers = n_distinct(customer_id)) %>%
+		ungroup() %>%
+		mutate(cv = revenue / customers)
+) %>%
+	ggplot(aes(x = reorder(country, cv), y = cv, fill = country)) +
+	geom_bar(stat = 'identity') +
+	ggtitle('Avg. Customer Value by Country',
+					'Top 5 Markets, no outliers removed') +
+	labs(x = 'Country', y = 'Avg. Customer Value (£)') +
+	# text for the conversion
+	geom_text(aes(label = paste0('£', format(round(cv), big.mark = ','))), 
+	          color = 'black', size = 4, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	# we don't want a legend for the fill
+	guides(fill = 'none') +
+	coord_flip()
+# Avg. customer value for EIRE is massive
+
+
+# ----------------- Order Values Top 5 Markets Boxplot
+top5_cv_boxplot <- data.table(
+	dataset %>%
+		filter(country %in% top_5_markets) %>%
+		# remove returns
+		filter(!(substr(invoice_id, 1, 1) %in% c('C', 'A'))) %>%
+		group_by(country, invoice_id) %>%
+		summarise(order_value = sum(product_revenue))
+) %>%
+	ggplot(aes(x = country, y = order_value, fill = country)) +
+	geom_boxplot() +
+	ggtitle('Order values by Country',
+					'Top 5 Markets, with outliers removed') +
+	labs(x = 'Country', y = 'Order Value (£)') +
+	# we don't want a legend for the fill
+	guides(fill = 'none') +
+	scale_y_continuous(breaks = seq(0, 1800, 100), limits = c(0, 1800))
+
+
 # revenue by year
