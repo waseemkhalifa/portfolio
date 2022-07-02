@@ -319,17 +319,20 @@ top5_cv_boxplot <- data.table(
 		filter(country %in% top_5_markets) %>%
 		# remove returns
 		filter(!(substr(invoice_id, 1, 1) %in% c('C', 'A'))) %>%
-		group_by(country, invoice_id) %>%
+		# remove NULL customer_ids
+		filter(is.na(customer_id) == F) %>%
+		group_by(country, customer_id) %>%
 		summarise(order_value = sum(product_revenue))
 ) %>%
-	ggplot(aes(x = country, y = order_value, fill = country)) +
-	geom_boxplot() +
-	ggtitle('Order values by Country',
+	ggplot(top5_cv_boxplot, aes(x = country, y = order_value, fill = country)) +
+	geom_boxplot(outlier.shape = NA) +
+	ggtitle('Customer Values by Country',
 					'Top 5 Markets, with outliers removed') +
-	labs(x = 'Country', y = 'Order Value (£)') +
+	labs(x = 'Country', y = 'Customer Value (£)') +
 	# we don't want a legend for the fill
 	guides(fill = 'none') +
-	scale_y_continuous(breaks = seq(0, 1800, 100), limits = c(0, 1800))
+	# facet_wrap(country ~ ., scales = 'free_x') +
+  coord_cartesian(ylim = quantile(top5_cv_boxplot$order_value, c(0.1, 0.9)))
 
 
 # revenue by year
