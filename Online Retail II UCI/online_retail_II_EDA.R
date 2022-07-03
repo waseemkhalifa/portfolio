@@ -11,6 +11,7 @@ library(data.table)
 library(ggplot2)
 library(tidyverse)
 library(lubridate)
+library(gridExtra)
 
 
 #--------------------------------------------------------------------------
@@ -131,15 +132,15 @@ revenue_per_country <- data.table(
 		mutate(percent = revenue / sum(revenue)) %>%
 		arrange(-percent)
 ) %>%
-	ggplot(aes(x = reorder(country, revenue), y = revenue, fill = percent)) +
-	geom_bar(stat = 'identity') +
+	ggplot(aes(x = reorder(country, revenue), y = revenue)) +
+	geom_bar(stat = 'identity', fill = '#F8766D') +
 	ggtitle('Revenue by Country',
 					'The UK is by far the biggest market') +
 	labs(x = 'Country', y = '£') +
 	# text for the conversion
-	geom_text(aes(label = ifelse(percent > 0.8,
+	geom_text(aes(label = ifelse(percent > 0.017,
 									paste0(round(percent * 100), '%'),'')), 
-	          color = 'white', size = 4, fontface = 'bold',
+	          color = 'black', size = 4, fontface = 'bold',
 	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
 	# gives the y axis the percentage scale
 	scale_y_continuous(labels = scales::comma) +
@@ -160,15 +161,15 @@ revenue_per_country_minus_UK <- data.table(
 		mutate(percent = revenue / sum(revenue)) %>%
 		arrange(-percent)
 ) %>%
-	ggplot(aes(x = reorder(country, revenue), y = revenue, fill = percent)) +
-	geom_bar(stat = 'identity') +
+	ggplot(aes(x = reorder(country, revenue), y = revenue)) +
+	geom_bar(stat = 'identity', fill = '#00BFC4') +
 	ggtitle('Revenue by Country',
 					'Without the UK') +
 	labs(x = 'Country', y = '£') +
 	# text for the conversion
 	geom_text(aes(label = ifelse(percent > 0.01,
 									paste0(round(percent * 100), '%'),'')), 
-	          color = 'white', size = 4, fontface = 'bold',
+	          color = 'black', size = 4, fontface = 'bold',
 	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
 	# gives the y axis the percentage scale
 	scale_y_continuous(labels = scales::comma) +
@@ -176,8 +177,13 @@ revenue_per_country_minus_UK <- data.table(
 	guides(fill = 'none') +
 	coord_flip() 
 # the next biggest markets are EIRE, Netherlands, Germany and France
-# We'll concentrate our analysis on these core 5 markets
 
+viz_1 <- grid.arrange(revenue_per_country, revenue_per_country_minus_UK, nrow = 1)
+ggsave(file = '/home/waseem/Documents/Self-Development/Online Retail II UCI/viz_1.png', 
+				viz_1, width = 9.5, height = 8.5, units = 'in')
+
+
+# We'll concentrate our analysis on these core 5 markets
 top_5_markets <- c('United Kingdom', 'EIRE', 'Netherlands', 'Germany', 'France')
 
 
@@ -248,10 +254,17 @@ top5_ov_hist <- data.table(
 					'Top 5 Markets, in £50 bins') +
 	labs(x = 'Order Value (£)', y = 'No. of Orders') + 
 	guides(fill = 'none') +
-	scale_x_continuous(breaks = seq(0, 3000, 250), lim = c(-50, 3000)) +
- 	# xlim(-50, 3000) + 
+	# scale_x_continuous(breaks = seq(0, 3000, 250), lim = c(-50, 3000)) +
+	xlim(-50, 3000) +
 	facet_wrap(country ~ ., scales = 'free') +
 	scale_y_continuous(labels = scales::comma)
+
+
+viz_2 <- grid.arrange(grid.arrange(top5_aov, top5_ov_boxplot, nrow = 1),
+											top5_ov_hist)
+ggsave(file = '/home/waseem/Documents/Self-Development/Online Retail II UCI/viz_2.png', 
+				viz_2, width = 9.5, height = 8.5, units = 'in')
+
 
 
 
