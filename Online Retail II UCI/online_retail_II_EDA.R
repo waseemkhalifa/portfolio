@@ -326,26 +326,29 @@ top5_cv <- data.table(
 # Avg. customer value for EIRE is massive
 
 
-# ----------------- Order Values Top 5 Markets Boxplot
-top5_cv_boxplot <- data.table(
+# ----------------- Top 5 customers for the Top 5 Markets
+top5_top_customers <- data.table(
 	dataset %>%
 		filter(country %in% top_5_markets) %>%
-		# remove returns
-		filter(!(substr(invoice_id, 1, 1) %in% c('C', 'A'))) %>%
-		# remove NULL customer_ids
+			# remove NULL customer_ids
 		filter(is.na(customer_id) == F) %>%
 		group_by(country, customer_id) %>%
-		summarise(order_value = sum(product_revenue))
+		summarise(revenue = sum(product_revenue)) %>%
+		ungroup() %>%
+		group_by(country) %>%
+		mutate(ranked = row_number(desc(revenue))) 
 ) %>%
-	ggplot(top5_cv_boxplot, aes(x = country, y = order_value, fill = country)) +
-	geom_boxplot(outlier.shape = NA) +
-	ggtitle('Customer Values by Country',
-					'Top 5 Markets, with outliers removed') +
-	labs(x = 'Country', y = 'Customer Value (£)') +
+	ggplot(aes(x = reorder(country, cv), y = cv, fill = country)) +
+	geom_bar(stat = 'identity') +
+	ggtitle('Avg. Customer Value by Country',
+					'Top 5 Markets, no outliers removed') +
+	labs(x = 'Country', y = 'Avg. Customer Value (£)') +
+	# text for the conversion
+	geom_text(aes(label = paste0('£', format(round(cv), big.mark = ','))), 
+	          color = 'black', size = 4, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
 	# we don't want a legend for the fill
 	guides(fill = 'none') +
-	# facet_wrap(country ~ ., scales = 'free_x') +
-  coord_cartesian(ylim = quantile(top5_cv_boxplot$order_value, c(0.1, 0.9)))
-
-
-# revenue by year
+	coord_flip()
