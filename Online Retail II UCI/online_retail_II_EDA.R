@@ -183,9 +183,15 @@ ggsave(file = '/home/waseem/Documents/Self-Development/Online Retail II UCI/viz_
 				viz_1, width = 9.5, height = 8.5, units = 'in')
 
 
+
+
+
+
+
+
+
 # We'll concentrate our analysis on these core 5 markets
 top_5_markets <- c('United Kingdom', 'EIRE', 'Netherlands', 'Germany', 'France')
-
 
 
 # ----------------- AOV by Top 5 Markets
@@ -268,6 +274,11 @@ ggsave(file = '/home/waseem/Documents/Self-Development/Online Retail II UCI/viz_
 
 
 
+
+
+
+
+
 # ----------------- Total customers by Country
 top5_customers_nums <- data.table(
 	dataset %>%
@@ -326,6 +337,39 @@ top5_cv <- data.table(
 # Avg. customer value for EIRE is massive
 
 
+# ----------------- Number of Orders by Customers (Top 5 Markets)
+# all orders which are returns (negative revenue)
+# start with A, 'C' in their invoice_id
+# so we'll remove these
+top5_orders_by_customers <- data.table(
+	dataset %>%
+		filter(country %in% top_5_markets) %>%
+		# remove returns
+		filter(!(substr(invoice_id, 1, 1) %in% c('C', 'A'))) %>%
+		group_by(country) %>%
+		summarise(orders = n_distinct(invoice_id),
+							customers = n_distinct(customer_id)) %>%
+		ungroup() %>%
+		mutate(orders_per_customer = round(orders / customers, 2))
+) %>%
+	ggplot(aes(x = reorder(country, orders_per_customer), 
+							y = orders_per_customer, fill = country)) +
+	geom_bar(stat = 'identity') +
+	ggtitle('Number of Orders Per Customer',
+					'Top 5 Markets, no outliers removed') +
+	labs(x = 'Country', y = 'Avg. Number of Orders Per Customer') +
+	# text for the conversion
+	geom_text(aes(label = orders_per_customer), 
+	          color = 'black', size = 4, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	# we don't want a legend for the fill
+	guides(fill = 'none') +
+	coord_flip()
+
+
+
 # ----------------- Top 5 customers for the Top 5 Markets
 top5_top_customers <- data.table(
 	dataset %>%
@@ -336,19 +380,45 @@ top5_top_customers <- data.table(
 		summarise(revenue = sum(product_revenue)) %>%
 		ungroup() %>%
 		group_by(country) %>%
-		mutate(ranked = row_number(desc(revenue))) 
+		mutate(ranked = row_number(desc(revenue))) %>%
+		filter(ranked <= 5)
 ) %>%
-	ggplot(aes(x = reorder(country, cv), y = cv, fill = country)) +
+	ggplot(aes(x = reorder(customer_id, desc(ranked)), 
+							y = revenue, fill = country)) +
 	geom_bar(stat = 'identity') +
-	ggtitle('Avg. Customer Value by Country',
-					'Top 5 Markets, no outliers removed') +
-	labs(x = 'Country', y = 'Avg. Customer Value (£)') +
+	ggtitle('Top 5 Customers by Customer Value',
+					'Top 5 Markets') +
+	labs(x = 'Customer ID', y = 'Customer Value (£)') +
 	# text for the conversion
-	geom_text(aes(label = paste0('£', format(round(cv), big.mark = ','))), 
-	          color = 'black', size = 4, fontface = 'bold',
-	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	geom_text(aes(label = paste0('£', format(round(revenue), big.mark = ','))), 
+	          color = 'black', size = 4,
+	          position = position_stack(vjust = 0.8, reverse = FALSE)) +
 	# gives the y axis the percentage scale
 	scale_y_continuous(labels = scales::comma) +
 	# we don't want a legend for the fill
 	guides(fill = 'none') +
-	coord_flip()
+	coord_flip() +
+	facet_wrap(. ~ country, scales = 'free')
+
+
+viz_3 <- grid.arrange(grid.arrange(top5_customers_nums, top5_cv, 
+												top5_orders_by_customers, nrow = 1),
+											top5_top_customers)
+ggsave(file = '/home/waseem/Documents/Self-Development/Online Retail II UCI/viz_3.png', 
+				viz_3, width = 9.5, height = 8.5, units = 'in')
+
+
+
+
+# we'll no look into products
+
+
+# Best selling products
+best_sellers_revenue <- data.table(
+	dataset %>%
+		# remove returns
+		filter(!(substr(invoice_id, 1, 1) %in% c('C', 'A'))) %>%
+		group_by(stock_code, description) %>%
+		summarise(revenue = sum(product_revenue)) %>%
+		arrange(-revenue)
+)
