@@ -410,15 +410,66 @@ ggsave(file = '/home/waseem/Documents/Self-Development/Online Retail II UCI/viz_
 
 
 
-# we'll no look into products
+# we'll now look into products
 
 
 # Best selling products
-best_sellers_revenue <- data.table(
+best_sellers <- data.table(
 	dataset %>%
 		# remove returns
 		filter(!(substr(invoice_id, 1, 1) %in% c('C', 'A'))) %>%
 		group_by(stock_code, description) %>%
-		summarise(revenue = sum(product_revenue)) %>%
-		arrange(-revenue)
+		summarise(orders = n_distinct(invoice_id),
+							revenue = sum(product_revenue)) %>%
+		arrange(-revenue) %>%
+		# we'll remove random stock_codes e.g manual or postage
+		filter(!(stock_code %in% c('M', 'DOT', 'POST')))
 )
+
+best_sellers_revenue <- data.table(
+	best_sellers %>%
+	mutate(ranked = row_number(desc(revenue))) %>%
+	filter(ranked <= 10)
+) %>%
+	ggplot(aes(x = reorder(description, desc(ranked)), 
+							y = revenue)) +
+	geom_bar(stat = 'identity', fill = '#F8766D') +
+	ggtitle('Best Sellers',
+					'By Revenue') +
+	labs(x = 'Product', y = 'Revenue (£)') +
+	# text for the conversion
+	geom_text(aes(label = paste0('£', format(round(revenue), big.mark = ','))), 
+	          color = 'white', size = 4, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	scale_y_continuous(labels = scales::comma) +
+	coord_flip() +
+	# this will wrap the long x labels
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 20))
+
+best_sellers_order <- data.table(
+	best_sellers %>%
+	mutate(ranked = row_number(desc(orders))) %>%
+	filter(ranked <= 10)
+) %>%
+	ggplot(aes(x = reorder(description, desc(ranked)), 
+							y = orders)) +
+	geom_bar(stat = 'identity', fill = '#00BFC4') +
+	ggtitle('Best Sellers',
+					'By Orders') +
+	labs(x = 'Product', y = 'Orders') +
+	# text for the conversion
+	geom_text(aes(label = format(round(orders), big.mark = ',')), 
+	          color = 'white', size = 4, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	scale_y_continuous(labels = scales::comma) +
+	coord_flip() +
+	# this will wrap the long x labels
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 20))
+
+# we'll now look at the most returned products
+returned_products <- data.table(
+)
+
+
+
+# we'll look at products per order (by Top 5 Markets)
