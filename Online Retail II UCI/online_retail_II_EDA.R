@@ -426,6 +426,7 @@ best_sellers <- data.table(
 		filter(!(stock_code %in% c('M', 'DOT', 'POST')))
 )
 
+
 best_sellers_revenue <- data.table(
 	best_sellers %>%
 	mutate(ranked = row_number(desc(revenue))) %>%
@@ -445,6 +446,7 @@ best_sellers_revenue <- data.table(
 	coord_flip() +
 	# this will wrap the long x labels
   scale_x_discrete(labels = function(x) str_wrap(x, width = 20))
+
 
 best_sellers_order <- data.table(
 	best_sellers %>%
@@ -466,10 +468,70 @@ best_sellers_order <- data.table(
 	# this will wrap the long x labels
   scale_x_discrete(labels = function(x) str_wrap(x, width = 20))
 
+
 # we'll now look at the most returned products
 returned_products <- data.table(
-)
-
+		dataset %>%
+		# keep returns
+		filter((substr(invoice_id, 1, 1) %in% c('C'))) %>%
+		group_by(stock_code, description) %>%
+		summarise(orders = n_distinct(invoice_id),
+							revenue = sum(product_revenue)) %>%
+		arrange(-orders)  %>%
+		ungroup() %>%
+		# we'll remove the following products
+		filter(!(stock_code %in% c('M', 'D', 'POST'))) %>%
+		mutate(ranked = row_number(desc(orders))) %>%
+		filter(ranked <= 10)
+) %>%
+	ggplot(aes(x = reorder(description, desc(ranked)), 
+							y = orders)) +
+	geom_bar(stat = 'identity', fill = '#C77CFF') +
+	ggtitle('Most Returned Products',
+					'By Orders') +
+	labs(x = 'Product', y = 'Orders') +
+	# text for the conversion
+	geom_text(aes(label = format(round(orders), big.mark = ',')), 
+	          color = 'white', size = 4, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	scale_y_continuous(labels = scales::comma) +
+	coord_flip() +
+	# this will wrap the long x labels
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 20))
 
 
 # we'll look at products per order (by Top 5 Markets)
+products_per_order <- data.table(
+	dataset %>%
+		filter(country %in% top_5_markets) %>%
+		# remove returns
+		filter(!(substr(invoice_id, 1, 1) %in% c('C', 'A'))) %>%
+		# we'll remove random stock_codes e.g manual or postage
+		filter(!(stock_code %in% c('M', 'DOT', 'POST'))) %>%
+		group_by(country, invoice_id) %>%
+		summarise(products_in_order = n_distinct(stock_code))
+)  %>%
+	ggplot(aes(x = country, y = products_in_order, fill = country)) +
+	geom_boxplot() +
+	ggtitle('Products Per Order',
+					'Top 5 Markets, with outliers removed') +
+	labs(x = 'Country', y = 'Number of Unique Products in Order') +
+	# we don't want a legend for the fill
+	guides(fill = 'none') +
+	scale_y_continuous(breaks = seq(0, 84, 5), limits = c(0, 84))
+
+viz_4 <- grid.arrange(grid.arrange(best_sellers_revenue, best_sellers_order, nrow = 1),
+											grid.arrange(returned_products, products_per_order, nrow = 1))
+ggsave(file = '/home/waseem/Documents/Self-Development/Online Retail II UCI/viz_4.png', 
+				viz_4, width = 9.5, height = 8.5, units = 'in')
+
+
+
+
+#--------------------------------------------------------------------------
+# Apriori Algorithm
+#--------------------------------------------------------------------------
+
+
+
+
