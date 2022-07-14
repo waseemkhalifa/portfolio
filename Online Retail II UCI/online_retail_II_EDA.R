@@ -12,6 +12,8 @@ library(ggplot2)
 library(tidyverse)
 library(lubridate)
 library(gridExtra)
+library(sqldf)
+library(arules)
 
 
 #--------------------------------------------------------------------------
@@ -531,7 +533,41 @@ ggsave(file = '/home/waseem/Documents/Self-Development/Online Retail II UCI/viz_
 #--------------------------------------------------------------------------
 # Apriori Algorithm
 #--------------------------------------------------------------------------
+apriori <- data.table(
+	dataset %>%
+		# we'll only look at United Kingdom
+		filter(country == 'United Kingdom') %>%
+		# remove returns
+		filter(!(substr(invoice_id, 1, 1) %in% c('C', 'A'))) %>%
+		# we'll remove random stock_codes e.g manual or postage
+		filter(!(stock_code %in% c('M', 'DOT', 'POST'))) %>%
+		group_by(invoice_id) %>%
+		mutate(products = paste0(description, collapse = "|")) %>%
+		ungroup() %>%
+		select(invoice_id, products) %>%
+		unique() %>%
+		mutate(sep_count = str_count(products, "\\|"))
+)
+apriori <- data.table(
+	apriori %>% 
+		separate(products, into = paste0('product',1:max(apriori$sep_count)), 
+							sep = '\\|')
+)
+apriori <- data.table(
+	apriori %>%
+		select(-sep_count, -invoice_id)
+)
+write.table(apriori, 
+				'/home/waseem/Documents/Self-Development/Online Retail II UCI/apriori.csv', 
+				row.names = F, col.names = F, na = '', sep = ',')
 
+apriori <- read.transactions('/home/waseem/Documents/Self-Development/Online Retail II UCI/apriori.csv', 
+												rm.duplicates = T, sep = ',')
+summary(apriori)
 
+# Training Apriori on the dataset
+rules <- apriori(data = apriori, 
+                 parameter = list(supp = 0.001, conf = 0.8, maxlen = 10))
 
-
+# Visualising the results
+inspect(sort(rules, by = 'support')[1:100])
