@@ -14,6 +14,7 @@ library(lubridate)
 library(gridExtra)
 library(sqldf)
 library(arules)
+library(scales)
 
 
 #--------------------------------------------------------------------------
@@ -582,10 +583,99 @@ apriori <- read.transactions('/home/waseem/Documents/Self-Development/Online Ret
 rules <- apriori(data = apriori, 
                  parameter = list(supp = 0.001, conf = 0.8, maxlen = 10))
 
+# this gives a summary of our apriori algorithm
+summary(rules)
+
 # Visualising the results
-inspect(sort(rules, by = 'support')[1:10])
+inspect(sort(rules, by = 'support')[1:20])
 
 # this saves our apriori algorithm results in a .csv file
 write(rules, 
 			file = '/home/waseem/Documents/Self-Development/Online Retail II UCI/apriori_rules.csv', 
 			sep = ',', row.names = F)
+
+
+
+
+#--------------------------------------------------------------------------
+# Customer Segmentation using RFM & K-Means Clustering
+#--------------------------------------------------------------------------
+
+# We will create customer segments based on their value & purchasing behaviour
+# Using RFM (Recency, Frequency & Monetary), we'll segment them using K-Means Clustering
+# Recency: Time since customer's last transaction (based on max date in the dataset)
+# Frequency: Total number of transactions
+# Monetary: Total money spend by the customer
+
+# over here we'll find the invoice_date
+max_invoice_date <- data.table(
+	dataset %>%
+		# remove returns
+		filter(!(substr(invoice_id, 1, 1) %in% c('C', 'A'))) %>%
+		# we'll remove random stock_codes e.g manual or postage
+		filter(!(stock_code %in% c('M', 'DOT', 'POST'))) %>%
+		# remove NULL customer_ids
+		filter(is.na(customer_id) == F) %>%
+		select(invoice_date)
+)
+max_invoice_date <- max(max_invoice_date$invoice_date)
+
+segment <- data.table(
+	dataset %>%
+		# remove returns
+		filter(!(substr(invoice_id, 1, 1) %in% c('C', 'A'))) %>%
+		# we'll remove random stock_codes e.g manual or postage
+		filter(!(stock_code %in% c('M', 'DOT', 'POST'))) %>%
+		# remove NULL customer_ids
+		filter(is.na(customer_id) == F) %>%
+		group_by(customer_id) %>%
+		mutate(
+			recency = as.numeric(max_invoice_date - max(invoice_date)),
+			frequency = n_distinct(invoice_id),
+			monetary = sum(product_revenue)
+		) %>%
+		ungroup() %>%
+		select(customer_id, recency, frequency, monetary) %>%
+		unique() 
+		# %>%
+		# mutate(
+		# 	recency = rescale(recency),
+		# 	frequency = rescale(frequency),
+		# 	monetary = rescale(monetary)
+		# )
+)
+# we'll scale the columns, so that they are all normalised
+segment_scaled = as.matrix(scale(select(segment, -customer_id)))
+
+
+# Elbow Method for finding the optimal number of clusters
+set.seed(0)
+# Compute and plot wss for k = 2 to k = 15.
+k.max <- 10
+wss <- sapply(1:k.max, 
+              function(k){kmeans(segment_scaled, k, nstart = 50, iter.max = 15 )$tot.withinss})
+plot(1:k.max, wss,
+     type = 'b', pch  =  19, frame  =  FALSE, 
+     xlab = 'Number of clusters K',
+     ylab = 'Total within-clusters sum of squares')
+# we will build with 4 clusters
+
+#Let us apply kmeans for k=4 clusters 
+kmm <- kmeans(segment_scaled, 4, nstart = 50, iter.max = 15) 
+
+# add the clusters info in our dataframe
+segment$cluster <- kmm$cluster
+
+
+# this is a summary of our K-means
+segment_summary <- data.table(
+	segment %>% 
+		group_by(cluster) %>% 
+		summarise(
+			# this will show us the number of customers in each cluster
+			customers = n_distinct(customer_id),
+			recency_mean = round(mean(recency)),
+			frequency_mean = round(mean(frequency)),
+			monetary_mean = round(mean(monetary)),
+		)
+)
