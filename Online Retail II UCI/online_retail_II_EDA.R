@@ -533,6 +533,10 @@ ggsave(file = '/home/waseem/Documents/Self-Development/Online Retail II UCI/viz_
 #--------------------------------------------------------------------------
 # Apriori Algorithm
 #--------------------------------------------------------------------------
+
+# The below algorithm will help us uncover items frequently bought together
+
+# we'll prepare the dataset for the apriori algorithm
 apriori <- data.table(
 	dataset %>%
 		# we'll only look at United Kingdom
@@ -542,32 +546,46 @@ apriori <- data.table(
 		# we'll remove random stock_codes e.g manual or postage
 		filter(!(stock_code %in% c('M', 'DOT', 'POST'))) %>%
 		group_by(invoice_id) %>%
+		# this will create a new column called products
+		# which will store all products bought in an order (invoice_id)
+		# each product will be seperated by '|'
 		mutate(products = paste0(description, collapse = "|")) %>%
 		ungroup() %>%
 		select(invoice_id, products) %>%
 		unique() %>%
-		mutate(sep_count = str_count(products, "\\|"))
+		# this just counts how many products we have in our products column
+		# it's a helper column for when we want to seperate each individual
+		# products into seperate columns
+		mutate(sep_count = (str_count(products, "\\|")+1))
 )
+# this will seperate each individual product into seperate columns
 apriori <- data.table(
 	apriori %>% 
 		separate(products, into = paste0('product',1:max(apriori$sep_count)), 
 							sep = '\\|')
 )
+# we only want the products in our final dataframe
 apriori <- data.table(
 	apriori %>%
 		select(-sep_count, -invoice_id)
 )
+# this will write our apriori dataset into a .csv file
 write.table(apriori, 
 				'/home/waseem/Documents/Self-Development/Online Retail II UCI/apriori.csv', 
 				row.names = F, col.names = F, na = '', sep = ',')
 
+# this will bring our apriori data into R in the format needed for the apriori algorithm
 apriori <- read.transactions('/home/waseem/Documents/Self-Development/Online Retail II UCI/apriori.csv', 
 												rm.duplicates = T, sep = ',')
-summary(apriori)
 
 # Training Apriori on the dataset
 rules <- apriori(data = apriori, 
                  parameter = list(supp = 0.001, conf = 0.8, maxlen = 10))
 
 # Visualising the results
-inspect(sort(rules, by = 'support')[1:100])
+inspect(sort(rules, by = 'support')[1:10])
+
+# this saves our apriori algorithm results in a .csv file
+write(rules, 
+			file = '/home/waseem/Documents/Self-Development/Online Retail II UCI/apriori_rules.csv', 
+			sep = ',', row.names = F)
