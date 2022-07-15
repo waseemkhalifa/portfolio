@@ -674,8 +674,13 @@ segment_summary <- data.table(
 		summarise(
 			# this will show us the number of customers in each cluster
 			customers = n_distinct(customer_id),
-			recency_mean = round(mean(recency)),
-			frequency_mean = round(mean(frequency)),
-			monetary_mean = round(mean(monetary)),
+			recency_avg = round(mean(recency)),
+			frequency_avg = round(mean(frequency)),
+			monetary_avg = round(mean(monetary)),
 		)
 )
+
+# we'll save our segment_summary as a .csv
+write.csv(segment_summary,
+					'/home/waseem/Documents/Self-Development/Online Retail II UCI/segment_summary.csv',
+					row.names = F)
