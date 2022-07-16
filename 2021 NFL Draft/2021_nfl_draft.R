@@ -13,6 +13,7 @@ library(tidyverse)
 library(lubridate)
 library(gridExtra)
 library(readxl)
+library(cowplot)
 
 
 #--------------------------------------------------------------------------
@@ -51,10 +52,13 @@ sapply(dataset, function(x) sum(is.na(x)))
 	# nation
 	# barb_region
 	# age_range
-	# number_of_sport_page_views (NULL when no sports page was viewed?)
+	# number_of_sport_page_views (NULL when no sports page was viewed and only video is viewed)
 
 # Other findings:
-	# 
+	# videos_watched_on_iplayer & shows_listened_to_on_sounds are not unique
+	# they are duplicated across multiple devices
+	# this could also be the case for other fields such as 
+		# has_visited_homepage, has_visited_news, has_visited_iplayer, has_visited_sounds
 
 #--------------------------------------------------------------------------
 # EDA visualisations
@@ -250,17 +254,205 @@ ggsave(file = '/home/waseem/Documents/Self-Development/2021 NFL Draft/viz_2.png'
 # looking at visits to sport by user
 users_visits_to_sport <- data.table(
 	dataset %>%
-		filter(device_type %in% c('Smartphone', 'Desktop')) %>%
-		group_by(user_id, device_type) %>%
+		group_by(user_id) %>%
 		summarise(number_of_visits_to_sport = sum(number_of_visits_to_sport)) %>%
 		arrange(-number_of_visits_to_sport)
 ) %>%
-	ggplot(aes(x = number_of_visits_to_sport, fill = device_type)) +
-	geom_histogram(binwidth = 1, colour = 'black') + 
+	ggplot(aes(x = number_of_visits_to_sport)) +
+	geom_histogram(binwidth = 1, colour = 'black', fill = '#00A9FF') + 
 	ggtitle('Visits to Sport') +
 	labs(x = 'Visits to Sport', y = 'Unique Users') + 
 	guides(fill = 'none') +
 	scale_x_continuous(breaks = seq(0, 10, 1), lim = c(0, 10)) +
-	# xlim(-50, 3000) +
-	facet_wrap(device_type ~ ., scales = 'free') +
 	scale_y_continuous(labels = scales::comma)
+
+users_visits_to_sport_grouped <- data.table(
+	dataset %>%
+		group_by(user_id) %>%
+		summarise(number_of_visits_to_sport = sum(number_of_visits_to_sport)) %>%
+		ungroup() %>%
+		mutate(group = ifelse(number_of_visits_to_sport == 1, 'One', 
+			'More Than One')) %>%
+		group_by(group) %>%
+		summarise(users = n_distinct(user_id)) %>%
+		ungroup() %>%
+		arrange(-users) %>%
+		mutate(percent = users / sum(users))
+) %>%
+	ggplot(aes(x = group, y = users)) +
+	geom_bar(stat = 'identity', fill = '#00A9FF') +
+	ggtitle('Visits to Sport') +
+	labs(x = 'How many?', y = 'Unique Users') +
+	# text for the conversion
+	geom_text(aes(label = paste0(round(percent * 100), '%')), 
+	          color = 'black', size = 3, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	coord_flip()
+
+users_visits_to_sport_grouped_plot <-	
+			grid.arrange(users_visits_to_sport_grouped, 
+							 		 users_visits_to_sport, 
+							     ncol = 1,
+							     heights = c(2, 4))
+
+
+# number_of_sport_page_views
+users_sport_pageviews <- data.table(
+	dataset %>%
+		# remove null pageviews 
+		filter(is.na(number_of_sport_page_views) == F) %>%
+		group_by(user_id) %>%
+		summarise(number_of_sport_page_views = sum(number_of_sport_page_views)) %>%
+		arrange(-number_of_sport_page_views)
+) %>%
+	ggplot(aes(x = number_of_sport_page_views)) +
+	geom_histogram(binwidth = 1, colour = 'black', fill = '#F8766D') + 
+	ggtitle('Sport Pageviews') +
+	labs(x = 'Sport Pageviews', y = 'Unique Users') + 
+	guides(fill = 'none') +
+	scale_x_continuous(breaks = seq(0, 10, 1), lim = c(0, 10)) +
+	scale_y_continuous(labels = scales::comma)
+
+users_sport_pageviews_grouped <- data.table(
+	dataset %>%
+		filter(is.na(number_of_sport_page_views) == F) %>%
+		group_by(user_id) %>%
+		summarise(number_of_sport_page_views = sum(number_of_sport_page_views)) %>%
+		ungroup() %>%
+		mutate(group = ifelse(number_of_sport_page_views == 1, 'One', 
+			'More Than One')) %>%
+		group_by(group) %>%
+		summarise(users = n_distinct(user_id)) %>%
+		ungroup() %>%
+		arrange(-users) %>%
+		mutate(percent = users / sum(users))
+) %>%
+	ggplot(aes(x = group, y = users)) +
+	geom_bar(stat = 'identity', fill = '#F8766D') +
+	ggtitle('Sport Pageviews') +
+	labs(x = 'How many?', y = 'Unique Users') +
+	# text for the conversion
+	geom_text(aes(label = paste0(round(percent * 100), '%')), 
+	          color = 'black', size = 3, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	coord_flip()
+
+users_sport_pageviews_grouped_plot <-	
+			grid.arrange(users_sport_pageviews_grouped, 
+							 		 users_sport_pageviews, 
+							     ncol = 1,
+							     heights = c(2, 4))
+
+
+
+# number_of_sport_articles_read
+users_sport_articles_read <- data.table(
+	dataset %>%
+		group_by(user_id) %>%
+		summarise(number_of_sport_articles_read = sum(number_of_sport_articles_read)) %>%
+		arrange(-number_of_sport_articles_read)
+) %>%
+	ggplot(aes(x = number_of_sport_articles_read)) +
+	geom_histogram(binwidth = 1, colour = 'black', fill = '#ED68ED') + 
+	ggtitle('Sport Articles Read') +
+	labs(x = 'Sport Articles Read', y = 'Unique Users') + 
+	guides(fill = 'none') +
+	scale_x_continuous(breaks = seq(-1, 10, 1), lim = c(-1, 10)) +
+	scale_y_continuous(labels = scales::comma)
+
+users_sport_articles_read_grouped <- data.table(
+	dataset %>%
+		filter(is.na(number_of_sport_articles_read) == F) %>%
+		group_by(user_id) %>%
+		summarise(number_of_sport_articles_read = sum(number_of_sport_articles_read)) %>%
+		ungroup() %>%
+		mutate(group = ifelse(number_of_sport_articles_read == 1, 'One', 
+										ifelse(number_of_sport_articles_read == 0, 'None', 
+										'More Than One'))) %>%
+		group_by(group) %>%
+		summarise(users = n_distinct(user_id)) %>%
+		ungroup() %>%
+		arrange(-users) %>%
+		mutate(percent = users / sum(users)) %>%
+		filter(group != 'None')
+) %>%
+	ggplot(aes(x = group, y = users)) +
+	geom_bar(stat = 'identity', fill = '#ED68ED') +
+	ggtitle('Sport Articles Read') +
+	labs(x = 'How many?', y = 'Unique Users') +
+	# text for the conversion
+	geom_text(aes(label = paste0(round(percent * 100), '%')), 
+	          color = 'black', size = 3, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	coord_flip()
+
+users_sport_articles_read_plot <-	
+			grid.arrange(users_sport_articles_read_grouped, 
+							 		 users_sport_articles_read, 
+							     ncol = 1,
+							     heights = c(2, 4))
+
+
+# number_of_sport_articles_read
+users_sport_clips_watched <- data.table(
+	dataset %>%
+		group_by(user_id) %>%
+		summarise(number_of_sport_clips_watched = sum(number_of_sport_clips_watched)) %>%
+		arrange(-number_of_sport_clips_watched)
+) %>%
+	ggplot(aes(x = number_of_sport_clips_watched)) +
+	geom_histogram(binwidth = 1, colour = 'black', fill = '#0CB702') + 
+	ggtitle('Sport Clips Watched') +
+	labs(x = 'Sport Clips Watched', y = 'Unique Users') + 
+	guides(fill = 'none') +
+	scale_x_continuous(breaks = seq(-1, 10, 1), lim = c(-1, 10)) +
+	scale_y_continuous(labels = scales::comma)
+
+users_sport_clips_watched_grouped <- data.table(
+	dataset %>%
+		group_by(user_id) %>%
+		summarise(number_of_sport_clips_watched = sum(number_of_sport_clips_watched)) %>%
+		ungroup() %>%
+		mutate(group = ifelse(number_of_sport_clips_watched == 1, 'One', 
+										ifelse(number_of_sport_clips_watched == 0, 'None', 
+										'More Than One'))) %>%
+		group_by(group) %>%
+		summarise(users = n_distinct(user_id)) %>%
+		ungroup() %>%
+		arrange(-users) %>%
+		mutate(percent = users / sum(users)) %>%
+		mutate(group = factor(group, levels = c('More Than One', 'One', 'None')))
+) %>%
+	ggplot(aes(x = group, y = users)) +
+	geom_bar(stat = 'identity', fill = '#0CB702') +
+	ggtitle('Sport Clips Watched') +
+	labs(x = 'How many?', y = 'Unique Users') +
+	# text for the conversion
+	geom_text(aes(label = paste0(round(percent * 100), '%')), 
+	          color = 'black', size = 3, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	coord_flip()
+
+users_sport_clips_watched_plot <-	
+			grid.arrange(users_sport_clips_watched_grouped, 
+							 		 users_sport_clips_watched, 
+							     ncol = 1,
+							     heights = c(2, 4))
+
+
+viz_3 <- grid.arrange(
+						grid.arrange(users_visits_to_sport_grouped_plot, 
+												users_sport_pageviews_grouped_plot),
+						grid.arrange(users_sport_articles_read_plot,
+													users_sport_clips_watched_plot),
+						nrow = 1)
+ggsave(file = '/home/waseem/Documents/Self-Development/2021 NFL Draft/viz_3.png', 
+				viz_3, width = 9.5, height = 8.5, units = 'in')
