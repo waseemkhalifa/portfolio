@@ -255,13 +255,12 @@ users_visits_to_sport <- data.table(
 		summarise(number_of_visits_to_sport = sum(number_of_visits_to_sport)) %>%
 		arrange(-number_of_visits_to_sport)
 ) %>%
-	ggplot(aes(x = order_value, fill = country)) +
-	geom_histogram(binwidth = 50, colour = 'black') + 
-	ggtitle('Order values by Country',
-					'Top 5 Markets, in £50 bins') +
-	labs(x = 'Order Value (£)', y = 'No. of Orders') + 
+	ggplot(aes(x = number_of_visits_to_sport, fill = device_type)) +
+	geom_histogram(binwidth = 1, colour = 'black') + 
+	ggtitle('Visits to Sport') +
+	labs(x = 'Visits to Sport', y = 'Unique Users') + 
 	guides(fill = 'none') +
-	# scale_x_continuous(breaks = seq(0, 3000, 250), lim = c(-50, 3000)) +
-	xlim(-50, 3000) +
-	facet_wrap(country ~ ., scales = 'free') +
+	scale_x_continuous(breaks = seq(0, 10, 1), lim = c(0, 10)) +
+	# xlim(-50, 3000) +
+	facet_wrap(device_type ~ ., scales = 'free') +
 	scale_y_continuous(labels = scales::comma)
