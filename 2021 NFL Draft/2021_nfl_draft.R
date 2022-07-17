@@ -565,9 +565,34 @@ videos_watched_on_iplayer <- data.table(
 	ggtitle('iPlayer Videos', 'Has Visited iPlayer') +
 	labs(x = 'iPlayer Videos Watched', y = 'Unique Users') + 
 	guides(fill = 'none') +
-	scale_x_continuous(breaks = seq(-1, 50, 1), lim = c(-1, 50)) +
+	scale_x_continuous(breaks = seq(-1, 25, 1), lim = c(-1, 25)) +
 	scale_y_continuous(labels = scales::comma) +
 	theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+watched_show <- data.table(
+	dataset %>%
+		filter(has_visited_iplayer == T) %>%
+		select(user_id, videos_watched_on_iplayer) %>%
+		unique() %>%
+		mutate(watched = ifelse(videos_watched_on_iplayer == 0,
+															"No", 'Yes')) %>%
+		group_by(watched) %>%
+		summarise(users = n_distinct(user_id)) %>%
+		ungroup() %>%
+		arrange(-users) %>%
+		mutate(percent = users / sum(users)) 
+) %>%
+	ggplot(aes(x = watched, y = users)) +
+	geom_bar(stat = 'identity', fill = '#ED68ED') +
+	ggtitle('Watched?', 'Videos On iPlayer') +
+	labs(x = '', y = 'Unique Users') +
+	# text for the conversion
+	geom_text(aes(label = paste0(round(percent * 100), '%')), 
+	          color = 'black', size = 3, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma)
+
 
 
 # shows_listened_to_on_sounds
@@ -580,20 +605,47 @@ shows_listened_to_on_sounds <- data.table(
 ) %>%
 	ggplot(aes(x = shows_listened_to_on_sounds)) +
 	geom_histogram(binwidth = 1, colour = 'black', fill = '#0CB702') + 
-	ggtitle('Sounds Shows', 'Has Visited iPlayer') +
+	ggtitle('Sounds Shows', 'Has Visited Sounds') +
 	labs(x = 'Sounds Shows Listened', y = 'Unique Users') + 
 	guides(fill = 'none') +
-	scale_x_continuous(breaks = seq(-1, 50, 1), lim = c(-1, 50)) +
+	scale_x_continuous(breaks = seq(-1, 25, 1), lim = c(-1, 25)) +
 	scale_y_continuous(labels = scales::comma) +
 	theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+listened_to_show <- data.table(
+	dataset %>%
+		filter(has_visited_sounds == T) %>%
+		select(user_id, shows_listened_to_on_sounds) %>%
+		unique() %>%
+		mutate(listened = ifelse(shows_listened_to_on_sounds == 0,
+															"No", 'Yes')) %>%
+		group_by(listened) %>%
+		summarise(users = n_distinct(user_id)) %>%
+		ungroup() %>%
+		arrange(-users) %>%
+		mutate(percent = users / sum(users)) 
+) %>%
+	ggplot(aes(x = listened, y = users)) +
+	geom_bar(stat = 'identity', fill = '#0CB702') +
+	ggtitle('Listened?', 'Show on BBC Sounds') +
+	labs(x = '', y = 'Unique Users') +
+	# text for the conversion
+	geom_text(aes(label = paste0(round(percent * 100), '%')), 
+	          color = 'black', size = 3, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma)
+
 
 
 
 viz_4 <- grid.arrange(
 						grid.arrange(visited_homepage, visited_news, nrow = 1),
 						grid.arrange(visited_iplayer, visited_sounds, nrow = 1),
-						grid.arrange(videos_watched_on_iplayer, shows_listened_to_on_sounds, ncol = 1),
-						ncol = 1,
-						heights = c(2, 2, 4))
+						grid.arrange(videos_watched_on_iplayer, watched_show, 
+													nrow = 1, widths = c(3, 1)),
+						grid.arrange(shows_listened_to_on_sounds, listened_to_show, 
+													nrow = 1, widths = c(3, 1)),
+						heights = c(2, 2, 2, 2))
 ggsave(file = '/home/waseem/Documents/Self-Development/2021 NFL Draft/viz_4.png', 
 				viz_4, width = 9.5, height = 8.5, units = 'in')
