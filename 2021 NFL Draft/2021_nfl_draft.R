@@ -649,3 +649,69 @@ viz_4 <- grid.arrange(
 						heights = c(2, 2, 2, 2))
 ggsave(file = '/home/waseem/Documents/Self-Development/2021 NFL Draft/viz_4.png', 
 				viz_4, width = 9.5, height = 8.5, units = 'in')
+
+
+
+
+
+#--------------------------------------------------------------------------
+# Users Segmentation using K-Means Clustering
+#--------------------------------------------------------------------------
+
+# We will create customer segments based on the numerical features
+segments <- data.table(
+	dataset %>%
+		filter(geo_country_site_visited == 'United Kingdom') %>%
+		group_by(user_id) %>%
+		summarise(
+			sport_visits = sum(number_of_visits_to_sport),
+			sport_pageviews = sum(ifelse(is.na(number_of_sport_page_views) == T, 0,
+															number_of_sport_page_views)),
+			sport_articles = sum(number_of_sport_articles_read),
+			sport_clips = sum(number_of_sport_clips_watched),
+			iplayer_videos = max(videos_watched_on_iplayer),
+			sounds_shows = max(shows_listened_to_on_sounds),
+		)
+)
+
+
+# Elbow Method for finding the optimal number of clusters
+set.seed(0)
+# Compute and plot wss for k = 2 to k = 15.
+k.max <- 10
+wss <- sapply(1:k.max, 
+              function(k){kmeans(as.matrix(scale(select(segments, -user_id))), 
+              			k, nstart = 50, iter.max = 15 )$tot.withinss})
+plot(1:k.max, wss,
+     type = 'b', pch  =  19, frame  =  FALSE, 
+     xlab = 'Number of clusters K',
+     ylab = 'Total within-clusters sum of squares')
+# we will build with 3 clusters
+
+#Let us apply kmeans for k=3 clusters 
+kmm <- kmeans(as.matrix(scale(select(segments, -user_id))), 3, nstart = 50, iter.max = 15)
+
+# add the clusters info in our dataframe
+segments$cluster <- kmm$cluster
+
+
+# this is a summary of our K-means
+segments_summary <- data.table(
+	segments %>% 
+		group_by(cluster) %>% 
+		summarise(
+			# this will show us the number of customers in each cluster
+			users = n_distinct(user_id),
+			sport_visits_avg = round(mean(sport_visits)),
+			sport_pageviews_avg = round(mean(sport_pageviews)),
+			sport_articles_avg = round(mean(sport_articles)),
+			sport_clips_avg = round(mean(sport_clips)),
+			iplayer_videos_avg = round(mean(iplayer_videos)),
+			sounds_shows_avg = round(mean(sounds_shows)),
+		)
+)
+
+# we'll save our segment_summary as a .csv
+write.csv(segments_summary,
+					'/home/waseem/Documents/Self-Development/2021 NFL Draft/segment_summary.csv',
+					row.names = F)
