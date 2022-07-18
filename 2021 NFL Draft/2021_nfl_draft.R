@@ -715,3 +715,134 @@ segments_summary <- data.table(
 write.csv(segments_summary,
 					'/home/waseem/Documents/Self-Development/2021 NFL Draft/segment_summary.csv',
 					row.names = F)
+
+
+
+
+#--------------------------------------------------------------------------
+# Deep Dive on the 'Enthusiasts' Cluster
+#--------------------------------------------------------------------------
+enthusiasts <- data.table(
+	left_join(dataset,
+						select(segments, user_id, cluster), 
+						by = ('user_id')) %>%
+	mutate(cluster_num = cluster,
+				 cluster = ifelse(cluster == 2, 'Enthusiasts', 'Others')) %>%
+	filter(geo_country_site_visited == 'United Kingdom')
+)
+
+
+# users by gender
+enthusiasts_gender <- data.table(
+	enthusiasts %>%
+		group_by(cluster, gender) %>%
+		summarise(users = n_distinct(user_id)) %>%
+		ungroup() %>%
+		arrange(-users) %>%
+		group_by(cluster) %>%
+		mutate(percent = users / sum(users)) %>%
+		ungroup() %>%
+		mutate(gender = ifelse(is.na(gender) == T, 'Null', gender))
+) %>%
+	ggplot(aes(x = reorder(gender, users), y = users, fill = cluster)) +
+	geom_bar(stat = 'identity') +
+	ggtitle('Gender') +
+	labs(x = 'Gender', y = 'Unique Users') +
+	# text for the conversion
+	geom_text(aes(label = paste0(round(percent * 100), '%')), 
+	          color = 'black', size = 3, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	coord_flip() +
+	facet_wrap(cluster ~ ., scales = 'free') +
+	# we don't want a legend for the fill
+	guides(fill = 'none')
+
+
+# users by age group
+enthusiasts_age <- data.table(
+	enthusiasts %>%
+		group_by(cluster, age_range) %>%
+		summarise(users = n_distinct(user_id)) %>%
+		ungroup() %>%
+		arrange(age_range) %>%
+		filter(!(age_range %in% c('42309', '44475'))) %>%
+		mutate(age_range = ifelse(is.na(age_range) == T, 'Null', age_range)) %>%
+		group_by(cluster) %>%
+		mutate(percent = users / sum(users))
+) %>%
+	ggplot(aes(x = reorder(age_range, users), y = users, fill = cluster)) +
+	geom_bar(stat = 'identity') +
+	ggtitle('Age Range') +
+	labs(x = 'Age Range', y = 'Unique Users') +
+	# text for the conversion
+	geom_text(aes(label = paste0(round(percent * 100), '%')), 
+	          color = 'black', size = 3, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	coord_flip() +
+	facet_wrap(cluster ~ ., scales = 'free') +
+	# we don't want a legend for the fill
+	guides(fill = 'none')
+
+
+# users by device_type
+enthusiasts_device <- data.table(
+	enthusiasts %>%
+		group_by(cluster, device_type) %>%
+		summarise(users = n_distinct(user_id)) %>%
+		ungroup() %>%
+		arrange(-users) %>%
+		group_by(cluster) %>%
+		mutate(percent = users / sum(users))
+) %>%
+	ggplot(aes(x = reorder(device_type, users), y = users, fill = cluster)) +
+	geom_bar(stat = 'identity') +
+	ggtitle('Device') +
+	labs(x = 'Device', y = 'Unique Users') +
+	# text for the conversion
+	geom_text(aes(label = paste0(round(percent * 100), '%')), 
+	          color = 'black', size = 3, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	coord_flip() +
+	facet_wrap(cluster ~ ., scales = 'free') +
+	# we don't want a legend for the fill
+	guides(fill = 'none')
+
+
+# users by app type
+enthusiasts_app <- data.table(
+	enthusiasts %>%
+		filter(app_type %in% c('responsive', 'mobile-app')) %>%
+		group_by(cluster, device_type, app_type) %>%
+		summarise(users = n_distinct(user_id)) %>%
+		ungroup() %>%
+		arrange(-users) %>%
+		group_by(cluster) %>%
+		mutate(percent = users / sum(users))
+) %>%
+	filter(device_type %in% c('Desktop', 'Smartphone')) %>%
+	ggplot(aes(x = reorder(app_type, users), y = users, fill = cluster)) +
+	geom_bar(stat = 'identity') +
+	ggtitle('App Type', '% of Total Users') +
+	labs(x = 'Device', y = 'Unique Users') +
+	# text for the conversion
+	geom_text(aes(label = paste0(round(percent * 100), '%')), 
+	          color = 'black', size = 3, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	facet_wrap(device_type ~ cluster, scales = 'free') +
+	coord_flip() + 
+	theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+	coord_flip()
+
+
+viz_5 <- grid.arrange(grid.arrange(enthusiasts_gender, enthusiasts_age, nrow = 1),
+											grid.arrange(enthusiasts_device, enthusiasts_app, nrow = 1))
+ggsave(file = '/home/waseem/Documents/Self-Development/2021 NFL Draft/viz_5.png', 
+				viz_5, width = 9.5, height = 8.5, units = 'in')
