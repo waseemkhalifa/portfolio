@@ -846,3 +846,32 @@ viz_5 <- grid.arrange(grid.arrange(enthusiasts_gender, enthusiasts_age, nrow = 1
 											grid.arrange(enthusiasts_device, enthusiasts_app, nrow = 1))
 ggsave(file = '/home/waseem/Documents/Self-Development/2021 NFL Draft/viz_5.png', 
 				viz_5, width = 9.5, height = 8.5, units = 'in')
+
+
+
+
+#--------------------------------------------------------------------------
+# Cross device users
+#--------------------------------------------------------------------------
+
+# cross-device users
+# these are users who used more than one device
+users_device <- data.table(
+	dataset %>%
+		group_by(device_type) %>%
+		summarise(users = n_distinct(user_id)) %>%
+		ungroup() %>%
+		arrange(-users) %>%
+		mutate(percent = users / sum(users))
+) %>%
+	ggplot(aes(x = reorder(device_type, users), y = users)) +
+	geom_bar(stat = 'identity', fill = '#ED68ED') +
+	ggtitle('Device') +
+	labs(x = 'Device', y = 'Unique Users') +
+	# text for the conversion
+	geom_text(aes(label = paste0(round(percent * 100), '%')), 
+	          color = 'black', size = 3, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	coord_flip()
