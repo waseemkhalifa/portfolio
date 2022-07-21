@@ -162,22 +162,51 @@ transaction <- data.table(
 )
 
 
+#--------------------------------------------------------------------------
+# Master dataset
+#--------------------------------------------------------------------------
 
-
+# our master dataset
+# row count for transaction = 10064
+# we'll now join transaction to invoice
+master <- data.table(
+	left_join(select(transaction, -created_date_time),
+						select(invoice, -created_date_time, -created_date), by = c('invoice_id'))
+)
+# we'll now join to account_product to get product_id
+master <- data.table(
+	left_join(master, account_product, by = c('account_product_id'))
+)
+# we find that 32 rows have NULL for product_id
+# we'll now join to product to get product_title
+master <- data.table(
+	left_join(master, product, by = c('product_id')) 
+)
+# let's join to account and see if any account with null product_id
+# had other invoices which had a product id
+master <- data.table(
+	left_join(master, account, by = c('account_id')) 
+)
+# we also find that they don't have account_id's
+# this looks like bad data and we should remove it
+# let's now join with payment_period so that we have everything
+master <- data.table(
+	left_join(master, payment_period, by = c('payment_period_id')) 
+)
+# no duplicates, row count = 10064
+# we'll remove any rows which don't have an account_id
+master <- data.table(
+	master %>%
+		filter()
+)
 
 
 #--------------------------------------------------------------------------
-# EDA visualisations
+# EDA
 #--------------------------------------------------------------------------
-
 
 
 # Calculate and visualise revenue for the latest 12 month period?
-	# How does that compare to the prior 12 month period?
-	# What is our revenue split between Careers and Memberships products?
-
-revenue <- data.table(
-	left_join(transaction, product, by = c('product_id'))
-)
-
-max(transaction$created_date)
+# How does that compare to the prior 12 month period?
+# What is our revenue split between Careers and Memberships products?
+master
