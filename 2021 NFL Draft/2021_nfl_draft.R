@@ -856,18 +856,49 @@ ggsave(file = '/home/waseem/Documents/Self-Development/2021 NFL Draft/viz_5.png'
 
 # cross-device users
 # these are users who used more than one device
-users_device <- data.table(
+cross_device <- data.table(
 	dataset %>%
-		group_by(device_type) %>%
-		summarise(users = n_distinct(user_id)) %>%
+		select(user_id, device_type) %>%
+		unique() %>%
+		group_by(user_id) %>%
+		summarise(devices = n_distinct(device_type)) %>%
 		ungroup() %>%
-		arrange(-users) %>%
+		group_by(devices) %>%
+		summarise(users = n_distinct(user_id)) %>%
 		mutate(percent = users / sum(users))
 ) %>%
-	ggplot(aes(x = reorder(device_type, users), y = users)) +
-	geom_bar(stat = 'identity', fill = '#ED68ED') +
-	ggtitle('Device') +
-	labs(x = 'Device', y = 'Unique Users') +
+	ggplot(aes(x = reorder(devices, users), y = users)) +
+	geom_bar(stat = 'identity', fill = '#00A9FF') +
+	ggtitle('How many devices?') +
+	labs(x = 'Unique Devices', y = 'Unique Users') +
+	# text for the conversion
+	geom_text(aes(label = paste0(round(percent * 100), '%')), 
+	          color = 'black', size = 3, fontface = 'bold',
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	coord_flip()
+
+
+
+# cross app_type
+cross_app_type <- data.table(
+	dataset %>%
+		select(user_id, device_type, app_type) %>%
+		unique() %>%
+		group_by(user_id, device_type) %>%
+		summarise(app_types = n_distinct(app_type)) %>%
+		ungroup() %>%
+		group_by(device_type, app_types) %>%
+		summarise(users = n_distinct(user_id)) %>%
+		ungroup() %>%
+		group_by(device_type) %>%
+		mutate(percent = users / sum(users))
+) %>%
+	ggplot(aes(x = reorder(devices, users), y = users)) +
+	geom_bar(stat = 'identity', fill = '#00A9FF') +
+	ggtitle('How many devices?') +
+	labs(x = 'Unique Devices', y = 'Unique Users') +
 	# text for the conversion
 	geom_text(aes(label = paste0(round(percent * 100), '%')), 
 	          color = 'black', size = 3, fontface = 'bold',
