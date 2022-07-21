@@ -197,7 +197,7 @@ master <- data.table(
 # we'll remove any rows which don't have an account_id
 master <- data.table(
 	master %>%
-		filter()
+		filter(is.na(account_id) == F)
 )
 
 
@@ -205,8 +205,12 @@ master <- data.table(
 # EDA
 #--------------------------------------------------------------------------
 
+max_date <- max(master$created_date)
 
 # Calculate and visualise revenue for the latest 12 month period?
 # How does that compare to the prior 12 month period?
 # What is our revenue split between Careers and Memberships products?
-master
+product_title_viz <- data.table(
+	master %>%
+		
+)
