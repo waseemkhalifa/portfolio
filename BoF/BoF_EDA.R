@@ -147,7 +147,7 @@ transaction <- data.table(
 	raw_transaction %>%
 	rename(transaction_id = TRANSACTION_ID,
 					invoice_id = INVOICE_ID,
-					transaction_ammount = TRANSACTION_AMOUNT_IN_CENTS,
+					transaction_amount = TRANSACTION_AMOUNT_IN_CENTS,
 					transaction_status = TRANSACTION_STATUS,
 					failure_reason = FAILURE_REASON,
 					created_date_time = CREATED_DATETIME
@@ -206,11 +206,27 @@ master <- data.table(
 #--------------------------------------------------------------------------
 
 max_date <- max(master$created_date)
+min_last_12_months <- add_with_rollback(max_date, months(-12), 
+																					roll_to_first = TRUE)
+min_prior_12_months <- add_with_rollback(min_last_12_months - 1, months(-12), 
+																					roll_to_first = TRUE)
+
 
 # Calculate and visualise revenue for the latest 12 month period?
 # How does that compare to the prior 12 month period?
 # What is our revenue split between Careers and Memberships products?
 product_title_viz <- data.table(
 	master %>%
-		
+		mutate(period = ifelse(between(created_date, min_last_12_months, max_date), 
+														'This Year', 
+										ifelse(between(created_date, min_prior_12_months, min_last_12_months -1),
+													 	'Last Year', NA)))) %>%
+		# filter to the last 12 months
+		filter(between(created_date, min_last_12_months, max_date)) %>%
+		filter(transaction_status == 'success') %>%
+		group_by(product_title) %>%
+		summarise(transaction_amount = sum(transaction_amount)) %>%
+		ungroup() %>%
+		mutate(percent = transaction_amount / sum(transaction_amount)) %>%
+		arrange(-percent)
 )
