@@ -138,7 +138,7 @@ invoice <- data.table(
 					payment_period_id = as.character(payment_period_id)) %>%
 	# we'll create a new field for date
 	# as the timestamp stores no time
-	mutate(created_date = ymd(substr(created_date_time, 1, 10)))
+	mutate(invoice_date = ymd(substr(created_date_time, 1, 10)))
 )
 
 
@@ -159,7 +159,7 @@ transaction <- data.table(
 					invoice_id = as.character(invoice_id)) %>%
 	# we'll create a new field for date
 	# as the timestamp stores no time
-	mutate(created_date = ymd(substr(created_date_time, 1, 10)))
+	mutate(transaction_date = ymd(substr(created_date_time, 1, 10)))
 )
 
 
@@ -172,7 +172,7 @@ transaction <- data.table(
 # we'll now join transaction to invoice
 master <- data.table(
 	left_join(select(transaction, -created_date_time),
-						select(invoice, -created_date_time, -created_date), by = c('invoice_id'))
+						select(invoice, -created_date_time), by = c('invoice_id'))
 )
 # we'll now join to account_product to get product_id
 master <- data.table(
@@ -206,18 +206,20 @@ master <- data.table(
 # EDA
 #--------------------------------------------------------------------------
 
-max_date <- max(master$created_date)
+max_date <- max(master$transaction_date)
 min_last_12_months <- add_with_rollback(max_date, months(-12), 
 																					roll_to_first = TRUE)
 min_prior_12_months <- add_with_rollback(min_last_12_months - 1, months(-12), 
 																					roll_to_first = TRUE)
 
 # custom function for period
-udf_period <- function(created_date, min_last_12_months, max_date, min_prior_12_months) {
-	ifelse(between(created_date, min_last_12_months, max_date), 
-														'This Year', 
-										ifelse(between(created_date, min_prior_12_months, min_last_12_months - 1),
-													 	'Last Year', NA))
+udf_period <- function(transaction_date, min_last_12_months, max_date, 
+												min_prior_12_months) {
+	ifelse(between(transaction_date, min_last_12_months, max_date), 
+					'This Year', 
+	ifelse(between(transaction_date, min_prior_12_months, min_last_12_months - 1), 
+					'Last Year', 
+					NA))
 }
 
 
@@ -225,19 +227,19 @@ udf_period <- function(created_date, min_last_12_months, max_date, min_prior_12_
 # How does that compare to the prior 12 month period?
 revenue_trend <- data.table(
 	master %>%
-		mutate(period = udf_period(created_date, min_last_12_months, 
+		mutate(period = udf_period(transaction_date, min_last_12_months, 
 																max_date, min_prior_12_months)) %>%
 		# filter to the last 12 months
 		filter(is.na(period) == F) %>%
 		filter(transaction_status == 'success') %>%
-		mutate(month_date = as.Date(as.yearmon(created_date, '%m/%Y')),
-						month_name = as.yearmon(created_date, '%m/%Y'))
+		mutate(month_date = as.Date(as.yearmon(transaction_date, '%m/%Y')),
+						month_name = as.yearmon(transaction_date, '%m/%Y'))
 )
 
 # What is our revenue split between Careers and Memberships products?
 product_title_viz <- data.table(
 	master %>%
-		mutate(period = udf_period(created_date, min_last_12_months, 
+		mutate(period = udf_period(transaction_date, min_last_12_months, 
 																max_date, min_prior_12_months)) %>%
 		# filter to the last 12 months
 		filter(is.na(period) == F) %>%
@@ -251,15 +253,94 @@ product_title_viz <- data.table(
 )
 
 
-
 # What are the top three reasons for payment failures (in descending order)
+payment_failures <- data.table(
+	master %>%
+		filter(transaction_status == 'failed') %>%
+		group_by(failure_reason) %>%
+		summarise(transactions = n_distinct(transaction_id)) %>%
+		ungroup() %>%
+		mutate(percent = transactions / sum(transactions)) %>%
+		arrange(-percent)
+)
 
 
 
 
+# Over the last 12 months what amount of accounts have churned?
+# Which month had the highest churn?
+
+# this is a user defined function
+# we'll use this to determine if the customer goes into the following states:
+	# dunning, churn or successfully paid customer
+udf_status <- function(invoice_date, transaction_date, transaction_status) {
+	ifelse(between(transaction_date, invoice_date, invoice_date + 6) 
+					& transaction_status != 'success', 
+					'dunning',
+	ifelse(!(between(transaction_date, invoice_date, invoice_date + 6))
+					& transaction_status != 'success', 
+					'churned',
+	ifelse(between(transaction_date, invoice_date, invoice_date + 6) 
+					& transaction_status == 'success', 
+					'renewal',
+					NA
+	)))
+} 
+
+# this is a user defined function
+# we'll use this to uncover invoices which have 
+# gone from dunning to churned
+udf_dunning_to_churned <- function(state) {
+	ifelse(state == 'churned' & lag(state) == 'dunning', T, F)
+}
+
+churn_trend <- data.table(
+	master %>%
+		mutate(period = udf_period(transaction_date, min_last_12_months, 
+																max_date, min_prior_12_months)) %>%
+		# filter to the last 12 months
+		filter(period == 'This Year') %>%
+		mutate(month_date = as.Date(as.yearmon(transaction_date, '%m/%Y')),
+						month_name = as.yearmon(transaction_date, '%m/%Y')) %>%
+		group_by(account_id, transaction_id, invoice_id) %>%
+		mutate(state = udf_status(invoice_date, transaction_date, transaction_status)) %>%
+		ungroup %>%
+		group_by(account_id, invoice_id) %>%
+		mutate(dunning_to_churned = udf_dunning_to_churned(state)) %>%
+		ungroup() %>%
+		filter(dunning_to_churned == T) %>%
+		group_by(month_date, month_name) %>%
+		summarise(churned_accounts = n_distinct(account_id))
+)
 
 
+# Over the past 12 months, how many account renewals have been recovered 
+# from the dunning process on a month by month basis?
+
+# this is a user defined function
+# we'll use this to uncover invoices which have been recovered from dunning
+# dunning to successfully renewal
+udf_dunning_to_renewal <- function(state) {
+	ifelse(state == 'customer' & lag(state) == 'dunning', T, F)
+}
 
 
+test <- data.table(
+	master %>%
+		select(account_id, account_title, product_title,
+						payment_period_title, transaction_date, transaction_id, invoice_date, 
+						invoice_id, transaction_amount, transaction_status, failure_reason,
+						account_product_id) %>%
+		group_by(account_id, transaction_id, invoice_id) %>%
+		mutate(state = udf_status(invoice_date, transaction_date, transaction_status)) %>%
+		ungroup() %>%
+		group_by(account_id, invoice_id) %>%
+		arrange(transaction_id) %>%
+		ungroup() %>%
+		group_by(account_id, invoice_id) %>%
+		mutate(churn_to_customer = udf_churn_to_customer(state))
+)
 
 
+filter(test, churn_to_customer == T)
+filter(test, account_id == '999')
