@@ -15,6 +15,7 @@ library(gridExtra)
 library(sqldf)
 library(arules)
 library(scales)
+library(zoo)
 
 
 #--------------------------------------------------------------------------
@@ -211,22 +212,54 @@ min_last_12_months <- add_with_rollback(max_date, months(-12),
 min_prior_12_months <- add_with_rollback(min_last_12_months - 1, months(-12), 
 																					roll_to_first = TRUE)
 
+# custom function for period
+udf_period <- function(created_date, min_last_12_months, max_date, min_prior_12_months) {
+	ifelse(between(created_date, min_last_12_months, max_date), 
+														'This Year', 
+										ifelse(between(created_date, min_prior_12_months, min_last_12_months - 1),
+													 	'Last Year', NA))
+}
+
 
 # Calculate and visualise revenue for the latest 12 month period?
 # How does that compare to the prior 12 month period?
+revenue_trend <- data.table(
+	master %>%
+		mutate(period = udf_period(created_date, min_last_12_months, 
+																max_date, min_prior_12_months)) %>%
+		# filter to the last 12 months
+		filter(is.na(period) == F) %>%
+		filter(transaction_status == 'success') %>%
+		mutate(month_date = as.Date(as.yearmon(created_date, '%m/%Y')),
+						month_name = as.yearmon(created_date, '%m/%Y'))
+)
+
 # What is our revenue split between Careers and Memberships products?
 product_title_viz <- data.table(
 	master %>%
-		mutate(period = ifelse(between(created_date, min_last_12_months, max_date), 
-														'This Year', 
-										ifelse(between(created_date, min_prior_12_months, min_last_12_months -1),
-													 	'Last Year', NA)))) %>%
+		mutate(period = udf_period(created_date, min_last_12_months, 
+																max_date, min_prior_12_months)) %>%
 		# filter to the last 12 months
-		filter(between(created_date, min_last_12_months, max_date)) %>%
+		filter(is.na(period) == F) %>%
 		filter(transaction_status == 'success') %>%
-		group_by(product_title) %>%
+		group_by(period, product_title) %>%
 		summarise(transaction_amount = sum(transaction_amount)) %>%
 		ungroup() %>%
+		group_by(period) %>%
 		mutate(percent = transaction_amount / sum(transaction_amount)) %>%
-		arrange(-percent)
+		arrange(period, -percent)
 )
+
+
+
+# What are the top three reasons for payment failures (in descending order)
+
+
+
+
+
+
+
+
+
+
