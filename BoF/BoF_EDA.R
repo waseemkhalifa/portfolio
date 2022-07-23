@@ -233,8 +233,28 @@ revenue_trend <- data.table(
 		filter(is.na(period) == F) %>%
 		filter(transaction_status == 'success') %>%
 		mutate(month_date = as.Date(as.yearmon(transaction_date, '%m/%Y')),
-						month_name = as.yearmon(transaction_date, '%m/%Y'))
+						month_name = as.yearmon(transaction_date, '%m/%Y')) %>%
+		group_by(period, month_date, month_name) %>%
+		summarise(transaction_amount = sum(transaction_amount))
 )
+
+revenue_total <- data.table(
+	master %>%
+		mutate(period = udf_period(transaction_date, min_last_12_months, 
+																max_date, min_prior_12_months)) %>%
+		# filter to the last 12 months
+		filter(is.na(period) == F) %>%
+		filter(transaction_status == 'success') %>%
+		group_by(period) %>%
+		summarise(transaction_amount = sum(transaction_amount)) %>%
+		ungroup() %>%
+		arrange(period) %>%
+		mutate(diff = ifelse(period == 'This Year', 
+					(transaction_amount - lag(transaction_amount, 1)) / lag(transaction_amount, 1), NA))
+)
+
+
+
 
 # What is our revenue split between Careers and Memberships products?
 product_title_viz <- data.table(
@@ -306,6 +326,7 @@ churn_trend <- data.table(
 		mutate(state = udf_status(invoice_date, transaction_date, transaction_status)) %>%
 		ungroup %>%
 		group_by(account_id, invoice_id) %>%
+		arrange(transaction_id) %>%
 		mutate(dunning_to_churned = udf_dunning_to_churned(state)) %>%
 		ungroup() %>%
 		filter(dunning_to_churned == T) %>%
@@ -321,26 +342,78 @@ churn_trend <- data.table(
 # we'll use this to uncover invoices which have been recovered from dunning
 # dunning to successfully renewal
 udf_dunning_to_renewal <- function(state) {
-	ifelse(state == 'customer' & lag(state) == 'dunning', T, F)
+	ifelse(state == 'renewal' & lag(state) == 'dunning', T, F)
 }
 
-
-test <- data.table(
+renewal_trend <- data.table(
 	master %>%
-		select(account_id, account_title, product_title,
-						payment_period_title, transaction_date, transaction_id, invoice_date, 
-						invoice_id, transaction_amount, transaction_status, failure_reason,
-						account_product_id) %>%
+		mutate(period = udf_period(transaction_date, min_last_12_months, 
+																max_date, min_prior_12_months)) %>%
+		# filter to the last 12 months
+		filter(period == 'This Year') %>%
+		mutate(month_date = as.Date(as.yearmon(transaction_date, '%m/%Y')),
+						month_name = as.yearmon(transaction_date, '%m/%Y')) %>%
 		group_by(account_id, transaction_id, invoice_id) %>%
 		mutate(state = udf_status(invoice_date, transaction_date, transaction_status)) %>%
-		ungroup() %>%
+		ungroup %>%
 		group_by(account_id, invoice_id) %>%
 		arrange(transaction_id) %>%
+		mutate(dunning_to_renewal = udf_dunning_to_renewal(state)) %>%
 		ungroup() %>%
-		group_by(account_id, invoice_id) %>%
-		mutate(churn_to_customer = udf_churn_to_customer(state))
+		filter(dunning_to_renewal == T) %>%
+		group_by(month_date, month_name) %>%
+		summarise(dunning_to_renewal = n_distinct(account_id))
 )
 
 
-filter(test, churn_to_customer == T)
-filter(test, account_id == '999')
+# On a month by month basis what is our total MRR (Monthly Recurring Revenue) 
+# across all products? 
+
+# we'll find the latest transaction state for each account and product
+# we'll then divide by 12 any yearly transaction_amount
+# monthly transaction amount will stay the same
+# we'll then group up the revenue by account_id and state of the latest order
+mmr <- data.table(
+	master %>%
+		group_by(account_id, transaction_id, invoice_id) %>%
+		mutate(state = udf_status(invoice_date, transaction_date, transaction_status)) %>%
+		ungroup %>%
+		group_by(account_id, product_title) %>%
+		mutate(lastest_transaction = row_number(desc(transaction_date))) %>%
+		filter(lastest_transaction == 1) %>%
+		ungroup() %>%
+		# we'll divide the transaction_amount by 12 if it is paid yearly
+		# else we'll leave as is
+		mutate(revenue = ifelse(payment_period_title == 'Yearly', 
+															transaction_amount / 12, 
+											ifelse(payment_period_title == 'Monthly', 
+															transaction_amount,
+											NA))) %>%
+		group_by(account_id, state) %>%
+		summarise(revenue = sum(revenue)) 
+)
+# we'll now join to the account table
+# any account without a transaction value, is a new account and is still active
+# we will only count accounts which are 'renewal' or without a transaction
+# as active accounts
+# all accounts have a trans value
+mmr <- data.table(
+	left_join(account, mmr, by = c('account_id')) %>%
+	filter(state == 'renewal') %>%
+	mutate(total = 'total') %>%
+	group_by(total) %>%
+	summarise(active_accounts = n_distinct(account_id),
+						avg_revenue_per_account = mean(revenue)) %>%
+	ungroup() %>%
+	mutate(mmr = active_accounts * avg_revenue_per_account)
+)
+
+filter(active_account, is.na(revenue))
+
+
+
+
+both_products %>% filter(lastest_transaction > 1)
+both_products %>% filter(account_id == '999')
+filter(account, account_id == '999')
+test %>% filter(account_id == '666')
