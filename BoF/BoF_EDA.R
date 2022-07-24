@@ -225,6 +225,8 @@ udf_period <- function(transaction_date, min_last_12_months, max_date,
 
 # Calculate and visualise revenue for the latest 12 month period?
 # How does that compare to the prior 12 month period?
+# Last Year 2017-11-20 2018-11-19             
+# This Year 2018-11-20 2019-11-07 
 revenue_trend <- data.table(
 	master %>%
 		mutate(period = udf_period(transaction_date, min_last_12_months, 
@@ -235,8 +237,24 @@ revenue_trend <- data.table(
 		mutate(month_date = as.Date(as.yearmon(transaction_date, '%m/%Y')),
 						month_name = as.yearmon(transaction_date, '%m/%Y')) %>%
 		group_by(period, month_date, month_name) %>%
-		summarise(transaction_amount = sum(transaction_amount))
-)
+		summarise(transaction_amount = sum(transaction_amount)) %>%
+		ungroup() %>%
+		mutate(revenue = transaction_amount / 100)
+) %>%
+	ggplot(aes(x = month_date, y = revenue, fill = period)) +
+	geom_bar(stat = 'identity') +
+	ggtitle('12 Month Revenue', '20/11/17 to 19/11/18 vs 20/11/18 to 19/11/19') +
+	labs(x = 'Month', y = 'Revenue ($)') +
+	# text for the conversion
+	geom_text(aes(label = paste0('$', format(round(revenue), big.mark = ','))), 
+	          color = 'black', size = 4, #angle = 90,
+	          position = position_stack(vjust = 0.8, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+  scale_x_date(date_breaks = '1 month', date_labels = '%b %Y') +
+	theme(legend.position = 'bottom', legend.title = element_blank()) +
+	facet_wrap(period ~ ., scales = 'free_x', ncol = 1)
+
 
 revenue_total <- data.table(
 	master %>%
@@ -250,8 +268,27 @@ revenue_total <- data.table(
 		ungroup() %>%
 		arrange(period) %>%
 		mutate(diff = ifelse(period == 'This Year', 
-					(transaction_amount - lag(transaction_amount, 1)) / lag(transaction_amount, 1), NA))
-)
+					(transaction_amount - lag(transaction_amount, 1)) / lag(transaction_amount, 1), NA)) %>%
+		ungroup() %>%
+		mutate(revenue = transaction_amount / 100)
+) %>%
+	ggplot(aes(x = period, y = revenue, fill = period)) +
+	geom_bar(stat = 'identity') +
+	ggtitle('Total 12 Month Revenue', '20/11/17 to 19/11/18 vs 20/11/18 to 19/11/19') +
+	labs(x = 'Period', y = 'Revenue ($)') +
+	# text for the conversion
+	geom_text(aes(label = paste0('$', format(round(revenue), big.mark = ','))), 
+	          color = 'black', size = 4, #angle = 90,
+	          position = position_stack(vjust = 0.8, reverse = FALSE)) +
+	 # text for the percent
+	  geom_text(aes(label = ifelse(is.na(diff) == F, 
+	  								paste0(round(diff * 100, 2), '%'), '')), 
+	            color = 'white', size = 4, fontface = 'bold',
+	            position = position_dodge(width = 1), vjust = 5) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	# we don't want a legend for the fill
+	guides(fill = 'none') 
 
 
 
@@ -270,7 +307,28 @@ product_title_viz <- data.table(
 		group_by(period) %>%
 		mutate(percent = transaction_amount / sum(transaction_amount)) %>%
 		arrange(period, -percent)
-)
+) %>%
+	ggplot(aes(x = period, y = revenue, fill = period)) +
+	geom_bar(stat = 'identity') +
+	ggtitle('Total 12 Month Revenue', '20/11/17 to 19/11/18 vs 20/11/18 to 19/11/19') +
+	labs(x = 'Period', y = 'Revenue ($)') +
+	# text for the conversion
+	geom_text(aes(label = paste0('$', format(round(revenue), big.mark = ','))), 
+	          color = 'black', size = 4, #angle = 90,
+	          position = position_stack(vjust = 0.8, reverse = FALSE)) +
+	 # text for the percent
+	  geom_text(aes(label = ifelse(is.na(diff) == F, 
+	  								paste0(round(diff * 100, 2), '%'), '')), 
+	            color = 'white', size = 4, fontface = 'bold',
+	            position = position_dodge(width = 1), vjust = 5) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	theme(legend.position = 'bottom', legend.title = element_blank()) 
+
+
+
+
+
 
 
 # What are the top three reasons for payment failures (in descending order)
