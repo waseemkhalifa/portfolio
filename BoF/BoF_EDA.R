@@ -247,13 +247,47 @@ revenue_trend <- data.table(
 	labs(x = 'Month', y = 'Revenue ($)') +
 	# text for the conversion
 	geom_text(aes(label = paste0('$', format(round(revenue), big.mark = ','))), 
-	          color = 'black', size = 4, #angle = 90,
-	          position = position_stack(vjust = 0.8, reverse = FALSE)) +
+	          color = 'black', size = 3,
+	          position = position_stack(vjust = 0.9, reverse = FALSE)) +
 	# gives the y axis the percentage scale
 	scale_y_continuous(labels = scales::comma) +
   scale_x_date(date_breaks = '1 month', date_labels = '%b %Y') +
-	theme(legend.position = 'bottom', legend.title = element_blank()) +
+	theme(legend.position = 'bottom', legend.title = element_blank(),
+				axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
 	facet_wrap(period ~ ., scales = 'free_x', ncol = 1)
+
+
+
+revenue_line <- data.table(
+	master %>%
+		mutate(period = udf_period(transaction_date, min_last_12_months, 
+																max_date, min_prior_12_months)) %>%
+		# filter to the last 12 months
+		filter(is.na(period) == F) %>%
+		filter(transaction_status == 'success') %>%
+		mutate(month_date = as.Date(as.yearmon(transaction_date, '%m/%Y')),
+						month_name = as.yearmon(transaction_date, '%m/%Y')) %>%
+		group_by(period, month_date, month_name) %>%
+		summarise(transaction_amount = sum(transaction_amount)) %>%
+		ungroup() %>%
+		mutate(revenue = transaction_amount / 100) %>%
+    mutate(month_viz = if_else(period == 'Last Year', 
+                                    add_with_rollback(month_date, months(12), 
+                                                  roll_to_first = TRUE), 
+                                    month_date)) %>%
+    mutate(month_viz = as.yearmon(month_viz, '%m/%Y'))
+) %>%
+	ggplot(aes(x = month_viz, y = revenue, group = period, color = period)) +
+	geom_line(size = 2) +
+	geom_point(size = 4) +
+	ggtitle('12 Month Trend', '20/11/17 to 19/11/18 vs 20/11/18 to 19/11/19') +
+	labs(x = 'Month', y = 'Revenue ($)') +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	theme(legend.position = 'bottom', legend.title = element_blank())
+
+
+
 
 
 revenue_total <- data.table(
@@ -274,7 +308,7 @@ revenue_total <- data.table(
 ) %>%
 	ggplot(aes(x = period, y = revenue, fill = period)) +
 	geom_bar(stat = 'identity') +
-	ggtitle('Total 12 Month Revenue', '20/11/17 to 19/11/18 vs 20/11/18 to 19/11/19') +
+	ggtitle('Total 12 Month Revenue') +
 	labs(x = 'Period', y = 'Revenue ($)') +
 	# text for the conversion
 	geom_text(aes(label = paste0('$', format(round(revenue), big.mark = ','))), 
@@ -283,8 +317,8 @@ revenue_total <- data.table(
 	 # text for the percent
 	  geom_text(aes(label = ifelse(is.na(diff) == F, 
 	  								paste0(round(diff * 100, 2), '%'), '')), 
-	            color = 'white', size = 4, fontface = 'bold',
-	            position = position_dodge(width = 1), vjust = 5) +
+	            color = 'white', size = 4,
+	            position = position_dodge(width = 1), vjust = 10) +
 	# gives the y axis the percentage scale
 	scale_y_continuous(labels = scales::comma) +
 	# we don't want a legend for the fill
@@ -306,28 +340,27 @@ product_title_viz <- data.table(
 		ungroup() %>%
 		group_by(period) %>%
 		mutate(percent = transaction_amount / sum(transaction_amount)) %>%
-		arrange(period, -percent)
+		arrange(period, -percent) %>%
+		ungroup() %>%
+		mutate(revenue = transaction_amount / 100)
 ) %>%
-	ggplot(aes(x = period, y = revenue, fill = period)) +
-	geom_bar(stat = 'identity') +
-	ggtitle('Total 12 Month Revenue', '20/11/17 to 19/11/18 vs 20/11/18 to 19/11/19') +
-	labs(x = 'Period', y = 'Revenue ($)') +
-	# text for the conversion
-	geom_text(aes(label = paste0('$', format(round(revenue), big.mark = ','))), 
-	          color = 'black', size = 4, #angle = 90,
-	          position = position_stack(vjust = 0.8, reverse = FALSE)) +
-	 # text for the percent
-	  geom_text(aes(label = ifelse(is.na(diff) == F, 
-	  								paste0(round(diff * 100, 2), '%'), '')), 
-	            color = 'white', size = 4, fontface = 'bold',
-	            position = position_dodge(width = 1), vjust = 5) +
+	ggplot(aes(x = period, y = percent, fill = product_title)) +
+	geom_bar(stat = 'identity', position = position_stack(reverse = FALSE)) +
+	ggtitle('Product Revenue Split') +
+	labs(x = 'Period', y = '%') +
+ 	# text for the percent
+  geom_text(aes(label = paste0(round(percent * 100, 2), '%')), 
+            color = 'black', size = 4,
+           	position = position_stack(vjust = 0.7, reverse = FALSE)) +
+  # text for the percent
+  geom_text(aes(label = if_else(product_title == 'Membership', 
+  											paste0('$', format(round(revenue), big.mark = ',')),
+  											'')), 
+            color = 'white', size = 4,
+           	position = position_stack(vjust = 0.2, reverse = FALSE)) +
 	# gives the y axis the percentage scale
-	scale_y_continuous(labels = scales::comma) +
-	theme(legend.position = 'bottom', legend.title = element_blank()) 
-
-
-
-
+	scale_y_continuous(labels = scales::percent) +
+	theme(legend.position = 'bottom', legend.title = element_blank())
 
 
 
@@ -340,7 +373,37 @@ payment_failures <- data.table(
 		ungroup() %>%
 		mutate(percent = transactions / sum(transactions)) %>%
 		arrange(-percent)
-)
+) %>%
+	ggplot(aes(x = reorder(failure_reason, transactions), y = transactions, 
+						fill = failure_reason)) +
+	geom_bar(stat = 'identity') +
+	ggtitle('Failure Reasons') +
+	labs(x = 'Failure Reasons', y = 'Transactions') +
+ 	# text for the percent
+  geom_text(aes(label = paste0(round(percent * 100, 2), '%')), 
+            color = 'white', size = 4,
+           	position = position_stack(vjust = 0.8, reverse = FALSE)) +
+  # text for the percent
+  geom_text(aes(label = paste0(format(round(transactions), big.mark = ','))), 
+            color = 'black', size = 4,
+           	position = position_stack(vjust = 0.2, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	theme(legend.position = 'bottom', legend.title = element_blank()) +
+	# we don't want a legend for the fill
+	guides(fill = 'none') +
+	coord_flip()
+
+
+viz_1 <- grid.arrange(
+							grid.arrange(revenue_trend, revenue_line, 
+															ncol = 1, heights = c(2, 1)),
+							grid.arrange(revenue_total, product_title_viz, payment_failures,
+															ncol = 1),
+							nrow = 1, widths = c(2, 1))
+ggsave(file = '/home/waseem/Documents/Self-Development/BoF/viz_1.png', 
+				viz_1, width = 9.5, height = 8.5, units = 'in')
+
 
 
 
@@ -389,8 +452,27 @@ churn_trend <- data.table(
 		ungroup() %>%
 		filter(dunning_to_churned == T) %>%
 		group_by(month_date, month_name) %>%
-		summarise(churned_accounts = n_distinct(account_id))
-)
+		summarise(churned_accounts = n_distinct(account_id)) %>%
+		ungroup() %>%
+		mutate(total_churned = sum(churned_accounts))
+) %>%
+	ggplot(aes(x = month_date, y = churned_accounts)) +
+	geom_bar(stat = 'identity', fill = '#00A9FF') +
+	ggtitle('Churned Accounts') +
+	labs(x = 'Month', y = 'Accounts') +
+	# text for the conversion
+	geom_text(aes(label = churned_accounts), 
+	          color = 'white', size = 4,
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	geom_text(mapping = aes(y = 25, x = as.Date('2019-08-01'),
+										label = if_else(month_date == as.Date('2019-08-01'),
+															paste0('Total: ', total_churned), NULL)),
+							size = 6) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+  scale_x_date(date_breaks = '1 month', date_labels = '%b %Y') +
+	theme(legend.position = 'bottom', legend.title = element_blank(),
+				axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
 
 # Over the past 12 months, how many account renewals have been recovered 
@@ -420,8 +502,27 @@ renewal_trend <- data.table(
 		ungroup() %>%
 		filter(dunning_to_renewal == T) %>%
 		group_by(month_date, month_name) %>%
-		summarise(dunning_to_renewal = n_distinct(account_id))
-)
+		summarise(dunning_to_renewal = n_distinct(account_id)) %>%
+		ungroup() %>%
+		mutate(total_dunning_to_renewal = sum(dunning_to_renewal))
+) %>%
+	ggplot(aes(x = month_date, y = dunning_to_renewal)) +
+	geom_bar(stat = 'identity', fill = '#F8766D') +
+	ggtitle('Reneweal Accounts', 'Dunning to Successful Renewal') +
+	labs(x = 'Month', y = 'Accounts') +
+	# text for the conversion
+	geom_text(aes(label = dunning_to_renewal), 
+	          color = 'white', size = 4,
+	          position = position_stack(vjust = 0.5, reverse = FALSE)) +
+	geom_text(mapping = aes(y = 6, x = as.Date('2019-08-01'),
+										label = if_else(month_date == as.Date('2019-08-01'),
+															paste0('Total: ', total_dunning_to_renewal), NULL)),
+							size = 6) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+  scale_x_date(date_breaks = '1 month', date_labels = '%b %Y') +
+	theme(legend.position = 'bottom', legend.title = element_blank(),
+				axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
 
 # On a month by month basis what is our total MRR (Monthly Recurring Revenue) 
@@ -463,15 +564,44 @@ mmr <- data.table(
 	summarise(active_accounts = n_distinct(account_id),
 						avg_revenue_per_account = mean(revenue)) %>%
 	ungroup() %>%
-	mutate(mmr = active_accounts * avg_revenue_per_account)
+	mutate(mmr = active_accounts * avg_revenue_per_account) %>%
+	mutate(avg_revenue_per_account_dollars = avg_revenue_per_account / 100,
+					mmr_dollars = mmr / 100,)
 )
+mmr_melt <- data.table(
+	mmr %>%
+		select(-avg_revenue_per_account, -mmr) %>%
+		melt(id.vars = 'total', 
+					measure.vars = c('active_accounts', 'avg_revenue_per_account_dollars',
+														'mmr_dollars')) %>%
+		select(-total) %>%
+		mutate(clean_label = if_else(variable == 'active_accounts', 'Active Accounts',
+												 if_else(variable == 'avg_revenue_per_account_dollars', 
+												 											'Avg. Revenue Per Account ($)',
+												 if_else(variable == 'mmr_dollars', 'MMR ($)',
+												 	''))))
+) %>%
+	ggplot(aes(x = clean_label, y = value, fill = clean_label)) +
+	geom_bar(stat = 'identity') +
+	ggtitle('MMR') +
+	labs(x = '', y = '') +
+	# text for the conversion
+	geom_text(aes(label = if_else(clean_label != 'Active Accounts',
+								paste0('$', format(round(value), big.mark = ',')),
+								as.character(value))), 
+	          color = 'black', size = 4,
+	          position = position_stack(vjust = 0.9, reverse = FALSE)) +
+	# gives the y axis the percentage scale
+	scale_y_continuous(labels = scales::comma) +
+	facet_wrap(clean_label ~ ., scales = 'free', nrow = 1,
+							labeller = labeller(clean_label = label_wrap_gen(20))) +
+	# we don't want a legend for the fill
+	guides(fill = 'none')
 
-filter(active_account, is.na(revenue))
 
-
-
-
-both_products %>% filter(lastest_transaction > 1)
-both_products %>% filter(account_id == '999')
-filter(account, account_id == '999')
-test %>% filter(account_id == '666')
+viz_2 <- grid.arrange(
+							grid.arrange(churn_trend, renewal_trend, ncol = 1),
+							mmr_melt,
+							nrow = 1)
+ggsave(file = '/home/waseem/Documents/Self-Development/BoF/viz_2.png', 
+				viz_2, width = 9.5, height = 8.5, units = 'in')
