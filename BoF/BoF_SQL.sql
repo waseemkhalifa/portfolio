@@ -51,3 +51,35 @@ WHERE
 ;
 
 
+
+
+/*
+	- Calculate and visualise revenue for the latest 12 month period?
+	- How does that compare to the prior 12 month period?
+*/
+
+-- this is the maximum date in our dataset
+SET max_date = to_date('2019-11-20');
+-- we find the last 12 months from this date range
+SET min_last_12_months = DATEADD(MONTH, -12, $max_date);
+-- we find the previous 12 months (for last year period)
+SET min_prior_12_months = DATEADD(MONTH, -12, DATEADD(DAY, -1, $min_last_12_months));
+
+CREATE OR REPLACE TABLE 
+	test_day.sandbox_1.question_1
+AS
+
+WITH
+
+
+base AS (
+
+	SELECT
+		CASE 
+			WHEN transaction_date BETWEEN $min_last_12_months AND $max_date 
+			THEN 'This Year'
+			WHEN transaction_date BETWEEN $min_prior_12_months AND DATEADD(DAY, -1, $min_prior_12_months) 
+			THEN 'Last Year'
+		END AS period,
+		
+)
