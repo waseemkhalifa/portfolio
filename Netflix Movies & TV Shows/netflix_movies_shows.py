@@ -10,15 +10,13 @@ sys.excepthook = ColorTB()
 import os
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from rich import print
+import plotly.express as px
 
 # just some formatting options
 # allows us to see all columns for a dataframe 
-# and numbers aren't displayed in scientific format
+# and numbers aren't displayed in scientific format (4 decimal places)
 pd.set_option('display.max_columns', None)
-pd.options.display.float_format = '{:.2f}'.format
+pd.options.display.float_format = '{:.4f}'.format
 
 #--------------------------------------------------------------------------
 # set Working Directory
@@ -96,3 +94,41 @@ def udf_seasons(var1):
 # we'll derive minutes using our function in lambda
 dataset['duration_seasons'] = dataset['duration'].apply(lambda x: \
                               udf_seasons(x))
+
+# that's our clean dataset complete, we can start some EDA
+# any other manipulations, we can do specifically during the EDA
+# we'll keep this as our base dataset
+
+#--------------------------------------------------------------------------
+# EDA
+#--------------------------------------------------------------------------
+
+#---------
+# what is the split of Type?
+#---------
+type_split = dataset.groupby('type').\
+              agg({'show_id': 'count'}).\
+              reset_index().\
+              rename(columns = {'show_id': 'shows'})
+type_split['percent'] = type_split['shows'] / type_split['shows'].sum()
+type_split['percent_viz'] = round(type_split['percent'] * 100).astype(str)
+
+type_split_viz = px.bar(
+  type_split,
+  x = 'type', y = 'percent',
+  text = 'percent_viz',
+  title = 'Movies vs T-Shows',
+  labels = {
+    'percent': '% of Shows',
+    'type': 'Type',
+  }
+  )
+type_split_viz.update_traces(
+  textfont_size = 12, 
+  textangle = 0, 
+  textposition = "outside", 
+  cliponaxis = False
+  )
+type_split_viz.layout.yaxis.tickformat = ',.0%'
+type_split_viz.show()
+type_split_viz.write_image('type_split.png')
