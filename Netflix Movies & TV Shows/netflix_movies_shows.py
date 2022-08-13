@@ -74,3 +74,25 @@ dataset['year'] = dataset['date_added'].str.split(',', expand = True)[1].\
 dataset['date_added'] = pd.to_datetime(dataset[['year', 'month', 'day']].\
                         astype(str).apply(''.join, 1), format = '%Y%B%d',\
                         errors = 'coerce')
+
+# we'll see the unique values in the duration column
+# we want to see if it only holding min or seasons
+dataset['duration'].unique()
+# it's only holding min or seasons, let's feature engineer seasons and mins
+# we'll create a custom functions which will help us achieve this
+# this function checks if the column contains 'min', if it does
+# it extracts the minutes
+def udf_minutes(var1):
+  if 'min' in str(var1).lower():
+    return str(var1).split(' ')[0].strip()
+# we'll derive minutes using our function in lambda
+dataset['duration_minutes'] = dataset['duration'].apply(lambda x: \
+                              udf_minutes(x))
+# this function checks if the column contains 'seasons', if it does
+# it extracts the seasons
+def udf_seasons(var1):
+  if 'seasons' in str(var1).lower():
+    return str(var1).split(' ')[0].strip()
+# we'll derive minutes using our function in lambda
+dataset['duration_seasons'] = dataset['duration'].apply(lambda x: \
+                              udf_seasons(x))
