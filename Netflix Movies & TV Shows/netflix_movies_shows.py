@@ -63,3 +63,14 @@ dataset['release_year'] = dataset['release_year'].astype(str)
 # we'll keep the orginal date_added column but rename it
 dataset['date_added_orginal'] = dataset['date_added']
 # create the new date_added column as string
+# first we'll seperate out day, month and year
+dataset['month'] = dataset['date_added'].str.split(' ', expand = True)[0].\
+                    str.strip()
+dataset['day'] = dataset['date_added'].str.split(' ', expand = True)[1].\
+                  str.split(',', expand = True)[0].str.zfill(2)
+dataset['year'] = dataset['date_added'].str.split(',', expand = True)[1].\
+                  str.strip()
+# we'll create the new data_added column now
+dataset['date_added'] = pd.to_datetime(dataset[['year', 'month', 'day']].\
+                        astype(str).apply(''.join, 1), format = '%Y%B%d',\
+                        errors = 'coerce')
