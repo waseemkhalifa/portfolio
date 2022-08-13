@@ -11,6 +11,7 @@ import os
 import pandas as pd
 import numpy as np
 import plotly.express as px
+import plotly.io as pio
 
 # just some formatting options
 # allows us to see all columns for a dataframe 
@@ -107,11 +108,13 @@ dataset['duration_seasons'] = dataset['duration'].apply(lambda x: \
 # what is the split of Type?
 #---------
 type_split = dataset.groupby('type').\
-              agg({'show_id': 'count'}).\
+              agg({'show_id': pd.Series.nunique}).\
               reset_index().\
               rename(columns = {'show_id': 'shows'})
 type_split['percent'] = type_split['shows'] / type_split['shows'].sum()
 type_split['percent_viz'] = round(type_split['percent'] * 100).astype(str)
+type_split['percent_viz'] = type_split['percent_viz'].\
+                            str.split('.', expand = True)[0].astype(str) + '%'
 
 type_split_viz = px.bar(
   type_split,
@@ -121,14 +124,31 @@ type_split_viz = px.bar(
   labels = {
     'percent': '% of Shows',
     'type': 'Type',
-  }
+  },
+  color = 'type'
   )
 type_split_viz.update_traces(
   textfont_size = 12, 
   textangle = 0, 
-  textposition = "outside", 
+  textposition = 'outside', 
   cliponaxis = False
   )
 type_split_viz.layout.yaxis.tickformat = ',.0%'
-type_split_viz.show()
-type_split_viz.write_image('type_split.png')
+# type_split_viz.show()
+type_split_viz.write_image('type_split.png', 
+  scale = 1, width = 800, height = 1000)
+
+#---------
+# No. of Shows by Country
+#---------
+# multiple countries can be within one row
+# so we will need to do some data manipulation
+shows_country = dataset.groupby('country').\
+                agg({'show_id': pd.Series.nunique}).\
+                reset_index().\
+                rename(columns = {'show_id': 'shows'})
+shows_country['percent'] = shows_country['shows'] / shows_country['shows'].sum()
+shows_country['percent_viz'] = round(shows_country['percent'] * 100).astype(str)
+shows_country['percent_viz'] = shows_country['percent_viz'].\
+                            str.split('.', expand = True)[0].astype(str) + '%'
+shows_country.sort_values('shows', ascending = False, inplace = True)
