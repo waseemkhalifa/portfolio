@@ -230,4 +230,50 @@ movie_duration_viz = px.box(
 )
 movie_duration_viz.show()
 movie_duration_viz.write_image('movie_duration.png', 
-  scale = 1, width = 800, height = 1000)
+  scale = 1, width = 800, height = 900)
+
+#---------
+# TV Show Seasons
+#---------
+# we will look at the number of seasons for TV Shows
+tv_duration = dataset[dataset['type'] == 'TV Show']\
+                  [['show_id', 'title', 'listed_in', 'duration_seasons']].\
+                  reset_index(drop = True).copy()
+# There are multiple genre's for a single film, so we'll split these out
+# this will split out genres into individual columns
+genres = tv_duration['listed_in'].str.split(',', expand = True).\
+          apply(lambda x: x.str.strip())
+# we will now concat to our tv_duration dataframe
+tv_duration = pd.concat([tv_duration, genres], axis = 1, join = 'outer')
+# the split is successful, so we'll drop the listed_in column
+tv_duration.drop(columns = 'listed_in', inplace = True)
+# we'll now re-arrange the dataframe from wide to long
+# we'll also remove nulls and duplicates
+tv_duration = pd.melt(tv_duration,\
+                  id_vars = ['show_id', 'title', 'duration_seasons']).\
+                  drop(columns = 'variable').dropna().\
+                  rename({'value': 'genre'}, axis = 'columns')
+# we need to convert duration_seasons from string to int
+tv_duration['duration_seasons'] = tv_duration['duration_seasons'].astype(int)
+
+tv_duration_viz = px.histogram(
+  tv_duration,
+  x = 'duration_seasons',
+  title = 'TV Show Seasons by Genre',
+  labels = {
+    'duration_seasons': 'No. Of Seasons',
+    'genre': 'Genre',
+  },
+  color = 'genre',
+  facet_col = 'genre', facet_col_wrap = 5
+)
+tv_duration_viz.update_yaxes(matches = None, showticklabels = True)
+tv_duration_viz.update_layout(showlegend = False)
+tv_duration_viz.show()
+tv_duration_viz.write_image('tv_duration_viz.png', 
+  scale = 1, width = 800, height = 800)
+
+
+#---------
+# Releases by Month Year
+#---------
