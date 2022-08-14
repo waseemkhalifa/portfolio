@@ -146,7 +146,8 @@ type_split_viz.write_image('type_split.png',
 # first we make a copy of our dataset, with two columns
 shows_country = dataset[['show_id', 'country']].copy()
 # this will split out countries into individual columns
-country_columns = shows_country['country'].str.split(',', expand = True)
+country_columns = shows_country['country'].str.split(',', expand = True).\
+                  apply(lambda x: x.str.strip())
 # we will now concat to our shows_country dataframe
 shows_country = pd.concat([shows_country, country_columns], axis = 1, \
                 join = 'outer')
@@ -156,17 +157,77 @@ shows_country[shows_country['country'].str.contains(',', na = False)]
 shows_country.drop(columns = 'country', inplace = True)
 # we'll now re-arrange the dataframe from wide to long
 # we'll also remove nulls and duplicates
-# our dataframe is now complete
 shows_country = pd.melt(shows_country, id_vars = ['show_id']).\
                 drop(columns = 'variable').dropna().\
                 rename({'value': 'country'}, axis = 'columns')
-
-shows_country = dataset.groupby('country').\
+# we'll now group the dataset
+shows_country = shows_country.groupby(['country']).\
                 agg({'show_id': pd.Series.nunique}).\
-                reset_index().\
-                rename(columns = {'show_id': 'shows'})
+                rename(columns = {'show_id': 'shows'}).\
+                sort_values('shows', ascending = False).\
+                reset_index()
 shows_country['percent'] = shows_country['shows'] / shows_country['shows'].sum()
 shows_country['percent_viz'] = round(shows_country['percent'] * 100).astype(str)
 shows_country['percent_viz'] = shows_country['percent_viz'].\
                             str.split('.', expand = True)[0].astype(str) + '%'
-shows_country.sort_values('shows', ascending = False, inplace = True)
+shows_country = shows_country.iloc[0:10]
+
+shows_country_viz = px.bar(
+  shows_country,
+  x = 'country', y = 'shows',
+  text = 'percent_viz',
+  title = 'Shows per Country (Top 10)',
+  labels = {
+    'shows': 'No. of Shows',
+    'country': 'Country',
+  },
+  color = 'shows'
+)
+shows_country_viz.update_traces(
+  textfont_size = 12, 
+  textangle = 0, 
+  textposition = 'outside', 
+  cliponaxis = False
+)
+shows_country_viz.show()
+shows_country_viz.write_image('shows_country.png', 
+  scale = 1, width = 800, height = 1000)
+
+
+#---------
+# Movie Durations
+#---------
+# over here we will look at the number of minutes per Movie by genre
+movie_duration = dataset[dataset['type'] == 'Movie']\
+                  [['show_id', 'title', 'listed_in', 'duration_minutes']].\
+                  reset_index(drop = True).copy()
+# There are multiple genre's for a single film, so we'll split these out
+# this will split out genres into individual columns
+genres = movie_duration['listed_in'].str.split(',', expand = True).\
+          apply(lambda x: x.str.strip())
+# we will now concat to our movie_duration dataframe
+movie_duration = pd.concat([movie_duration, genres], axis = 1, join = 'outer')
+# the split is successful, so we'll drop the listed_in column
+movie_duration.drop(columns = 'listed_in', inplace = True)
+# we'll now re-arrange the dataframe from wide to long
+# we'll also remove nulls and duplicates
+movie_duration = pd.melt(movie_duration,\
+                  id_vars = ['show_id', 'title', 'duration_minutes']).\
+                  drop(columns = 'variable').dropna().\
+                  rename({'value': 'genre'}, axis = 'columns')
+# we need to convert duration_minutes from string to int
+movie_duration['duration_minutes'] = movie_duration['duration_minutes'].astype(int)
+
+movie_duration_viz = px.box(
+  movie_duration,
+  x = 'genre', y = 'duration_minutes',
+  title = 'Movie Duration by Genre',
+  labels = {
+    'duration_minutes': 'Minutes',
+    'genre': 'Genre',
+  },
+  color = 'genre'
+)
+movie_duration_viz.show()
+movie_duration_viz.write_image('movie_duration.png', 
+  scale = 1, width = 800, height = 1000)
