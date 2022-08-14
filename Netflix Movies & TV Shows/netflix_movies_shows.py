@@ -141,8 +141,26 @@ type_split_viz.write_image('type_split.png',
 #---------
 # No. of Shows by Country
 #---------
-# multiple countries can be within one row
+# multiple countries can be within one row (seperated by ',')
 # so we will need to do some data manipulation
+# first we make a copy of our dataset, with two columns
+shows_country = dataset[['show_id', 'country']].copy()
+# this will split out countries into individual columns
+country_columns = shows_country['country'].str.split(',', expand = True)
+# we will now concat to our shows_country dataframe
+shows_country = pd.concat([shows_country, country_columns], axis = 1, \
+                join = 'outer')
+# we'll check if the split has been successful
+shows_country[shows_country['country'].str.contains(',', na = False)]
+# the split is successful, so we'll drop the country column
+shows_country.drop(columns = 'country', inplace = True)
+# we'll now re-arrange the dataframe from wide to long
+# we'll also remove nulls and duplicates
+# our dataframe is now complete
+shows_country = pd.melt(shows_country, id_vars = ['show_id']).\
+                drop(columns = 'variable').dropna().\
+                rename({'value': 'country'}, axis = 'columns')
+
 shows_country = dataset.groupby('country').\
                 agg({'show_id': pd.Series.nunique}).\
                 reset_index().\
