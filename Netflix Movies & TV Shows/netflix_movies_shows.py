@@ -90,7 +90,7 @@ dataset['duration_minutes'] = dataset['duration'].apply(lambda x: \
 # this function checks if the column contains 'seasons', if it does
 # it extracts the seasons
 def udf_seasons(var1):
-  if 'seasons' in str(var1).lower():
+  if 'season' in str(var1).lower():
     return str(var1).split(' ')[0].strip()
 # we'll derive minutes using our function in lambda
 dataset['duration_seasons'] = dataset['duration'].apply(lambda x: \
@@ -216,7 +216,8 @@ movie_duration = pd.melt(movie_duration,\
                   drop(columns = 'variable').dropna().\
                   rename({'value': 'genre'}, axis = 'columns')
 # we need to convert duration_minutes from string to int
-movie_duration['duration_minutes'] = movie_duration['duration_minutes'].astype(int)
+movie_duration['duration_minutes'] = movie_duration['duration_minutes']\
+                                      .astype(int)
 
 movie_duration_viz = px.box(
   movie_duration,
@@ -275,5 +276,40 @@ tv_duration_viz.write_image('tv_duration_viz.png',
 
 
 #---------
-# Releases by Month Year
+# Shows Added by Month Year
 #---------
+# over here we will show the number of shows added by month year
+shows_added = dataset[['show_id', 'title', 'date_added', 'type']].copy()
+shows_added['month_year'] = shows_added['date_added'].dt.to_period('M').\
+                            dt.to_timestamp()
+shows_added = shows_added.groupby(['month_year', 'type']).\
+              agg({'show_id': pd.Series.nunique}).\
+              rename(columns = {'show_id': 'shows'}).reset_index()
+
+# viz as line graph
+shows_added_viz = px.line(
+  shows_added,
+  x = 'month_year', y = 'shows',
+  title = 'Shows Added by Month Year',
+  labels = {
+    'shows': 'No. of Shows',
+    'month_year': 'Month-Year',
+  },
+  color = 'type'
+)
+shows_added_viz.show()
+shows_added_viz.write_image('shows_added.png', 
+  scale = 1, width = 800, height = 1000)
+
+# viz as heatmap
+https://stackoverflow.com/questions/71549352/plotly-express-heatmap-using-pandas-dataframe
+def df_to_plotly(df):
+    return {'z': df.values.tolist(),
+            'x': df.columns.tolist(),
+            'y': df.index.tolist()}
+
+
+shows_added_heatmap = px.imshow(
+  shows_added[['shows', 'month_year']].to_dict()
+)
+shows_added_heatmap.show()
