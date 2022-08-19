@@ -17,7 +17,7 @@ import plotly.io as pio
 # allows us to see all columns for a dataframe 
 # and numbers aren't displayed in scientific format (4 decimal places)
 pd.set_option('display.max_columns', None)
-pd.options.display.float_format = '{:.4f}'.format
+pd.options.display.float_format = '{:.2f}'.format
 
 #--------------------------------------------------------------------------
 # set Working Directory
@@ -266,7 +266,8 @@ tv_duration_viz = px.histogram(
     'genre': 'Genre',
   },
   color = 'genre',
-  facet_col = 'genre', facet_col_wrap = 5
+  facet_col = 'genre', 
+  facet_col_wrap = 5
 )
 tv_duration_viz.update_yaxes(matches = None, showticklabels = True)
 tv_duration_viz.update_layout(showlegend = False)
@@ -302,14 +303,22 @@ shows_added_viz.write_image('shows_added.png',
   scale = 1, width = 800, height = 1000)
 
 # viz as heatmap
-https://stackoverflow.com/questions/71549352/plotly-express-heatmap-using-pandas-dataframe
-def df_to_plotly(df):
-    return {'z': df.values.tolist(),
-            'x': df.columns.tolist(),
-            'y': df.index.tolist()}
+shows_added_heatmap = shows_added.copy()
+shows_added_heatmap['year'] = \
+  pd.DatetimeIndex(shows_added_heatmap['month_year']).year
+shows_added_heatmap['month'] = \
+  pd.DatetimeIndex(shows_added_heatmap['month_year']).month
+shows_added_heatmap = shows_added_heatmap.\
+  groupby(['year', 'month']).agg({'shows': 'sum'}).reset_index()
+shows_added_heatmap = shows_added_heatmap.pivot(
+  index = 'month', columns = 'year', values = 'shows').fillna(0)
 
 
-shows_added_heatmap = px.imshow(
-  shows_added[['shows', 'month_year']].to_dict()
-)
-shows_added_heatmap.show()
+shows_added_heatmap_viz = px.imshow(
+  shows_added_heatmap,
+  x = shows_added_heatmap.columns, 
+  y = shows_added_heatmap.index,
+  labels = dict(x = 'Month', y = 'Year'),
+  color_continuous_scale = 'RdBu_r', origin = 'lower')
+shows_added_heatmap_viz.update_xaxes(side = 'top')
+shows_added_heatmap_viz.show()
