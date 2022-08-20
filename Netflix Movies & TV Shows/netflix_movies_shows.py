@@ -313,12 +313,14 @@ shows_added_heatmap = shows_added_heatmap.\
 shows_added_heatmap = shows_added_heatmap.pivot(
   index = 'month', columns = 'year', values = 'shows').fillna(0)
 
-
 shows_added_heatmap_viz = px.imshow(
   shows_added_heatmap,
   x = shows_added_heatmap.columns, 
   y = shows_added_heatmap.index,
   labels = dict(x = 'Month', y = 'Year'),
-  color_continuous_scale = 'RdBu_r', origin = 'lower')
-shows_added_heatmap_viz.update_xaxes(side = 'top')
+  color_continuous_scale = 'blues', origin = 'lower')
+shows_added_heatmap_viz.update_xaxes(side = 'top', type = 'category', \
+  nticks = len(shows_added_heatmap.columns))
+shows_added_heatmap_viz.update_yaxes(type = 'category',\
+  nticks = len(shows_added_heatmap.index))
 shows_added_heatmap_viz.show()
