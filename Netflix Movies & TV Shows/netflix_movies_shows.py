@@ -189,7 +189,7 @@ shows_country_viz.update_traces(
   textposition = 'outside', 
   cliponaxis = False
 )
-shows_country_viz.show()
+# shows_country_viz.show()
 shows_country_viz.write_image('shows_country.png', 
   scale = 1, width = 800, height = 1000)
 
@@ -229,7 +229,7 @@ movie_duration_viz = px.box(
   },
   color = 'genre'
 )
-movie_duration_viz.show()
+# movie_duration_viz.show()
 movie_duration_viz.write_image('movie_duration.png', 
   scale = 1, width = 800, height = 900)
 
@@ -271,7 +271,7 @@ tv_duration_viz = px.histogram(
 )
 tv_duration_viz.update_yaxes(matches = None, showticklabels = True)
 tv_duration_viz.update_layout(showlegend = False)
-tv_duration_viz.show()
+# tv_duration_viz.show()
 tv_duration_viz.write_image('tv_duration_viz.png', 
   scale = 1, width = 800, height = 800)
 
@@ -298,7 +298,7 @@ shows_added_viz = px.line(
   },
   color = 'type'
 )
-shows_added_viz.show()
+# shows_added_viz.show()
 shows_added_viz.write_image('shows_added.png', 
   scale = 1, width = 800, height = 1000)
 
@@ -306,20 +306,28 @@ shows_added_viz.write_image('shows_added.png',
 shows_added_heatmap = shows_added.copy()
 shows_added_heatmap['year'] = \
   pd.DatetimeIndex(shows_added_heatmap['month_year']).year
-shows_added_heatmap['month'] = \
+shows_added_heatmap['month_num'] = \
   pd.DatetimeIndex(shows_added_heatmap['month_year']).month
+shows_added_heatmap['month'] = \
+  shows_added_heatmap['month_year'].dt.month_name()
 shows_added_heatmap = shows_added_heatmap.\
-  groupby(['year', 'month']).agg({'shows': 'sum'}).reset_index()
-shows_added_heatmap = shows_added_heatmap.pivot(
-  index = 'month', columns = 'year', values = 'shows').fillna(0)
+  groupby(['year', 'month', 'month_num']).agg({'shows': 'sum'}).reset_index()
+shows_added_heatmap = shows_added_heatmap.pivot(\
+  index = ['month', 'month_num'],\
+  columns = 'year', values = 'shows').fillna(0).astype(int)
+shows_added_heatmap.sort_values('month_num', ascending = True,\
+  inplace = True)
+shows_added_heatmap.drop(index = ('month_num'))
+
 
 shows_added_heatmap_viz = px.imshow(
   shows_added_heatmap,
   x = shows_added_heatmap.columns, 
   y = shows_added_heatmap.index,
+  text_auto = True,
   labels = dict(x = 'Month', y = 'Year'),
   color_continuous_scale = 'blues', origin = 'lower')
-shows_added_heatmap_viz.update_xaxes(side = 'top', type = 'category', \
+shows_added_heatmap_viz.update_xaxes(side = 'top', type = 'category',\
   nticks = len(shows_added_heatmap.columns))
 shows_added_heatmap_viz.update_yaxes(type = 'category',\
   nticks = len(shows_added_heatmap.index))
