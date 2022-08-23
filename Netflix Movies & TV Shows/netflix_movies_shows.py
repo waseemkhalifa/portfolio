@@ -312,13 +312,13 @@ shows_added_heatmap['month'] = \
   shows_added_heatmap['month_year'].dt.month_name()
 shows_added_heatmap = shows_added_heatmap.\
   groupby(['year', 'month', 'month_num']).agg({'shows': 'sum'}).reset_index()
-shows_added_heatmap = shows_added_heatmap.pivot(\
-  index = ['month', 'month_num'],\
-  columns = 'year', values = 'shows').fillna(0).astype(int)
-shows_added_heatmap.sort_values('month_num', ascending = True,\
+shows_added_heatmap.sort_values('month_num', ascending = False,\
   inplace = True)
-shows_added_heatmap.drop(index = ('month_num'))
-
+shows_added_heatmap.reset_index(inplace = True)
+shows_added_heatmap = shows_added_heatmap.pivot(\
+  index = ['month_num', 'month'],\
+  columns = 'year', values = 'shows').fillna(0).astype(int)
+shows_added_heatmap = shows_added_heatmap.droplevel(0, axis = 0)
 
 shows_added_heatmap_viz = px.imshow(
   shows_added_heatmap,
@@ -330,5 +330,5 @@ shows_added_heatmap_viz = px.imshow(
 shows_added_heatmap_viz.update_xaxes(side = 'top', type = 'category',\
   nticks = len(shows_added_heatmap.columns))
 shows_added_heatmap_viz.update_yaxes(type = 'category',\
-  nticks = len(shows_added_heatmap.index))
+  nticks = len(shows_added_heatmap.index), autorange = 'reversed')
 shows_added_heatmap_viz.show()
