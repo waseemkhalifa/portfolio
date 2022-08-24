@@ -332,3 +332,26 @@ shows_added_heatmap_viz.update_xaxes(side = 'top', type = 'category',\
 shows_added_heatmap_viz.update_yaxes(type = 'category',\
   nticks = len(shows_added_heatmap.index), autorange = 'reversed')
 shows_added_heatmap_viz.show()
+
+
+#---------
+# movie genre heatmap
+#---------
+# over here we will look at the number of genres per Movie
+movie_genre = dataset[dataset['type'] == 'Movie']\
+  [['show_id', 'title', 'listed_in']].\
+  reset_index(drop = True).copy()
+# There are multiple genre's for a single film, so we'll split these out
+# this will split out genres into individual columns
+genres = movie_genre['listed_in'].str.split(',', expand = True).\
+  apply(lambda x: x.str.strip())
+# we will now concat to our movie_genre dataframe
+movie_genre = pd.concat([movie_genre, genres], axis = 1, join = 'outer')
+# the split is successful, so we'll drop the listed_in column
+movie_genre.drop(columns = 'listed_in', inplace = True)
+# we'll now re-arrange the dataframe from wide to long
+# we'll also remove nulls and duplicates
+movie_genre = pd.melt(movie_genre,\
+  id_vars = ['show_id', 'title']).\
+  drop(columns = 'variable').dropna().\
+  rename({'value': 'genre'}, axis = 'columns')
