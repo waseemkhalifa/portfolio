@@ -132,7 +132,7 @@ def play_tic_tac_toe():
           if turns == max_turns:
              print('Nobody wins!')
              break
-          if turns > max_turns:
+          elif turns > max_turns:
              break
           elif p == 'x':
             print('You are player x')
