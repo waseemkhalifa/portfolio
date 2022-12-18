@@ -391,6 +391,7 @@ def play_blackjack():
         elif game_choice == '2':
           round = round + 1
           for_loop_helper = False
+          print('')
           print('Thank you for playing - GOODBYE')
           break
         else:
