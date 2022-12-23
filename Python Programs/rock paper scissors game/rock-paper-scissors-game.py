@@ -32,14 +32,14 @@ def player_choice():
   # this original choice value can be anything that isn't an integer
   choice = 'wrong'
   # while the choice is not a digit, keep asking for input.
-  while choice not in [1, 2, 3]:
+  while choice not in ['1', '2', '3']:
     print('Choose one of the following:')
     choice = input('Rock(1), Paper(2) or Scissors(3): ')
-    # we'll convert choice to int here
-    choice = int(choice)
-    if choice not in [1, 2, 3]:
+    if choice not in ['1', '2', '3']:
       print('')
       print('Only 1, 2 or 3 are valid inputs')
+  # we'll convert choice to int here
+  choice = int(choice)
   player_chosen = choice_dict[choice]
   return player_chosen
 
@@ -109,16 +109,14 @@ def game():
     score_keeper(player_score, computer_score, result)
     # ask the player if they'd like to carry on playing or not
     choice = 'wrong'
-    while choice not in [1, 2]:
+    while choice not in ['1', '2']:
       print('')
       choice = input('Continue playing?: Yes(1) or No(2): ')
-      # we'll convert choice to int here
-      choice = int(choice)
       print('')
-      if choice not in [1, 2]:
+      if choice not in ['1', '2']:
         print('')
         print('Only 1 or 2 are valid inputs')
-      elif choice == 2:
+      elif choice == '2':
         play = False
 
 # this will start the game
