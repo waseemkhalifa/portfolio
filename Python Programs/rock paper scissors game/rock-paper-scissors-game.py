@@ -34,7 +34,9 @@ def player_choice():
   # while the choice is not a digit, keep asking for input.
   while choice not in [1, 2, 3]:
     print('Choose one of the following:')
-    choice = int(input('Rock(1), Paper(2) or Scissors(3): '))
+    choice = input('Rock(1), Paper(2) or Scissors(3): ')
+    # we'll convert choice to int here
+    choice = int(choice)
     if choice not in [1, 2, 3]:
       print('')
       print('Only 1, 2 or 3 are valid inputs')
@@ -109,7 +111,9 @@ def game():
     choice = 'wrong'
     while choice not in [1, 2]:
       print('')
-      choice = int(input('Continue playing?: Yes(1) or No(2): '))
+      choice = input('Continue playing?: Yes(1) or No(2): ')
+      # we'll convert choice to int here
+      choice = int(choice)
       print('')
       if choice not in [1, 2]:
         print('')
