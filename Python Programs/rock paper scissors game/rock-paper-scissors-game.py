@@ -118,6 +118,7 @@ def game():
         print('Only 1 or 2 are valid inputs')
       elif choice == '2':
         play = False
+  print('Thank you for playing - GOODBYE')
 
 # this will start the game
 game()
