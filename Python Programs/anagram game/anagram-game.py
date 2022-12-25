@@ -63,11 +63,31 @@ def shuffle_word(word):
 
 # this function will ask the player to solve the anagram
 # they will have a maximum of 3 attempts
-# if they get it correct/not the function will print a message
+# if they get it correct/not the function will return a message
+def solve(orig_word, shuf_word):
+  print('')
+  print('Can you solve this anagram: {a}'.format(a=shuf_word))
+  print('You have a maximum of 3 attempts')
+  print('')
+  max_attempts=3
+  current_attempt=1
+  while max_attempts!=0:
+    print('Attempt {a}'.format(a=current_attempt))
+    attempt = input('Enter your guess: ')
+    if attempt == orig_word:
+      message = 'correct'
+      max_attempts = 0
+      break
+    else:
+      message = 'wrong'
+      current_attempt+=1
+      max_attempts-=1
+  return message
 
-a = original_word(3)
-print(a)
-shuffle_word(a)
+
+orig_word = original_word(3)
+shuf_word = shuffle_word(orig_word)
+solve(orig_word, shuf_word)
 
 a = [i for i in words if len(i) == 5]
 a
