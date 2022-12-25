@@ -8,7 +8,8 @@
 
 # the concept of the game is as follows:
 # the player starts the game with 10 points
-# the player is asked how many letters of the anagram challenge they would like
+# the player is asked how many letters of a anagram would you like to challenge
+# themselves to
 # the player is able to choose between 3-15 letters
 # if the player solves the anagram, their points increase by the number of
 # letters of the anagram they've solved
@@ -46,7 +47,27 @@ def letters():
   choice = int(choice)
   return choice
 
+# this function will pick a random word
+# the word will have the length specified
+def original_word(letters):
+  word = [i for i in words if len(i) == 5]
+  word = random.choice(word)
+  return word
 
+# this function will shuffle the original_word
+def shuffle_word(word):
+  word = list(word)
+  random.shuffle(word)
+  word = ''.join(word)
+  return word
+
+# this function will ask the player to solve the anagram
+# they will have a maximum of 3 attempts
+# if they get it correct/not the function will print a message
+
+a = original_word(3)
+print(a)
+shuffle_word(a)
 
 a = [i for i in words if len(i) == 5]
 a
