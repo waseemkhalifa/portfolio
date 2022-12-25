@@ -20,7 +20,39 @@
 from english_words import english_words_lower_alpha_set as words
 # we will use this to pick words from random
 import random
+# this is the default number of points for the game (global variable)
+points = 10
+
+# this function will ask the player how many letters of an anagram they'd
+# like to challenge themselves to
+def letters():
+  # accepted inputs
+  # any number between 3 and 16
+  # we'll convert the numbers in the list from int to string
+  # as input is stored as a string (which we'll convert to int later)
+  accepted_inputs = list(range(3, 16))
+  accepted_inputs = [str(x) for x in accepted_inputs]
+   # this original choice value can be anything that isn't an integer
+  choice = 'wrong'
+  # while the choice is not a digit, keep asking for input.
+  while choice not in accepted_inputs:
+    print('How many letters of a anagram would you like to challenge '+\
+      'yourself to?')
+    choice = input('Choose between 3 to 15: ')
+    if choice not in accepted_inputs:
+      print('')
+      print('Only numbers between 3 to 15 are valid inputs')
+  # we'll convert choice to int here
+  choice = int(choice)
+  return choice
+
+
 
 a = [i for i in words if len(i) == 5]
 a
-random.choice(a)
+b = random.choice(a)
+print(b)
+c = list(b)
+print(c)
+random.shuffle(c)
+
