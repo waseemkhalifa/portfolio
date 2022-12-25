@@ -22,6 +22,8 @@
 from english_words import english_words_lower_set as words
 # we will use this to pick words from random
 import random
+# for the floor method
+import math
 # this is the default number of points for the game (global variable)
 points = 10
 
@@ -56,3 +58,18 @@ def original_word(letters):
   word = random.choice(word)
   return word
 
+# this function will hide half of the letters in the word by random
+def hidden_word(orig_word):
+  # work out len of orig_word and use floor
+  hide = math.floor(len(orig_word)/2)
+  orig_word = list(orig_word)
+  lst = random.choices(orig_word, k=3)
+  for i,x in enumerate(orig_word):
+  return hide
+
+hidden_word('')
+
+orig_word = 'hello'
+hide = math.floor(len(orig_word)/2)
+orig_word = list(orig_word)
+lst = random.choices(orig_word, k=hide)
