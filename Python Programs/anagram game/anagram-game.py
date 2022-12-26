@@ -129,16 +129,20 @@ def game():
     solved = solve(orig_word, shuf_word)
     points_calc(solved, orig_word)
     # ask the player if they'd like to carry on playing or not
-    choice = 'wrong'
-    while choice not in ['1', '2']:
-      print('')
-      choice = input('Continue playing?: Yes(1) or No(2): ')
-      print('')
-      if choice not in ['1', '2']:
+    # if they don't have any points left the game ends automatically
+    if points > 0:
+      choice = 'wrong'
+      while choice not in ['1', '2']:
         print('')
-        print('Only 1 or 2 are valid inputs')
-      elif choice == '2':
-        points = 0
+        choice = input('Continue playing?: Yes(1) or No(2): ')
+        print('')
+        if choice not in ['1', '2']:
+          print('')
+          print('Only 1 or 2 are valid inputs')
+        elif choice == '2':
+          points = 0
+    else:
+      print('You have no points!')
   print('Thank you for playing - GOODBYE')
   print('')
 
