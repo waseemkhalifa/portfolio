@@ -3,7 +3,6 @@
 #--------------------------------------------------------------------------
 setwd('/home/waseem/Documents/Self-Development/git_repos/waseem-self-development/Online Retail II UCI/')
 
-
 #--------------------------------------------------------------------------
 # Load libraries
 #--------------------------------------------------------------------------
@@ -15,7 +14,6 @@ library(gridExtra)
 library(sqldf)
 library(arules)
 library(scales)
-
 
 #--------------------------------------------------------------------------
 # load dataset
@@ -186,16 +184,8 @@ ggsave(file = '/home/waseem/Documents/Self-Development/Online Retail II UCI/viz_
 				viz_1, width = 9.5, height = 8.5, units = 'in')
 
 
-
-
-
-
-
-
-
 # We'll concentrate our analysis on these core 5 markets
 top_5_markets <- c('United Kingdom', 'EIRE', 'Netherlands', 'Germany', 'France')
-
 
 # ----------------- AOV by Top 5 Markets
 # all orders which are returns (negative revenue)
@@ -268,18 +258,10 @@ top5_ov_hist <- data.table(
 	facet_wrap(country ~ ., scales = 'free') +
 	scale_y_continuous(labels = scales::comma)
 
-
 viz_2 <- grid.arrange(grid.arrange(top5_aov, top5_ov_boxplot, nrow = 1),
 											top5_ov_hist)
 ggsave(file = '/home/waseem/Documents/Self-Development/Online Retail II UCI/viz_2.png', 
 				viz_2, width = 9.5, height = 8.5, units = 'in')
-
-
-
-
-
-
-
 
 
 # ----------------- Total customers by Country
