@@ -30,13 +30,13 @@ def choice():
     # this will match the element to the row & column of the array
     array_position = []
     if choice == 1:
-       array_position = [0,0]
+        array_position = [0,0]
     elif choice == 2:
        array_position = [0,1]
     elif choice == 3:
        array_position = [0,2]
     elif choice == 4:
-       array_position = [1,0]
+        array_position = [1,0]
     elif choice == 5:
        array_position = [1,1]
     elif choice == 6:
@@ -56,10 +56,10 @@ def x_choice(board_display, element_choice):
     col_input = element_choice[1]
     filled_element = ['x', 'o']
     while board_display[row_input][col_input] in filled_element:
-      print('There is already an input on the board, choose another element')
-      element_choice = choice()
-      row_input = element_choice[0]
-      col_input = element_choice[1]
+        print('There is already an input on the board, choose another element')
+        element_choice = choice()
+        row_input = element_choice[0]
+        col_input = element_choice[1]
     board_display[row_input][col_input] = 'x'
 
 # this is for player_o
@@ -69,48 +69,48 @@ def o_choice(board_display, element_choice):
     col_input = element_choice[1]
     filled_element = ['x', 'o']
     while board_display[row_input][col_input] in filled_element:
-      print('There is already an input on the board, choose another element')
-      element_choice = choice()
-      row_input = element_choice[0]
-      col_input = element_choice[1]
+        print('There is already an input on the board, choose another element')
+        element_choice = choice()
+        row_input = element_choice[0]
+        col_input = element_choice[1]
     board_display[row_input][col_input] = 'o'
 
 # this function will determine if a player has won
 def won_game(board):
     # player x
     if board[0][0] == 'x' and board[0][1] == 'x' and board[0][2] == 'x':
-      return True
+        return True
     elif board[1][0] == 'x' and board[1][1] == 'x' and board[1][2] == 'x':
-      return True
+        return True
     elif board[2][0] == 'x' and board[2][1] == 'x' and board[2][2] == 'x':
-      return True
+        return True
     elif board[0][0] == 'x' and board[1][0] == 'x' and board[2][0] == 'x':
-      return True
+        return True
     elif board[0][1] == 'x' and board[1][1] == 'x' and board[2][1] == 'x':
-      return True
+        return True
     elif board[0][2] == 'x' and board[1][2] == 'x' and board[2][2] == 'x':
-      return True
+        return True
     elif board[0][0] == 'x' and board[1][1] == 'x' and board[2][2] == 'x':
-      return True
+        return True
     elif board[0][2] == 'x' and board[1][1] == 'x' and board[2][0] == 'x':
-      return True
+        return True
     # player o
     elif board[0][0] == 'o' and board[0][1] == 'o' and board[0][2] == 'o':
-      return True
+        return True
     elif board[1][0] == 'o' and board[1][1] == 'o' and board[1][2] == 'o':
-      return True
+        return True
     elif board[2][0] == 'o' and board[2][1] == 'o' and board[2][2] == 'o':
-      return True
+        return True
     elif board[0][0] == 'o' and board[1][0] == 'o' and board[2][0] == 'o':
-      return True
+        return True
     elif board[0][1] == 'o' and board[1][1] == 'o' and board[2][1] == 'o':
-      return True
+        return True
     elif board[0][2] == 'o' and board[1][2] == 'o' and board[2][2] == 'o':
-      return True
+        return True
     elif board[0][0] == 'o' and board[1][1] == 'o' and board[2][2] == 'o':
-      return True
+        return True
     elif board[0][2] == 'o' and board[1][1] == 'o' and board[2][0] == 'o':
-      return True
+        return True
 
 # this is our game
 def play_tic_tac_toe():
@@ -126,45 +126,45 @@ def play_tic_tac_toe():
     while turns < max_turns:
         # for loop for numbers of players
         for p in players:
-          # we'll print the board at the start of every turn
-          print(board)
-          # break out of for loop if we've played all turns
-          if turns == max_turns:
-             print('Nobody wins!')
-             break
-          elif turns > max_turns:
-             break
-          elif p == 'x':
-            print('You are player x')
-            # user inputs in which element they'd like their input
-            element_choice = choice()
-            # this will input the user's choice on the board
-            # it will also take care of wrong inputs
-            x_choice(board, element_choice)
-            # we'll increment by one at the end of each turn
-            turns+=1
-            # check to see if player x has won
-            if won_game(board) == True:
-               print('Player X has won!')
-               print(board)
-               turns = max_turns + 1
-               break
-          # player o
-          elif p == 'o':
-            print('You are player o')
-            # user inputs in which element they'd like their input
-            element_choice = choice()
-            # this will input the user's choice on the board
-            # it will also take care of wrong inputs
-            o_choice(board, element_choice)
-            # we'll increment by one at the end of each turn
-            turns+=1
-            # check to see if player o has won
-            if won_game(board) == True:
-               print('Player O has won!')
-               print(board)
-               turns = max_turns + 1
-               break
+            # we'll print the board at the start of every turn
+            print(board)
+            # break out of for loop if we've played all turns
+            if turns == max_turns:
+                print('Nobody wins!')
+                break
+            elif turns > max_turns:
+                break
+            elif p == 'x':
+                print('You are player x')
+                # user inputs in which element they'd like their input
+                element_choice = choice()
+                # this will input the user's choice on the board
+                # it will also take care of wrong inputs
+                x_choice(board, element_choice)
+                # we'll increment by one at the end of each turn
+                turns+=1
+                # check to see if player x has won
+                if won_game(board) == True:
+                    print('Player X has won!')
+                    print(board)
+                    turns = max_turns + 1
+                    break
+            # player o
+            elif p == 'o':
+                print('You are player o')
+                # user inputs in which element they'd like their input
+                element_choice = choice()
+                # this will input the user's choice on the board
+                # it will also take care of wrong inputs
+                o_choice(board, element_choice)
+                # we'll increment by one at the end of each turn
+                turns+=1
+                # check to see if player o has won
+                if won_game(board) == True:
+                    print('Player O has won!')
+                    print(board)
+                    turns = max_turns + 1
+                    break
 
 # to play the game
 play_tic_tac_toe()
