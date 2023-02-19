@@ -17,10 +17,10 @@
 fn main() {
     
     // our HashMap will store rock, paper & scissors as key value pairs
-    let mut hm_choice = HashMap::new();
-    hm_choice.insert(1, "Rock");
-    hm_choice.insert(2, "Paper");
-    hm_choice.insert(3, "Scissors");
+    let mut hm_choice: HashMap<i32, String> = HashMap::new();
+    hm_choice.insert(1, "Rock".to_string());
+    hm_choice.insert(2, "Paper".to_string());
+    hm_choice.insert(3, "Scissors".to_string());
 
     // these are our score variables for the players
     let mut player_score:i32 = 0;
@@ -31,13 +31,33 @@ fn main() {
     while play == true {
 
         // we'll ask the player for their choice
-        player = players_choice();
-        
+        let player = players_choice();
+        // get the string value from hashmap
+        let player = hm_choice.get(&player).unwrap();
+
         //  the computer's random choice
-        computer = computer_choice();
+        let computer = computer_choice();
+        // get the string value from hashmap
+        let computer = hm_choice.get(&computer).unwrap();
 
         // we'll print the choices
-        println!("")
+        println!("");
+        println!("Player:{}     Computer:{}", player, computer);
+
+        // we'll print out the result of the round
+        let result = won_lost(player, computer);
+        println!("");
+        println!("{}", result);
+
+        // we'll work out the scores
+        player_score = player_new_score(player_score, result);
+        computer_score = computer_new_score(computer_score, result);
+        println!("");
+        println!("SCORE:    Player={}     Computer={}", 
+            player_score, computer_score);
+        
+        // we'll ask the player if they want to continue playing the game
+        play = continue_playing();
     }
 
 }
@@ -60,7 +80,8 @@ fn players_choice() -> i32 {
     let correct_input: [i32; 3] = [1, 2, 3];
 
     // this is a loop, which will only end if a valid input is entered
-    let mut choice = loop {
+    let choice = loop {
+        println!("");
         println!("Choose one of the following:");
         println!("Rock(1), Paper(2) or Scissors(3)");
 
@@ -87,6 +108,7 @@ fn players_choice() -> i32 {
         println!("Only 1, 2 or 3 are valid inputs");
         println!("");
 	};
+
     return choice;
 }
 
@@ -120,25 +142,28 @@ fn won_lost<'a>(player_chosen: &'a str, computer_chosen: &'a str) -> &'a str {
     } else if computer_chosen == "Scissors" && player_chosen == "Paper" {
         return_value = "YOU LOSE!";
     }
+
     return return_value;
 }
 
 // this function will work out the player's score
-fn player_score(score:i32, result:&str) -> i32 {
-    let mut score:i32 = 0;
+fn player_new_score(score:i32, result:&str) -> i32 {
+    let mut new_score = score;
     if result == "YOU WIN!" {
-        score += 1;
+        new_score += 1;
     }
-    return score;
+
+    return new_score;
 }
 
 // this function will work out the computer's score
-fn computer_score(score:i32, result:&str) -> i32 {
-    let mut score:i32 = 0;
+fn computer_new_score(score:i32, result:&str) -> i32 {
+    let mut new_score = score;
     if result == "YOU LOSE!" {
-        score += 1;
+        new_score += 1;
     }
-    return score;
+
+    return new_score;
 }
 
 // this function will ask the player if they'd like to continue playing
@@ -147,10 +172,9 @@ fn continue_playing() -> bool {
     let correct_input: [i32; 2] = [1, 2];
 
     // this is a loop, which will only end if a valid input is entered
-    let mut choice = loop {
+    let choice = loop {
         println!("");
         println!("Continue playing?: Yes(1) or No(2):");
-        println!("");
 
         // this is Rust's user input method
 		let mut choice = String::new();
@@ -177,13 +201,13 @@ fn continue_playing() -> bool {
 	};
 
     // convert the input to True or False
-    let mut return_bool:bool = false;
-
     if choice == 1 {
-        return_bool = true;
+        println!("");
+        return true;
     } else {
-        return_bool = false;
+        println!("");
+        println!("Thank you for playing - GOODBYE");
+        return false;
     }
-
-    return return_bool;
 }
+
