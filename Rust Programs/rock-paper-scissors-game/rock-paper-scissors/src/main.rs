@@ -32,7 +32,9 @@ fn main() {
     let mut player_score = 0;
     let mut computer_score = 0;  
 
-    players_choice();
+    // players_choice();
+    let test = computer_choice();
+    println!("{}", test);
 }
 
 
@@ -49,6 +51,8 @@ use std::io;
 /* ----------------------- functions ----------------------- */
 
 // this function will ask the player for their choice
+// it will return only the valid input of 1, 2 or 3, which we'll map
+// to our hashmap
 fn players_choice() -> i32 {
 
     let correct_input: [i32; 3] = [1, 2, 3];
@@ -73,5 +77,12 @@ fn players_choice() -> i32 {
         println!("Only 1, 2 or 3 are valid inputs");
         println!("");
 	};
+    return choice;
+}
+
+// this function will return the computer's choice (at random)
+fn computer_choice() -> i32 {
+    // this prints random values between 1 and 3
+    let choice: i32 = rand::thread_rng().gen_range(1..4);
     return choice;
 }
