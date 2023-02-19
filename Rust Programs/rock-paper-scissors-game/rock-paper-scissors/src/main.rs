@@ -14,6 +14,7 @@
 */
 
 /* ----------------------- main ----------------------- */
+
 fn main() {
     // our HashMap will store rock, paper & scissors as key value pairs
     let mut hm_choice = HashMap::new();
@@ -27,14 +28,16 @@ fn main() {
     println!("Random Value: {}", rng.gen_range(1..4));
 
     // default scores for the player & computer
-    // we'll first define the score variables (which are global)
+    // we'll first define the score variables
     let mut player_score = 0;
     let mut computer_score = 0;  
 
     players_choice();
 }
 
+
 /* ----------------------- packages ----------------------- */
+
 // this will be used by the computer to choose rock paper scissors at random
 use rand::Rng;
 // this will store our rock, paper & scissors as key value pairs
@@ -42,30 +45,11 @@ use std::collections::HashMap;
 // this will allow the user to input their choice for the game
 use std::io;
 
+
 /* ----------------------- functions ----------------------- */
+
 // this function will ask the player for their choice
-fn players_choice() {
-
-    let correct_input: [i32; 3] = [1, 2, 3];
-
-    let mut choice = loop {
-        println!("Choose one of the following:");
-        println!("Rock(1), Paper(2) or Scissors(3)");
-		let mut choice = String::new();
-		io::stdin().read_line(&mut choice).unwrap();
-        let mut choice2: i32 = choice.trim().parse().unwrap();
-        println!("");
-        println!("Wrong Input!");
-        println!("Only 1, 2 or 3 are valid inputs");
-        println!("");
-        break;
-	};
-    println!("input: {}", choice);
-}
-
-
-// this function works for int inputs only
-fn players_choice2() {
+fn players_choice() -> i32 {
 
     let correct_input: [i32; 3] = [1, 2, 3];
 
@@ -75,12 +59,19 @@ fn players_choice2() {
 		let mut choice = String::new();
 		io::stdin().read_line(&mut choice).unwrap();
 		if let Ok(val) = choice.trim().parse::<i32>() {
-			break val;
+            if correct_input.contains(&val) {
+                break val;
+            }
+            println!("");
+            println!("Wrong Input!");
+            println!("Only 1, 2 or 3 are valid inputs");
+            println!("");
+			continue;
 		}
         println!("");
         println!("Wrong Input!");
         println!("Only 1, 2 or 3 are valid inputs");
         println!("");
 	};
-    println!("input: {}", choice);
+    return choice;
 }
