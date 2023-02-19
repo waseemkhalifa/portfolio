@@ -14,31 +14,35 @@
 */
 
 /* ----------------------- main ----------------------- */
-
 fn main() {
+    
     // our HashMap will store rock, paper & scissors as key value pairs
     let mut hm_choice = HashMap::new();
     hm_choice.insert(1, "Rock");
     hm_choice.insert(2, "Paper");
     hm_choice.insert(3, "Scissors");
-    println!("{:?}", hm_choice);
-    println!("");
 
-    // default scores for the player & computer
-    // we'll first define the score variables
-    // let mut player_score = 0;
-    // let mut computer_score = 0;  
+    // these are our score variables for the players
+    let mut player_score:i32 = 0;
+    let mut computer_score:i32 = 0;
 
+    // this is our main game
+    let mut play:bool = true;
+    while play == true {
 
-    let player_chosen1: &str = "Rock";
-    let computer_chosen1: &str = "Scissors";
-    let test = won_lost(&player_chosen1, &computer_chosen1);
-    println!("{}", test);
+        // we'll ask the player for their choice
+        player = players_choice();
+        
+        //  the computer's random choice
+        computer = computer_choice();
+
+        // we'll print the choices
+        println!("")
+    }
+
 }
 
-
 /* ----------------------- packages ----------------------- */
-
 // this will be used by the computer to choose rock paper scissors at random
 use rand::Rng;
 // this will store our rock, paper & scissors as key value pairs
@@ -46,9 +50,7 @@ use std::collections::HashMap;
 // this will allow the user to input their choice for the game
 use std::io;
 
-
 /* ----------------------- functions ----------------------- */
-
 // this function will ask the player for their choice
 // it will return only the valid input of 1, 2 or 3, which we'll map
 // to our hashmap
@@ -119,4 +121,69 @@ fn won_lost<'a>(player_chosen: &'a str, computer_chosen: &'a str) -> &'a str {
         return_value = "YOU LOSE!";
     }
     return return_value;
+}
+
+// this function will work out the player's score
+fn player_score(score:i32, result:&str) -> i32 {
+    let mut score:i32 = 0;
+    if result == "YOU WIN!" {
+        score += 1;
+    }
+    return score;
+}
+
+// this function will work out the computer's score
+fn computer_score(score:i32, result:&str) -> i32 {
+    let mut score:i32 = 0;
+    if result == "YOU LOSE!" {
+        score += 1;
+    }
+    return score;
+}
+
+// this function will ask the player if they'd like to continue playing
+fn continue_playing() -> bool {
+    // the only values we'll accept for our user input
+    let correct_input: [i32; 2] = [1, 2];
+
+    // this is a loop, which will only end if a valid input is entered
+    let mut choice = loop {
+        println!("");
+        println!("Continue playing?: Yes(1) or No(2):");
+        println!("");
+
+        // this is Rust's user input method
+		let mut choice = String::new();
+		io::stdin().read_line(&mut choice).unwrap();
+
+        // if the value entered was int
+		if let Ok(val) = choice.trim().parse::<i32>() {
+            if correct_input.contains(&val) {
+                break val;
+            }
+            // this will bring if the value wasn't our valid input values
+            println!("");
+            println!("Wrong Input!");
+            println!("Only 1 or 2 are valid inputs");
+            println!("");
+			continue;
+		}
+
+        // this will be printed if the value entered was not int
+        println!("");
+        println!("Wrong Input!");
+        println!("Only 1 or 2 are valid inputs");
+        println!("");
+	};
+
+    // convert the input to True or False
+    let mut return_bool:bool = false;
+
+    if choice == 1 {
+        return_bool = true;
+    } else {
+        return_bool = false;
+    }
+
+    return return_bool;
 }
