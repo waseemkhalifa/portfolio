@@ -25,45 +25,48 @@ fn main() {
         // for loop for numbers of players
         for p in players:
             // we"ll println! the board at the start of every turn
-            println!ln!("{}", board);
+            println!("{}", board);
             // break out of for loop if we"ve played all turns
             if turns == max_turns {
-                println!ln!("Nobody wins!")
-                break
+                println!("Nobody wins!");
+                break;
             } else if turns > max_turns {
-                break
+                break;
             } else if p == "x" {
-                println!("You are player x")
+                println!("You are player x");
                 // user inputs in which element they"d like their input
-                element_choice = choice()
+                element_choice = choice();
                 // this will input the user"s choice on the board
                 // it will also take care of wrong inputs
-                x_choice(board, element_choice)
+                x_choice(board, element_choice);
                 // we"ll increment by one at the end of each turn
-                turns+=1
+                turns+=1;
                 // check to see if player x has won
-                if won_game(board) == True:
-                    println!("Player X has won!")
-                    println!(board)
-                    turns = max_turns + 1
-                    break
+                if won_game(board) == True {
+                    println!("Player X has won!");
+                    println!(board);
+                    turns = max_turns + 1;
+                    break;
+                }
             }
             // player o
-            else if p == "o":
-                println!("You are player o")
+            else if p == "o" {
+                println!("You are player o");
                 // user inputs in which element they"d like their input
-                element_choice = choice()
+                element_choice = choice();
                 // this will input the user"s choice on the board
                 // it will also take care of wrong inputs
-                o_choice(board, element_choice)
+                o_choice(board, element_choice);
                 // we"ll increment by one at the end of each turn
-                turns+=1
+                turns+=1;
                 // check to see if player o has won
-                if won_game(board) == True:
-                    println!("Player O has won!")
-                    println!(board)
-                    turns = max_turns + 1
-                    break
+                if won_game(board) == True {
+                    println!("Player O has won!");
+                    println!(board);
+                    turns = max_turns + 1;
+                    break;
+                }
+            }
     }
 }
 
