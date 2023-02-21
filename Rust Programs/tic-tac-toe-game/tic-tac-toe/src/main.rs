@@ -77,3 +77,37 @@ use ndarray::arr2;
 /* ----------------------- functions ----------------------- */
 // this function will allow the user to choose the element in which they"d like
 // to add their input
+def choice():
+    // the only values we'll accept for our user input
+    let correct_input: [i32; 9] = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+    // while the choice is not a digit, keep asking for input.
+    while choice not in ['1', '2', '3', '4', '5', '6', '7', '8', '9']:
+        // we shouldn't convert here, otherwise we get an error on a wrong
+        // input
+        choice = input('Your Turn, choose an element: ');
+        if choice not in ['1', '2', '3', '4', '5', '6', '7', '8', '9']:
+            print('Sorry, but you did not choose a valid element')
+    // we can convert once the while loop above has confirmed we have a digit
+    choice = int(choice)
+    // this will match the element to the row & column of the array
+    array_position = []
+    if choice == 1:
+        array_position = [0,0];
+    elif choice == 2:
+       array_position = [0,1];
+    elif choice == 3:
+       array_position = [0,2];
+    elif choice == 4:
+        array_position = [1,0];
+    elif choice == 5:
+       array_position = [1,1];
+    elif choice == 6:
+       array_position = [1,2];
+    elif choice == 7:
+       array_position = [2,0];
+    elif choice == 8:
+       array_position = [2,1];
+    elif choice == 9:
+       array_position = [2,2];
+    return array_position
