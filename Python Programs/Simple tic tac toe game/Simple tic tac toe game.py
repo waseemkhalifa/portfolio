@@ -54,62 +54,62 @@ def choice():
 def x_choice(board_display, element_choice):
     row_input = element_choice[0]
     col_input = element_choice[1]
-    filled_element = ['x', 'o']
+    filled_element = ['X', 'O']
     while board_display[row_input][col_input] in filled_element:
         print('There is already an input on the board, choose another element')
         element_choice = choice()
         row_input = element_choice[0]
         col_input = element_choice[1]
-    board_display[row_input][col_input] = 'x'
+    board_display[row_input][col_input] = 'X'
 
 # this is for player_o
 # this function replaces the board with the players input
 def o_choice(board_display, element_choice):
     row_input = element_choice[0]
     col_input = element_choice[1]
-    filled_element = ['x', 'o']
+    filled_element = ['X', 'O']
     while board_display[row_input][col_input] in filled_element:
         print('There is already an input on the board, choose another element')
         element_choice = choice()
         row_input = element_choice[0]
         col_input = element_choice[1]
-    board_display[row_input][col_input] = 'o'
+    board_display[row_input][col_input] = 'O'
 
 # this function will determine if a player has won
 def won_game(board):
-    # player x
-    if board[0][0] == 'x' and board[0][1] == 'x' and board[0][2] == 'x':
+    # player X
+    if board[0][0] == 'X' and board[0][1] == 'X' and board[0][2] == 'X':
         return True
-    elif board[1][0] == 'x' and board[1][1] == 'x' and board[1][2] == 'x':
+    elif board[1][0] == 'X' and board[1][1] == 'X' and board[1][2] == 'X':
         return True
-    elif board[2][0] == 'x' and board[2][1] == 'x' and board[2][2] == 'x':
+    elif board[2][0] == 'X' and board[2][1] == 'X' and board[2][2] == 'X':
         return True
-    elif board[0][0] == 'x' and board[1][0] == 'x' and board[2][0] == 'x':
+    elif board[0][0] == 'X' and board[1][0] == 'X' and board[2][0] == 'X':
         return True
-    elif board[0][1] == 'x' and board[1][1] == 'x' and board[2][1] == 'x':
+    elif board[0][1] == 'X' and board[1][1] == 'X' and board[2][1] == 'X':
         return True
-    elif board[0][2] == 'x' and board[1][2] == 'x' and board[2][2] == 'x':
+    elif board[0][2] == 'X' and board[1][2] == 'X' and board[2][2] == 'X':
         return True
-    elif board[0][0] == 'x' and board[1][1] == 'x' and board[2][2] == 'x':
+    elif board[0][0] == 'X' and board[1][1] == 'X' and board[2][2] == 'X':
         return True
-    elif board[0][2] == 'x' and board[1][1] == 'x' and board[2][0] == 'x':
+    elif board[0][2] == 'X' and board[1][1] == 'X' and board[2][0] == 'X':
         return True
-    # player o
-    elif board[0][0] == 'o' and board[0][1] == 'o' and board[0][2] == 'o':
+    # player O
+    elif board[0][0] == 'O' and board[0][1] == 'O' and board[0][2] == 'O':
         return True
-    elif board[1][0] == 'o' and board[1][1] == 'o' and board[1][2] == 'o':
+    elif board[1][0] == 'O' and board[1][1] == 'O' and board[1][2] == 'O':
         return True
-    elif board[2][0] == 'o' and board[2][1] == 'o' and board[2][2] == 'o':
+    elif board[2][0] == 'O' and board[2][1] == 'O' and board[2][2] == 'O':
         return True
-    elif board[0][0] == 'o' and board[1][0] == 'o' and board[2][0] == 'o':
+    elif board[0][0] == 'O' and board[1][0] == 'O' and board[2][0] == 'O':
         return True
-    elif board[0][1] == 'o' and board[1][1] == 'o' and board[2][1] == 'o':
+    elif board[0][1] == 'O' and board[1][1] == 'O' and board[2][1] == 'O':
         return True
-    elif board[0][2] == 'o' and board[1][2] == 'o' and board[2][2] == 'o':
+    elif board[0][2] == 'O' and board[1][2] == 'O' and board[2][2] == 'O':
         return True
-    elif board[0][0] == 'o' and board[1][1] == 'o' and board[2][2] == 'o':
+    elif board[0][0] == 'O' and board[1][1] == 'O' and board[2][2] == 'O':
         return True
-    elif board[0][2] == 'o' and board[1][1] == 'o' and board[2][0] == 'o':
+    elif board[0][2] == 'O' and board[1][1] == 'O' and board[2][0] == 'O':
         return True
 
 # this is our game
@@ -121,7 +121,7 @@ def play_tic_tac_toe():
     # this is the max turns the game can have
     max_turns = 9
     # players in the game
-    players = ['x', 'o']
+    players = ['X', 'O']
     # while loop, to loop while the number of turns is less/equal to max_turns
     while turns < max_turns:
         # for loop for numbers of players
@@ -134,8 +134,8 @@ def play_tic_tac_toe():
                 break
             elif turns > max_turns:
                 break
-            elif p == 'x':
-                print('You are player x')
+            elif p == 'X':
+                print('You are player X')
                 # user inputs in which element they'd like their input
                 element_choice = choice()
                 # this will input the user's choice on the board
@@ -143,15 +143,15 @@ def play_tic_tac_toe():
                 x_choice(board, element_choice)
                 # we'll increment by one at the end of each turn
                 turns+=1
-                # check to see if player x has won
+                # check to see if player X has won
                 if won_game(board) == True:
                     print('Player X has won!')
                     print(board)
                     turns = max_turns + 1
                     break
-            # player o
-            elif p == 'o':
-                print('You are player o')
+            # player O
+            elif p == 'O':
+                print('You are player O')
                 # user inputs in which element they'd like their input
                 element_choice = choice()
                 # this will input the user's choice on the board
@@ -159,7 +159,7 @@ def play_tic_tac_toe():
                 o_choice(board, element_choice)
                 # we'll increment by one at the end of each turn
                 turns+=1
-                # check to see if player o has won
+                # check to see if player O has won
                 if won_game(board) == True:
                     print('Player O has won!')
                     print(board)
