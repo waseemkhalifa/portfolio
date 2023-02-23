@@ -136,6 +136,7 @@ def play_tic_tac_toe():
             if turns == max_turns:
                 print('')
                 print('Nobody wins!')
+                print('')
                 break
             elif turns > max_turns:
                 break
