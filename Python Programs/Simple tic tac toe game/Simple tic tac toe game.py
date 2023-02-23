@@ -56,6 +56,7 @@ def x_choice(board_display, element_choice):
     col_input = element_choice[1]
     filled_element = ['X', 'O']
     while board_display[row_input][col_input] in filled_element:
+        print('')
         print('There is already an input on the board, choose another element')
         element_choice = choice()
         row_input = element_choice[0]
@@ -69,6 +70,7 @@ def o_choice(board_display, element_choice):
     col_input = element_choice[1]
     filled_element = ['X', 'O']
     while board_display[row_input][col_input] in filled_element:
+        print('')
         print('There is already an input on the board, choose another element')
         element_choice = choice()
         row_input = element_choice[0]
@@ -127,9 +129,12 @@ def play_tic_tac_toe():
         # for loop for numbers of players
         for p in players:
             # we'll print the board at the start of every turn
+            print('')
             print(board)
+            print('')
             # break out of for loop if we've played all turns
             if turns == max_turns:
+                print('')
                 print('Nobody wins!')
                 break
             elif turns > max_turns:
@@ -145,9 +150,12 @@ def play_tic_tac_toe():
                 turns+=1
                 # check to see if player X has won
                 if won_game(board) == True:
-                    print('Player X has won!')
+                    print('')
                     print(board)
+                    print('')
+                    print('Player X has won!')
                     turns = max_turns + 1
+                    print('')
                     break
             # player O
             elif p == 'O':
@@ -161,8 +169,11 @@ def play_tic_tac_toe():
                 turns+=1
                 # check to see if player O has won
                 if won_game(board) == True:
-                    print('Player O has won!')
+                    print('')
                     print(board)
+                    print('')
+                    print('Player O has won!')
+                    print('')
                     turns = max_turns + 1
                     break
 
