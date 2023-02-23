@@ -45,6 +45,7 @@ fn main() {
             if turns == max_turns {
                 println!("");
                 println!("Nobody wins!");
+                println!("");
                 break;
             } else if turns > max_turns {
                 break;
@@ -59,7 +60,7 @@ fn main() {
                 // we"ll increment by one at the end of each turn
                 turns+=1;
                 // check to see if player x has won
-                if won_game(board) == True {
+                if won_game(board) == true {
                     println!("");
                     println!("{:?}", board);
                     println!("");
@@ -81,7 +82,7 @@ fn main() {
                 // we"ll increment by one at the end of each turn
                 turns+=1;
                 // check to see if player o has won
-                if won_game(board) == True {
+                if won_game(board) == true {
                     println!("");
                     println!("{:?}", board);
                     println!("");
@@ -116,7 +117,7 @@ fn choice() -> i32 {
         println!("Your Turn, choose an element: ");
 
         // this is Rust's user input method
-		let mut choice = String::new();
+		let choice = String::new();
 		io::stdin().read_line(&mut choice).unwrap();
 
         // if the value entered was int
@@ -140,3 +141,90 @@ fn choice() -> i32 {
     return choice;
 }
 
+// this is for player_x
+// this function replaces the board with the players input
+fn x_choice(board_display: [i32;2], element_choice: [i32;2]) {
+    let mut row_input = element_choice[0];
+    let mut col_input = element_choice[1];
+    let filled_element = ["X", "O"];
+    while filled_element.contains(board_display[row_input][col_input]) {
+        println!("");
+        println!("There is already an input on the board, choose another element");
+        element_choice = choice();
+        row_input = element_choice[0];
+        col_input = element_choice[1];
+    }
+    board_display[row_input][col_input] = "X";
+}
+
+// this is for player_o
+// this function replaces the board with the players input
+fn o_choice(board_display: [i32;2], element_choice: [i32;2]) {
+    let mut row_input = element_choice[0];
+    let mut col_input = element_choice[1];
+    let filled_element = ["X", "O"];
+    while filled_element.contains(board_display[row_input][col_input]) {
+        println!("");
+        println!("There is already an input on the board, choose another element");
+        element_choice = choice();
+        row_input = element_choice[0];
+        col_input = element_choice[1];
+    }
+    board_display[row_input][col_input] = "O";
+}
+
+// this function will determine if a player has won
+fn won_game(board: [i32;2]) -> bool {
+    // player X
+    if board[0][0] == "X" && board[0][1] == "X" && board[0][2] == "X" {
+        return true;
+    } 
+    else if board[1][0] == "X" && board[1][1] == "X" && board[1][2] == "X"{
+        return true;
+    }
+    else if board[2][0] == "X" && board[2][1] == "X" && board[2][2] == "X"{
+        return true;
+    } 
+    else if board[0][0] == "X" && board[1][0] == "X" && board[2][0] == "X"{
+        return true;
+    }
+    else if board[0][1] == "X" && board[1][1] == "X" && board[2][1] == "X"{
+        return true;
+    }
+    else if board[0][2] == "X" && board[1][2] == "X" && board[2][2] == "X"{
+        return true;
+    }
+    else if board[0][0] == "X" && board[1][1] == "X" && board[2][2] == "X"{
+        return true;
+    }
+    else if board[0][2] == "X" && board[1][1] == "X" && board[2][0] == "X"{
+        return true;
+    }
+    // player O
+    else if board[0][0] == "O" && board[0][1] == "O" && board[0][2] == "O"{
+        return true;
+    }
+    else if board[1][0] == "O" && board[1][1] == "O" && board[1][2] == "O"{
+        return true;
+    }
+    else if board[2][0] == "O" && board[2][1] == "O" && board[2][2] == "O"{
+        return true;
+    }
+    else if board[0][0] == "O" && board[1][0] == "O" && board[2][0] == "O"{
+        return true;
+    }
+    else if board[0][1] == "O" && board[1][1] == "O" && board[2][1] == "O"{
+        return true;
+    }
+    else if board[0][2] == "O" && board[1][2] == "O" && board[2][2] == "O"{
+        return true;
+    }
+    else if board[0][0] == "O" && board[1][1] == "O" && board[2][2] == "O"{
+        return true;
+    }
+    else if board[0][2] == "O" && board[1][1] == "O" && board[2][0] == "O"{
+        return true;
+    } else {
+        return false;
+    }
+}
