@@ -12,18 +12,6 @@
 
 /* ----------------------- main ----------------------- */
 fn main() {
-    // we'll create a hashmap to map int to array element
-    let mut hm_choice: HashMap<i32, [i32;2]> = HashMap::new();
-    hm_choice.insert(1, [0,0]);
-    hm_choice.insert(2, [0,1]);
-    hm_choice.insert(3, [0,2]);
-    hm_choice.insert(4, [1,0]);
-    hm_choice.insert(5, [1,1]);
-    hm_choice.insert(6, [1,2]);
-    hm_choice.insert(7, [2,0]);
-    hm_choice.insert(8, [2,1]);
-    hm_choice.insert(9, [2,2]);
-
     // this will build our empty board 
     let mut board = arr2(&[[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
     // this will be a counter of how many turns we've had in the game
@@ -53,14 +41,13 @@ fn main() {
                 println!("You are player X");
                 // user inputs in which element they'd like their input
                 let element_choice = choice();
-                let element_choice = hm_choice.get(&element_choice).unwrap();
                 // this will input the user"s choice on the board
                 // it will also take care of wrong inputs
-                x_choice(board, element_choice);
+                x_choice(&mut board, *element_choice);
                 // we"ll increment by one at the end of each turn
                 turns+=1;
                 // check to see if player x has won
-                if won_game(board) == true {
+                if won_game(&mut board) == true {
                     println!("");
                     println!("{:?}", board);
                     println!("");
@@ -75,14 +62,13 @@ fn main() {
                 println!("You are player O");
                 // user inputs in which element they"d like their input
                 let element_choice = choice();
-                let element_choice = hm_choice.get(&element_choice).unwrap();
                 // this will input the user"s choice on the board
                 // it will also take care of wrong inputs
-                o_choice(board, element_choice);
+                o_choice(&mut board, *element_choice);
                 // we"ll increment by one at the end of each turn
                 turns+=1;
                 // check to see if player o has won
-                if won_game(board) == true {
+                if won_game(&mut board) == true {
                     println!("");
                     println!("{:?}", board);
                     println!("");
@@ -107,7 +93,19 @@ use std::io;
 /* ----------------------- functions ----------------------- */
 // this function will allow the user to choose the element in which they"d like
 // to add their input
-fn choice() -> i32 {
+fn choice() -> [i32;2] {
+    // we'll create a hashmap to map int to array element
+    let mut hm_choice: HashMap<i32, [i32;2]> = HashMap::new();
+    hm_choice.insert(1, [0,0]);
+    hm_choice.insert(2, [0,1]);
+    hm_choice.insert(3, [0,2]);
+    hm_choice.insert(4, [1,0]);
+    hm_choice.insert(5, [1,1]);
+    hm_choice.insert(6, [1,2]);
+    hm_choice.insert(7, [2,0]);
+    hm_choice.insert(8, [2,1]);
+    hm_choice.insert(9, [2,2]);
+
     // the only values we'll accept for our user input
     let correct_input: [i32; 9] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -137,20 +135,22 @@ fn choice() -> i32 {
         println!("Wrong Input!");
         println!("Sorry, but you did not choose a valid element");
 	};
+
+    let choice = hm_choice.get(&element_choice).unwrap();
      
     return choice;
 }
 
 // this is for player_x
 // this function replaces the board with the players input
-fn x_choice(board_display: [i32;2], element_choice: [i32;2]) {
+fn x_choice(board_display: &mut arr2<i32>, element_choice: [i32;2]) {
     let mut row_input = element_choice[0];
     let mut col_input = element_choice[1];
     let filled_element = ["X", "O"];
     while filled_element.contains(board_display[row_input][col_input]) {
         println!("");
         println!("There is already an input on the board, choose another element");
-        element_choice = choice();
+        let element_choice = choice();
         row_input = element_choice[0];
         col_input = element_choice[1];
     }
@@ -159,14 +159,14 @@ fn x_choice(board_display: [i32;2], element_choice: [i32;2]) {
 
 // this is for player_o
 // this function replaces the board with the players input
-fn o_choice(board_display: [i32;2], element_choice: [i32;2]) {
+fn o_choice(board_display: &mut arr2<i32>, element_choice: [i32;2]) {
     let mut row_input = element_choice[0];
     let mut col_input = element_choice[1];
     let filled_element = ["X", "O"];
     while filled_element.contains(board_display[row_input][col_input]) {
         println!("");
         println!("There is already an input on the board, choose another element");
-        element_choice = choice();
+        let element_choice = choice();
         row_input = element_choice[0];
         col_input = element_choice[1];
     }
@@ -174,7 +174,7 @@ fn o_choice(board_display: [i32;2], element_choice: [i32;2]) {
 }
 
 // this function will determine if a player has won
-fn won_game(board: [i32;2]) -> bool {
+fn won_game(board: &mut arr2) -> bool {
     // player X
     if board[0][0] == "X" && board[0][1] == "X" && board[0][2] == "X" {
         return true;
