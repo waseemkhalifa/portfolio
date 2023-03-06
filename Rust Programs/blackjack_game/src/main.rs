@@ -31,75 +31,18 @@ use std::io;
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
+/* ----------------------- imports ----------------------- */
+use blackjack-game::create_deck;
+
 /* ----------------------- main ----------------------- */
 fn main() {
-    // let mut deck: Vec<Card>  = vec![];
-    // for suits in Suits::iter() {
-    //     for ranks in Ranks::iter() {
-    //         let a = suits;
-    //         let b = ranks;
-    //         let card = Card{suit:a, rank:b};
-    //         deck.push(card);
-    //     }
-    // }
-    // println!("{:?}", deck);
-    // println!("");
-    // println!("{:?}", deck[1]);
     
-    let deck = deck();
+    let deck = create_deck();
     println!("{:?}", deck);
     println!("");
     println!("{:?}", deck[1]);
 
 }
 
-/* ----------------------- functions ----------------------- */
-// the derive attribute makes the enum printable
-#[derive(Debug, EnumIter, Copy, Clone)]
-enum Suits {
-    Hearts, 
-    Diamonds, 
-    Spades, 
-    Clubs
-}
-
-// the derive attribute makes the enum printable
-#[derive(Debug, EnumIter, Copy, Clone)]
-enum Ranks {
-    Two, 
-    Three, 
-    Four, 
-    Five, 
-    Six, 
-    Seven, 
-    Eight, 
-    Nine, 
-    Ten, 
-    Jack, 
-    Queen, 
-    King, 
-    Ace
-}
-#[derive(Debug, Copy, Clone)]
-struct Card {
-    suit:Suits,
-    rank:Ranks
-}
 
 
-fn deck() -> Vec<Card> {
-    let mut deck: Vec<Card>  = vec![];
-    for suits in Suits::iter() {
-        for ranks in Ranks::iter() {
-            let a = suits;
-            let b = ranks;
-            let card = Card{suit:a, rank:b};
-            deck.push(card);
-        }
-    }
-    return deck;
-}
-
-
-// create hashmap in a function, which can extract the value needed
-// acting like a look up function
