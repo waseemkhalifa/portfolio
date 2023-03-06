@@ -33,25 +33,25 @@ use strum_macros::EnumIter;
 
 /* ----------------------- main ----------------------- */
 fn main() {
-    let mut card = Card {
-        suit: Suits::Hearts,
-        rank: Ranks::Ace,
-    };
-
-    println!("{:?}", card.rank);
-
-    for suit in Suits::iter() {
-        for rank in Ranks::iter() {
-            println!("{:?} {:?}", suit, rank);
+    let mut deck: Vec<Card>  = vec![];
+    for suits in Suits::iter() {
+        for ranks in Ranks::iter() {
+            let a = suits;
+            let b = ranks;
+            let card = Card{suit:a, rank:b};
+            deck.push(card);
         }
     }
+    println!("{:?}", deck);
+    println!("");
+    println!("{:?}", deck[1]);
 
 
 }
 
 /* ----------------------- functions ----------------------- */
 // the derive attribute makes the enum printable
-#[derive(Debug, EnumIter)]
+#[derive(Debug, EnumIter, Copy, Clone)]
 enum Suits {
     Hearts, 
     Diamonds, 
@@ -60,7 +60,7 @@ enum Suits {
 }
 
 // the derive attribute makes the enum printable
-#[derive(Debug, EnumIter)]
+#[derive(Debug, EnumIter, Copy, Clone)]
 enum Ranks {
     Two, 
     Three, 
@@ -76,7 +76,7 @@ enum Ranks {
     King, 
     Ace
 }
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 struct Card {
     suit:Suits,
     rank:Ranks
