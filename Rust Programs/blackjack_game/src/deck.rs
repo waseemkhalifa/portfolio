@@ -49,6 +49,9 @@ impl Deck {
         self.deck.shuffle(&mut thread_rng());
         self.deck.shuffle(&mut thread_rng());
     }
+    pub fn hit(&mut self) -> Card {
+        return self.deck.pop().unwrap();
+    }
 }
 
 

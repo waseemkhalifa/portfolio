@@ -41,6 +41,9 @@ fn main() {
     println!("Deck Shuffled");
     deck.shuffle_deck();
     println!("{:?}", deck.deck);
+    println!("");
+
+    println!("{:?}", deck.hit());;
 
 }
 
