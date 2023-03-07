@@ -20,19 +20,9 @@
         or to quit
 */
 
-/* ----------------------- packages ----------------------- */
-// this will be used by the computer to choose rock paper scissors at random
-use rand::Rng;
-// this will store our rock, paper & scissors as key value pairs
-use std::collections::HashMap;
-// this will allow the user to input their choice for the game
-use std::io;
-// this will allow us to iterate over a Enum
-use strum::IntoEnumIterator;
-use strum_macros::EnumIter;
-
 /* ----------------------- imports ----------------------- */
-use blackjack-game::create_deck;
+mod deck;
+use deck::create_deck;
 
 /* ----------------------- main ----------------------- */
 fn main() {
@@ -40,7 +30,9 @@ fn main() {
     let deck = create_deck();
     println!("{:?}", deck);
     println!("");
-    println!("{:?}", deck[1]);
+    println!("{:?}", deck.deck);
+    println!("");
+    println!("{:?}", deck.deck[5]);
 
 }
 
