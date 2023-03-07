@@ -43,7 +43,7 @@ fn main() {
     println!("{:?}", deck.deck);
     println!("");
 
-    println!("{:?}", deck.hit());;
+    
 
 }
 
