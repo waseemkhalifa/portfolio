@@ -1,10 +1,7 @@
 /* ----------------------- packages ----------------------- */
-// this will be used by the computer to choose rock paper scissors at random
-// use rand::Rng;
-// this will store our rock, paper & scissors as key value pairs
-// use std::collections::HashMap;
-// this will allow the user to input their choice for the game
-// use std::io;
+// this will be used by the computer to shuffle the deck
+use rand::thread_rng;
+use rand::seq::SliceRandom;
 // this will allow us to iterate over a Enum
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
@@ -46,6 +43,13 @@ pub struct Deck {
     pub deck:Vec<Card>,
 }
 
+impl Deck {
+    pub fn shuffle_deck(&mut self) {
+        self.deck.shuffle(&mut thread_rng());
+        self.deck.shuffle(&mut thread_rng());
+        self.deck.shuffle(&mut thread_rng());
+    }
+}
 
 
 // this will create our deck of cards

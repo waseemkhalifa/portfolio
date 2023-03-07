@@ -27,12 +27,20 @@ use deck::create_deck;
 /* ----------------------- main ----------------------- */
 fn main() {
     
-    let deck = create_deck();
+    let mut deck = create_deck();
+    println!("");
+    println!("print raw deck");
     println!("{:?}", deck);
     println!("");
+    println!("print vec");
     println!("{:?}", deck.deck);
     println!("");
+    println!("print one card");
     println!("{:?}", deck.deck[5]);
+    println!("");
+    println!("Deck Shuffled");
+    deck.shuffle_deck();
+    println!("{:?}", deck.deck);
 
 }
 
