@@ -23,6 +23,8 @@
 /* ----------------------- imports ----------------------- */
 mod deck;
 use deck::create_deck;
+mod player;
+use crate::player::Player;
 
 /* ----------------------- main ----------------------- */
 fn main() {
@@ -43,9 +45,15 @@ fn main() {
     println!("{:?}", deck.deck);
     println!("");
 
-    
+    println!("{:?}", deck.hit());
+    println!("");
 
+    // let new_player = deck.intial_hand();
+
+    let new_player = Player {
+            hand: deck.intial_hand(),
+        };
+
+
+    println!("{:?}", new_player);
 }
-
-
-

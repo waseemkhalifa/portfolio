@@ -1,12 +1,15 @@
-/* ----------------------- packages ----------------------- */
-// this will allow us to iterate over a Enum
-use strum::IntoEnumIterator;
-use strum_macros::EnumIter;
+use crate::deck::Card;
 
 /* ----------------------- functions ----------------------- */
+#[derive(Debug)]
 pub struct Player {
-    bank: 100,
+    bank: i32,
+    pub hand: Vec<Card>,
+    bet: i32,
+    hand_value: i32,
+}
+
+pub struct Dealer {
     hand: Vec<Card>,
-    bet: 0,
-    hand_value: 0
+    hand_value: i32,
 }

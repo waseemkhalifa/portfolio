@@ -52,16 +52,16 @@ impl Deck {
     pub fn hit(&mut self) -> Card {
         return self.deck.pop().unwrap();
     }
-    pub fn intial_hand(&mut self, created_player:&mut Vec<Card>) -> Vec<Card> {
+    pub fn intial_hand(&mut self) -> Vec<Card> {
+        let mut intial_hand_cards:Vec<Card> = Vec::new();
         let mut a = 0;
         while a != 2 {
-            created_player.push(self.hit());
+            intial_hand_cards.push(self.hit());
             a+=1;
         }
-        return created_player.to_vec();
+        return intial_hand_cards;
     }
 }
-
 
 // this will create our deck of cards
 pub fn create_deck() -> Deck {
