@@ -17,17 +17,35 @@ pub struct Dealer {
     pub hand_value: i32,
 }
 
-pub trait User {
-    fn initialise_player(&self, deck:&mut Deck) -> Player;
+// pub trait User {
+//     fn initialise_player(&self, deck:&mut Deck) -> Player;
+// }
+
+// impl User for Player {
+//     fn initialise_player(&self, deck:&mut Deck) -> Player {
+//         Player {
+//             bank: 100,
+//             hand: deck.intial_hand(),
+//             bet: 0,
+//             hand_value: 0,
+//         }
+//     }
+// }
+
+// this will initialise our Player
+pub fn initialise_player(deck:&mut Deck) -> Player {
+    Player {
+        bank: 100,
+        hand: deck.intial_hand(),
+        bet: 0,
+        hand_value: 0,
+    }
 }
 
-impl User for Player {
-    fn initialise_player(&self, deck:&mut Deck) -> Player {
-        Player {
-            bank: 100,
-            hand: deck.intial_hand(),
-            bet: 0,
-            hand_value: 0,
-        }
+// this will initialise our Dealer
+pub fn initialise_dealer(deck:&mut Deck) -> Dealer {
+    Dealer {
+        hand: deck.intial_hand(),
+        hand_value: 0,
     }
 }

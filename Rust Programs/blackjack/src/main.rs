@@ -24,7 +24,8 @@
 mod deck;
 use deck::create_deck;
 mod player;
-use crate::player::Player;
+use player::initialise_player;
+use player::initialise_dealer;
 
 /* ----------------------- main ----------------------- */
 fn main() {
@@ -50,13 +51,24 @@ fn main() {
 
     // let new_player = deck.intial_hand();
 
-    let new_player = Player {
-            bank: 100,
-            hand: deck.intial_hand(),
-            bet: 0,
-            hand_value: 0,
-        };
+    // let new_player = Player {
+    //         bank: 100,
+    //         hand: deck.intial_hand(),
+    //         bet: 0,
+    //         hand_value: 0,
+    //     };
 
-
+    let mut new_player = initialise_player(&mut deck);
     println!("{:?}", new_player);
+    println!("");
+
+    println!("{:?}", deck.deck);
+    println!("");
+
+    let mut new_dealer = initialise_dealer(&mut deck);
+    println!("{:?}", new_dealer);
+    println!("");
+
+    println!("{:?}", deck.deck);
+    println!("");
 }
