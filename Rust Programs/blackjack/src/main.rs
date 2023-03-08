@@ -51,7 +51,10 @@ fn main() {
     // let new_player = deck.intial_hand();
 
     let new_player = Player {
+            bank: 100,
             hand: deck.intial_hand(),
+            bet: 0,
+            hand_value: 0,
         };
 
 
