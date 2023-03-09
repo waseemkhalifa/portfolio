@@ -97,10 +97,13 @@ fn main() {
     let mut sum:i32 = vec.iter().sum();
     println!("the total sum is: {}", sum);
     println!("");
-    while sum > 21 &&  {
-        for i in &index_vec {
-            vec[*i] = 1;
+    let index_vec_helper = index_vec.clone();
+    while sum > 21 && index_vec.len() > 0 {
+        for (index, element) in index_vec_helper.iter().enumerate() {
+            vec[*element] = 1;
             sum = vec.iter().sum();
+            index_vec.remove(index);
+            println!("index_vec: {:?}", index_vec);
         }
     }
     println!("Vector: {:?}", vec);
