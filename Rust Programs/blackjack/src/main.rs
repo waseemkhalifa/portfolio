@@ -23,9 +23,9 @@
 /* ----------------------- imports ----------------------- */
 mod deck;
 use deck::create_deck;
-mod player;
-use player::initialise_player;
-use player::initialise_dealer;
+mod user;
+use user::initialise_player;
+use user::initialise_dealer;
 
 /* ----------------------- main ----------------------- */
 fn main() {
@@ -48,15 +48,6 @@ fn main() {
 
     println!("{:?}", deck.hit());
     println!("");
-
-    // let new_player = deck.intial_hand();
-
-    // let new_player = Player {
-    //         bank: 100,
-    //         hand: deck.intial_hand(),
-    //         bet: 0,
-    //         hand_value: 0,
-    //     };
 
     let mut new_player = initialise_player(&mut deck);
     println!("{:?}", new_player);

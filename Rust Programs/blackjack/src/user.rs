@@ -18,17 +18,16 @@ pub struct Dealer {
 }
 
 // pub trait User {
-//     fn initialise_player(&self, deck:&mut Deck) -> Player;
+//     fn hand_value_calc(&self, Vec<Card>) -> i32;
+//     fn show_cards(&self, Vec<Card>);
 // }
 
 // impl User for Player {
-//     fn initialise_player(&self, deck:&mut Deck) -> Player {
-//         Player {
-//             bank: 100,
-//             hand: deck.intial_hand(),
-//             bet: 0,
-//             hand_value: 0,
-//         }
+//     fn hand_value_calc(&self, Vec<Card>) -> i32 {
+//         let mut hand_value_map: HashMap<i32, String> = HashMap::new();
+//         hm_choice.insert(1, "Rock".to_string());
+//         hm_choice.insert(2, "Paper".to_string());
+//         hm_choice.insert(3, "Scissors".to_string());
 //     }
 // }
 
