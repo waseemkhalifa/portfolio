@@ -62,4 +62,31 @@ fn main() {
 
     println!("{:?}", deck.deck);
     println!("");
+
+    println!("{:?}", new_player.hand);
+    println!("{:?}", new_player.hand[0].rank);
+    println!("");
+
+    use std::collections::HashMap;
+    use crate::deck::Ranks;
+    let mut hand_value_map: HashMap<Ranks, i32> = HashMap::new();
+    hand_value_map.insert(Ranks::Two, 2);
+    hand_value_map.insert(Ranks::Three, 3);
+    hand_value_map.insert(Ranks::Four, 4);
+    hand_value_map.insert(Ranks::Five, 5);
+    hand_value_map.insert(Ranks::Six, 6);
+    hand_value_map.insert(Ranks::Seven, 7);
+    hand_value_map.insert(Ranks::Eight, 8);
+    hand_value_map.insert(Ranks::Nine, 9);
+    hand_value_map.insert(Ranks::Ten, 10);
+    hand_value_map.insert(Ranks::Jack, 10);
+    hand_value_map.insert(Ranks::Queen, 10);
+    hand_value_map.insert(Ranks::King, 10);
+    hand_value_map.insert(Ranks::Ace, 11);
+
+    // ha
+    for cards in &new_player.hand {
+        println!("{:?}", cards.rank);
+    }
+    
 }

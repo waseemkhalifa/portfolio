@@ -15,7 +15,7 @@ pub enum Suits {
     Clubs,
 }
 
-#[derive(Debug, EnumIter, Copy, Clone)]
+#[derive(Debug, EnumIter, Copy, Clone, Eq, Hash, PartialEq)]
 pub enum Ranks {
     Two, 
     Three, 
@@ -34,8 +34,8 @@ pub enum Ranks {
 
 #[derive(Debug, Copy, Clone)]
 pub struct Card {
-    suit:Suits,
-    rank:Ranks,
+    pub suit:Suits,
+    pub rank:Ranks,
 }
 
 #[derive(Debug, Clone)]
