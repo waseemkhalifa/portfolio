@@ -94,4 +94,9 @@ fn main() {
     new_dealer.hidden_show_cards(&new_dealer.hand);
     new_dealer.hidden_hand_value = new_dealer.hidden_hand_value_calc(&new_dealer.hand); 
     println!("{}", new_dealer.hidden_hand_value);
+    println!("");
+    println!("");
+
+    println!("bank: {}, bet: {}", new_player.bank, new_player.bet);
+    new_player.make_bet(new_player.bank);
 }

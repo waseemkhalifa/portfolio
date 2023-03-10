@@ -1,8 +1,11 @@
 /* ----------------------- imports ----------------------- */
+// key value pairs of card values
 use std::collections::HashMap;
 use crate::deck::Card;
 use crate::deck::Deck;
 use crate::deck::Ranks;
+// this will allow the user to input their choice for the game
+use std::io;
 
 /* ----------------------- functions ----------------------- */
 #[derive(Debug)]
@@ -12,6 +15,48 @@ pub struct Player {
     pub bet: i32,
     pub hand_value: i32,
 }
+
+impl Player {
+    pub fn make_bet(&self, bank: i32) -> i32 {
+        // this is a loop, which will only end if a valid input is entered
+        let choice = loop {
+            println!("");
+            println!("Make a bet from your bank: £1 - £{}", bank);
+            println!("");
+            
+            // this is Rust's user input method
+            let mut choice = String::new();
+            io::stdin().read_line(&mut choice).unwrap();
+
+            // if the value entered was int
+            if let Ok(val) = choice.trim().parse::<i32>() {
+                // choice = choice.trim().parse::<i32>();
+                if val > 0 && val <= bank {
+                    break val;
+                } 
+                // this will print if the value entered was not valid
+                println!("");
+                println!("Input not accepted!");
+                println!("Bet needs to be from your bank holdings");
+                println!("");
+                continue;
+            }
+
+            // this will be printed if the value entered was not int
+            println!("");
+            println!("Input not accepted! - Only number inputs accepted");
+            println!("Bet needs to be from your bank holdings");
+            println!("");
+        };
+
+        return choice;
+    }
+
+    // pub fn hit_stand(&self) -> String {}
+
+    // pub fn round_result(&self) -> String {} //maybe this goes in the game struct
+}
+
 
 #[derive(Debug)]
 pub struct Dealer {
