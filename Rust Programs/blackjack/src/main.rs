@@ -43,11 +43,11 @@ fn main() {
     println!("{:?}", deck.deck[5]);
     println!("");
     println!("Deck Shuffled");
-    // deck.shuffle_deck();
+    deck.shuffle_deck();
     println!("{:?}", deck.deck);
     println!("");
 
-    // println!("{:?}", deck.hit());
+    println!("{:?}", deck.hit());
     println!("");
 
     let mut new_player = initialise_player(&mut deck);
@@ -64,70 +64,18 @@ fn main() {
     println!("{:?}", deck.deck);
     println!("");
 
-    
-    
-    
-    use crate::deck::Card;
-    use crate::deck::Suits::Diamonds;
-    use crate::deck::Ranks::Ace;
     println!("{:?}", new_player.hand);
     println!("{:?}", new_player.hand[0].rank);
     println!("");
-    new_player.hand.push(Card{suit:Diamonds, rank:Ace});
-    new_player.hand.push(Card{suit:Diamonds, rank:Ace});
-    new_player.hand.push(Card{suit:Diamonds, rank:Ace});
-    use std::collections::HashMap;
-    use crate::deck::Ranks;
-    let mut hand_map: HashMap<Ranks, i32> = HashMap::new();
-    hand_map.insert(Ranks::Two, 2);
-    hand_map.insert(Ranks::Three, 3);
-    hand_map.insert(Ranks::Four, 4);
-    hand_map.insert(Ranks::Five, 5);
-    hand_map.insert(Ranks::Six, 6);
-    hand_map.insert(Ranks::Seven, 7);
-    hand_map.insert(Ranks::Eight, 8);
-    hand_map.insert(Ranks::Nine, 9);
-    hand_map.insert(Ranks::Ten, 10);
-    hand_map.insert(Ranks::Jack, 10);
-    hand_map.insert(Ranks::Queen, 10);
-    hand_map.insert(Ranks::King, 10);
-    hand_map.insert(Ranks::Ace, 11);
-    
-    // let mut vec:Vec<i32> = Vec::new();
-    // let mut index_vec:Vec<usize> = Vec::new();
-    // for (index, cards) in new_player.hand.iter().enumerate() {
-    //     println!("{:?} {}", cards.rank, hand_map.get(&cards.rank).unwrap());
-    //     vec.push(*hand_map.get(&cards.rank).unwrap());
-    //     if cards.rank == Ranks::Ace {
-    //         index_vec.push(index);
-    //     }
-    // }
-    // vec[1] = 0;
-    // vec[2] = 0;
-    // println!("Vector: {:?}", vec);
-    // println!("index_vec: {:?}", index_vec);
-    // let mut sum:i32 = vec.iter().sum();
-    // println!("the total sum is: {}", sum);
-    // println!("");
-    // let mut index_vec_len = index_vec.len();
-    // while sum > 21 && index_vec_len > 0 {
-    //     for (index, element) in index_vec.iter().enumerate() {
-    //         vec[*element] = 1;
-    //         sum = vec.iter().sum();
-    //         index_vec_len-=1;
-    //         if sum <= 21 {
-    //             break;
-    //         }
-    //     }
-    // }
-    // println!("");
-    // println!("Vector: {:?}", vec);
-    // println!("index_vec: {:?}", index_vec);
-    // let mut sum:i32 = vec.iter().sum();
-    // println!("the total sum is: {}", sum);
-    
     new_player.hand_value = new_player.hand_value_calc(&new_player.hand); 
     println!("{}", new_player.hand_value);
-    println!("{:?}", new_player.hand);
+    println!("");
+
+    println!("{:?}", new_dealer.hand);
+    println!("{:?}", new_dealer.hand[0].rank);
+    println!("");
+    new_dealer.hand_value = new_dealer.hand_value_calc(&new_dealer.hand); 
+    println!("{}", new_dealer.hand_value);
+    println!("");
 
 }
