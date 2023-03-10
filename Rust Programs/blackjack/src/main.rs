@@ -63,6 +63,9 @@ fn main() {
 
     println!("{:?}", deck.deck);
     println!("");
+    println!("");
+    println!("");
+    println!("");
 
     println!("{:?}", new_player.hand);
     println!("{:?}", new_player.hand[0].rank);
@@ -77,5 +80,18 @@ fn main() {
     new_dealer.hand_value = new_dealer.hand_value_calc(&new_dealer.hand); 
     println!("{}", new_dealer.hand_value);
     println!("");
+    println!("");
+    println!("");
 
+    new_player.show_cards(&new_player.hand);
+    println!("");
+    println!("");
+
+    new_dealer.show_cards(&new_dealer.hand);
+    println!("");
+    println!("");
+
+    new_dealer.hidden_show_cards(&new_dealer.hand);
+    new_dealer.hidden_hand_value = new_dealer.hidden_hand_value_calc(&new_dealer.hand); 
+    println!("{}", new_dealer.hidden_hand_value);
 }
