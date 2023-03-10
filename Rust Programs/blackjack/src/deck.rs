@@ -55,7 +55,7 @@ impl Deck {
     pub fn intial_hand(&mut self) -> Vec<Card> {
         let mut intial_hand_cards:Vec<Card> = Vec::new();
         let mut a = 0;
-        while a != 3 { // change back to 2
+        while a != 2 {
             intial_hand_cards.push(self.hit());
             a+=1;
         }

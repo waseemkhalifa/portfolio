@@ -26,6 +26,7 @@ use deck::create_deck;
 mod user;
 use user::initialise_player;
 use user::initialise_dealer;
+use crate::user::User;
 
 /* ----------------------- main ----------------------- */
 fn main() {
@@ -73,8 +74,8 @@ fn main() {
     println!("{:?}", new_player.hand[0].rank);
     println!("");
     new_player.hand.push(Card{suit:Diamonds, rank:Ace});
-    // new_player.hand.push(Card{suit:Diamonds, rank:Ace});
-    // new_player.hand.push(Card{suit:Diamonds, rank:Ace});
+    new_player.hand.push(Card{suit:Diamonds, rank:Ace});
+    new_player.hand.push(Card{suit:Diamonds, rank:Ace});
     use std::collections::HashMap;
     use crate::deck::Ranks;
     let mut hand_map: HashMap<Ranks, i32> = HashMap::new();
@@ -92,37 +93,41 @@ fn main() {
     hand_map.insert(Ranks::King, 10);
     hand_map.insert(Ranks::Ace, 11);
     
-    let mut vec:Vec<i32> = Vec::new();
-    let mut index_vec:Vec<usize> = Vec::new();
-    for (index, cards) in new_player.hand.iter().enumerate() {
-        println!("{:?} {}", cards.rank, hand_map.get(&cards.rank).unwrap());
-        vec.push(*hand_map.get(&cards.rank).unwrap());
-        if cards.rank == Ranks::Ace {
-            index_vec.push(index);
-        }
-    }
-    vec[1] = 0;
-    vec[2] = 0;
-    println!("Vector: {:?}", vec);
-    println!("index_vec: {:?}", index_vec);
-    let mut sum:i32 = vec.iter().sum();
-    println!("the total sum is: {}", sum);
-    println!("");
-    let mut index_vec_len = index_vec.len();
-    while sum > 21 && index_vec_len > 0 {
-        for (index, element) in index_vec.iter().enumerate() {
-            vec[*element] = 1;
-            sum = vec.iter().sum();
-            println!("the total sum is: {}", sum);
-            index_vec_len-=1;
-            if sum <= 21 {
-                break;
-            }
-        }
-    }
-    println!("");
-    println!("Vector: {:?}", vec);
-    println!("index_vec: {:?}", index_vec);
-    let mut sum:i32 = vec.iter().sum();
-    println!("the total sum is: {}", sum);
+    // let mut vec:Vec<i32> = Vec::new();
+    // let mut index_vec:Vec<usize> = Vec::new();
+    // for (index, cards) in new_player.hand.iter().enumerate() {
+    //     println!("{:?} {}", cards.rank, hand_map.get(&cards.rank).unwrap());
+    //     vec.push(*hand_map.get(&cards.rank).unwrap());
+    //     if cards.rank == Ranks::Ace {
+    //         index_vec.push(index);
+    //     }
+    // }
+    // vec[1] = 0;
+    // vec[2] = 0;
+    // println!("Vector: {:?}", vec);
+    // println!("index_vec: {:?}", index_vec);
+    // let mut sum:i32 = vec.iter().sum();
+    // println!("the total sum is: {}", sum);
+    // println!("");
+    // let mut index_vec_len = index_vec.len();
+    // while sum > 21 && index_vec_len > 0 {
+    //     for (index, element) in index_vec.iter().enumerate() {
+    //         vec[*element] = 1;
+    //         sum = vec.iter().sum();
+    //         index_vec_len-=1;
+    //         if sum <= 21 {
+    //             break;
+    //         }
+    //     }
+    // }
+    // println!("");
+    // println!("Vector: {:?}", vec);
+    // println!("index_vec: {:?}", index_vec);
+    // let mut sum:i32 = vec.iter().sum();
+    // println!("the total sum is: {}", sum);
+    
+    new_player.hand_value = new_player.hand_value_calc(&new_player.hand); 
+    println!("{}", new_player.hand_value);
+    println!("{:?}", new_player.hand);
+
 }

@@ -20,12 +20,13 @@ pub struct Dealer {
 }
 
 pub trait User {
-    fn hand_value_calc(&self, hand: Vec<Card>) -> i32;
+    fn hand_value_calc(&self, hand: &Vec<Card>) -> i32;
     // fn show_cards(&self, hand: Vec<Card>);
 }
 
 impl User for Player {
-    fn hand_value_calc(&self, hand: Vec<Card>) -> i32 {
+    fn hand_value_calc(&self, hand: &Vec<Card>) -> i32 {
+
         let mut hand_map: HashMap<Ranks, i32> = HashMap::new();
         hand_map.insert(Ranks::Two, 2);
         hand_map.insert(Ranks::Three, 3);
@@ -40,7 +41,32 @@ impl User for Player {
         hand_map.insert(Ranks::Queen, 10);
         hand_map.insert(Ranks::King, 10);
         hand_map.insert(Ranks::Ace, 11);
-        return 1;
+
+        let mut hand_values:Vec<i32> = Vec::new();
+        let mut hand_values_index:Vec<usize> = Vec::new();
+
+        for (index, cards) in hand.iter().enumerate() {
+            hand_values.push(*hand_map.get(&cards.rank).unwrap());
+            if cards.rank == Ranks::Ace {
+                hand_values_index.push(index);
+            }
+        }
+
+        let mut hand_value_sum:i32 = hand_values.iter().sum();
+        let mut hand_values_index_len = hand_values_index.len();
+        
+        while hand_value_sum > 21 && hand_values_index_len > 0 {
+            for (index, element) in hand_values_index.iter().enumerate() {
+                hand_values[*element] = 1;
+                hand_value_sum = hand_values.iter().sum();
+                hand_values_index_len-=1;
+                if hand_value_sum <= 21 {
+                    break;
+                }
+            }
+        }
+
+        return hand_value_sum;
     }
 }
 
