@@ -22,7 +22,6 @@ impl Player {
         let choice = loop {
             println!("");
             println!("Make a bet from your bank: £1 - £{}", bank);
-            println!("");
             
             // this is Rust's user input method
             let mut choice = String::new();
@@ -38,7 +37,6 @@ impl Player {
                 println!("");
                 println!("Input not accepted!");
                 println!("Bet needs to be from your bank holdings");
-                println!("");
                 continue;
             }
 
@@ -46,15 +44,55 @@ impl Player {
             println!("");
             println!("Input not accepted! - Only number inputs accepted");
             println!("Bet needs to be from your bank holdings");
-            println!("");
         };
 
         return choice;
     }
 
-    // pub fn hit_stand(&self) -> String {}
+    pub fn hit_stand(&self) -> String {
+        // we'll create a hashmap to map int choice to string
+        let mut hm_choice: HashMap<i32, String> = HashMap::new();
+        hm_choice.insert(1, "Hit".to_string());
+        hm_choice.insert(2, "Stand".to_string());
 
-    // pub fn round_result(&self) -> String {} //maybe this goes in the game struct
+        // this is a loop, which will only end if a valid input is entered
+        let choice = loop {
+            println!("");
+            println!("Do you want to Hit or Stand?");
+            println!("Choose one: Hit = 1 or Stand = 2:");
+            
+            // this is Rust's user input method
+            let mut choice = String::new();
+            io::stdin().read_line(&mut choice).unwrap();
+
+            // if the value entered was int
+            if let Ok(val) = choice.trim().parse::<i32>() {
+                // choice = choice.trim().parse::<i32>();
+                if val == 1 || val == 2 {
+                    break val;
+                } 
+                // this will print if the value entered was not valid
+                println!("");
+                println!("Input not accepted!");
+                println!("Input only allows for 1 or 2");
+                continue;
+            }
+
+            // this will be printed if the value entered was not int
+            println!("");
+            println!("Input not accepted!");
+            println!("Input only allows for 1 or 2");
+        };
+
+        let choice = hm_choice.get(&choice).unwrap().to_string();
+
+        return choice;
+    }
+
+    // pub fn round_result(
+    //     &self, player: &Player, round_result: String) -> String {
+        
+    // }
 }
 
 

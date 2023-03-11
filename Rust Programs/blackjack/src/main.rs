@@ -99,4 +99,5 @@ fn main() {
 
     println!("bank: {}, bet: {}", new_player.bank, new_player.bet);
     new_player.make_bet(new_player.bank);
+    println!("{}", new_player.hit_stand());
 }
