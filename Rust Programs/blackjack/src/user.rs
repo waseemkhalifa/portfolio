@@ -32,7 +32,7 @@ impl Player {
                 // choice = choice.trim().parse::<i32>();
                 if val > 0 && val <= bank {
                     break val;
-                } 
+                }
                 // this will print if the value entered was not valid
                 println!("");
                 println!("Input not accepted!");
@@ -128,11 +128,16 @@ impl Dealer {
         println!("> -hidden card-");
         println!("> {:?} of {:?}", hand[1].rank, hand[1].suit);
     }
+
+    pub fn show_hidden_hand_value(&self, hidden_hand_value: &i32) {
+        println!("Value of your Hand: {}", hidden_hand_value);
+    }
 }
 
 pub trait User {
     fn hand_value_calc(&self, hand: &Vec<Card>) -> i32;
     fn show_cards(&self, hand: &Vec<Card>);
+    fn show_hand_value(&self, hand_value: &i32);
 }
 
 impl User for Player {
@@ -164,7 +169,7 @@ impl User for Player {
         let mut hand_value_sum:i32 = hand_values.iter().sum();
         let mut hand_values_index_len = hand_values_index.len();
         while hand_value_sum > 21 && hand_values_index_len > 0 {
-            for (index, element) in hand_values_index.iter().enumerate() {
+            for (_index, element) in hand_values_index.iter().enumerate() {
                 hand_values[*element] = 1;
                 hand_value_sum = hand_values.iter().sum();
                 hand_values_index_len-=1;
@@ -182,6 +187,10 @@ impl User for Player {
         for card in hand {
             println!("> {:?} of {:?}", card.rank, card.suit)
         }
+    }
+
+    fn show_hand_value(&self, hand_value: &i32) {
+        println!("Value of your Hand: {}", hand_value);
     }
 }
 
@@ -214,7 +223,7 @@ impl User for Dealer {
         let mut hand_value_sum:i32 = hand_values.iter().sum();
         let mut hand_values_index_len = hand_values_index.len();
         while hand_value_sum > 21 && hand_values_index_len > 0 {
-            for (index, element) in hand_values_index.iter().enumerate() {
+            for (_index, element) in hand_values_index.iter().enumerate() {
                 hand_values[*element] = 1;
                 hand_value_sum = hand_values.iter().sum();
                 hand_values_index_len-=1;
@@ -232,6 +241,10 @@ impl User for Dealer {
         for card in hand {
             println!("> {:?} of {:?}", card.rank, card.suit)
         }
+    }
+
+    fn show_hand_value(&self, hand_value: &i32) {
+        println!("Value of your Hand: {}", hand_value);
     }
 }
 

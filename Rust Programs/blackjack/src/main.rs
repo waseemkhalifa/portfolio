@@ -22,82 +22,11 @@
 
 /* ----------------------- imports ----------------------- */
 mod deck;
-use deck::create_deck;
 mod user;
-use user::initialise_player;
-use user::initialise_dealer;
-use crate::user::User;
+mod game;
+use crate::game::game;
 
 /* ----------------------- main ----------------------- */
 fn main() {
-    
-    let mut deck = create_deck();
-    println!("");
-    println!("print raw deck");
-    println!("{:?}", deck);
-    println!("");
-    println!("print vec");
-    println!("{:?}", deck.deck);
-    println!("");
-    println!("print one card");
-    println!("{:?}", deck.deck[5]);
-    println!("");
-    println!("Deck Shuffled");
-    deck.shuffle_deck();
-    println!("{:?}", deck.deck);
-    println!("");
-
-    println!("{:?}", deck.hit());
-    println!("");
-
-    let mut new_player = initialise_player(&mut deck);
-    println!("{:?}", new_player);
-    println!("");
-
-    println!("{:?}", deck.deck);
-    println!("");
-
-    let mut new_dealer = initialise_dealer(&mut deck);
-    println!("{:?}", new_dealer);
-    println!("");
-
-    println!("{:?}", deck.deck);
-    println!("");
-    println!("");
-    println!("");
-    println!("");
-
-    println!("{:?}", new_player.hand);
-    println!("{:?}", new_player.hand[0].rank);
-    println!("");
-    new_player.hand_value = new_player.hand_value_calc(&new_player.hand); 
-    println!("{}", new_player.hand_value);
-    println!("");
-
-    println!("{:?}", new_dealer.hand);
-    println!("{:?}", new_dealer.hand[0].rank);
-    println!("");
-    new_dealer.hand_value = new_dealer.hand_value_calc(&new_dealer.hand); 
-    println!("{}", new_dealer.hand_value);
-    println!("");
-    println!("");
-    println!("");
-
-    new_player.show_cards(&new_player.hand);
-    println!("");
-    println!("");
-
-    new_dealer.show_cards(&new_dealer.hand);
-    println!("");
-    println!("");
-
-    new_dealer.hidden_show_cards(&new_dealer.hand);
-    new_dealer.hidden_hand_value = new_dealer.hidden_hand_value_calc(&new_dealer.hand); 
-    println!("{}", new_dealer.hidden_hand_value);
-    println!("");
-    println!("");
-
-    println!("bank: {}, bet: {}", new_player.bank, new_player.bet);
-    new_player.make_bet(new_player.bank);
-    println!("{}", new_player.hit_stand());
+    game();
 }

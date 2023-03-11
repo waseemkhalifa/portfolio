@@ -1,4 +1,4 @@
-/* ----------------------- packages ----------------------- */
+/* ----------------------- imports ----------------------- */
 // this will be used by the computer to shuffle the deck
 use rand::thread_rng;
 use rand::seq::SliceRandom;
