@@ -6,7 +6,7 @@ use crate::user::initialise_player;
 
 /* ----------------------- functions ----------------------- */
 /* this will our main game function */
-pub fn game() {
+pub fn play_blackjack() {
 
     // welcome message to the game
     println!("");

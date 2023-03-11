@@ -24,9 +24,9 @@
 mod deck;
 mod user;
 mod game;
-use crate::game::game;
+use crate::game::play_blackjack;
 
 /* ----------------------- main ----------------------- */
 fn main() {
-    game();
+    play_blackjack();
 }
