@@ -6,6 +6,7 @@ use crate::deck::Deck;
 use crate::deck::Ranks;
 // this will allow the user to input their choice for the game
 use std::io;
+use slowprint::slow_println;
 
 /* ----------------------- functions ----------------------- */
 #[derive(Debug)]
@@ -18,6 +19,7 @@ pub struct Player {
 
 impl Player {
     pub fn make_bet(&mut self) {
+        let delay = std::time::Duration::from_millis(30);
         // this is a loop, which will only end if a valid input is entered
         let choice = loop {
             println!("");
@@ -35,20 +37,21 @@ impl Player {
                 }
                 // this will print if the value entered was not valid
                 println!("");
-                println!("Input not accepted!");
-                println!("Bet needs to be from your bank holdings");
+                slow_println("Input not accepted!", delay);
+                slow_println("Bet needs to be from your bank holdings", delay);
                 continue;
             }
 
             // this will be printed if the value entered was not int
             println!("");
-            println!("Input not accepted! - Only number inputs accepted");
-            println!("Bet needs to be from your bank holdings");
+            slow_println("Input not accepted! - Only number inputs accepted", delay);
+            slow_println("Bet needs to be from your bank holdings", delay);
         };
         self.bet = choice;
     }
 
     pub fn hit_stand(&self) -> String {
+        let delay = std::time::Duration::from_millis(30);
         // we'll create a hashmap to map int choice to string
         let mut hm_choice: HashMap<i32, String> = HashMap::new();
         hm_choice.insert(1, "Hit".to_string());
@@ -57,8 +60,8 @@ impl Player {
         // this is a loop, which will only end if a valid input is entered
         let choice = loop {
             println!("");
-            println!("Do you want to Hit or Stand?");
-            println!("Choose one: Hit = 1 or Stand = 2:");
+            slow_println("Do you want to Hit or Stand?", delay);
+            slow_println("Choose one: Hit = 1 or Stand = 2:", delay);
             
             // this is Rust's user input method
             let mut choice = String::new();
@@ -72,15 +75,15 @@ impl Player {
                 } 
                 // this will print if the value entered was not valid
                 println!("");
-                println!("Input not accepted!");
-                println!("Input only allows for 1 or 2");
+                slow_println("Input not accepted!", delay);
+                slow_println("Input only allows for 1 or 2", delay);
                 continue;
             }
 
             // this will be printed if the value entered was not int
             println!("");
-            println!("Input not accepted!");
-            println!("Input only allows for 1 or 2");
+            slow_println("Input not accepted!", delay);
+            slow_println("Input only allows for 1 or 2", delay);
         };
 
         let choice = hm_choice.get(&choice).unwrap().to_string();
@@ -135,8 +138,9 @@ impl Dealer {
     }
 
     pub fn hidden_show_cards(&self, hand: &Vec<Card>) {
-        println!("Dealer has the following hand:");
-        println!("> -hidden card-");
+        let delay = std::time::Duration::from_millis(30);
+        slow_println("Dealer has the following hand:", delay);
+        slow_println("> -hidden card-", delay);
         println!("> {:?} of {:?}", hand[1].rank, hand[1].suit);
     }
 
@@ -194,7 +198,8 @@ impl User for Player {
     }
 
     fn show_cards(&self, hand: &Vec<Card>) {
-        println!("You have the following hand:");
+        let delay = std::time::Duration::from_millis(30);
+        slow_println("You have the following hand:", delay);
         for card in hand {
             println!("> {:?} of {:?}", card.rank, card.suit)
         }
@@ -248,7 +253,8 @@ impl User for Dealer {
     }
 
     fn show_cards(&self, hand: &Vec<Card>) {
-        println!("The Dealer had the following hand:");
+        let delay = std::time::Duration::from_millis(30);
+        slow_println("The Dealer had the following hand:", delay);
         for card in hand {
             println!("> {:?} of {:?}", card.rank, card.suit)
         }
