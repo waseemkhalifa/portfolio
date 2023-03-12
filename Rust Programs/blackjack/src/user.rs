@@ -17,11 +17,11 @@ pub struct Player {
 }
 
 impl Player {
-    pub fn make_bet(&self, bank: i32) -> i32 {
+    pub fn make_bet(&mut self) {
         // this is a loop, which will only end if a valid input is entered
         let choice = loop {
             println!("");
-            println!("Make a bet from your bank: £1 - £{}", bank);
+            println!("Make a bet from your bank: £1 - £{}", self.bank);
             
             // this is Rust's user input method
             let mut choice = String::new();
@@ -30,7 +30,7 @@ impl Player {
             // if the value entered was int
             if let Ok(val) = choice.trim().parse::<i32>() {
                 // choice = choice.trim().parse::<i32>();
-                if val > 0 && val <= bank {
+                if val > 0 && val <= self.bank {
                     break val;
                 }
                 // this will print if the value entered was not valid
@@ -45,8 +45,7 @@ impl Player {
             println!("Input not accepted! - Only number inputs accepted");
             println!("Bet needs to be from your bank holdings");
         };
-
-        return choice;
+        self.bet = choice;
     }
 
     pub fn hit_stand(&self) -> String {
@@ -89,10 +88,22 @@ impl Player {
         return choice;
     }
 
-    // pub fn round_result(
-    //     &self, player: &Player, round_result: String) -> String {
-        
-    // }
+    pub fn round_result(&mut self, round_result: String) {
+        println!("");
+        if round_result == "won" {
+            let old_bank = self.bank;
+            self.bank = self.bank + self.bet;
+            println!("Your bank balance has increased from £{} to £{}", 
+                old_bank, self.bank);
+        } else if round_result == "lost" {
+            let old_bank = self.bank;
+            self.bank = self.bank - self.bet;
+            println!("Your bank balance has decreased from £{} to £{}", 
+                old_bank, self.bank);
+        } else {
+            println!("Your bank balance has remained at £{}", self.bank);
+        }
+    }
 }
 
 
@@ -130,7 +141,7 @@ impl Dealer {
     }
 
     pub fn show_hidden_hand_value(&self, hidden_hand_value: &i32) {
-        println!("Value of your Hand: {}", hidden_hand_value);
+        println!("Dealer's Hand Value: {}", hidden_hand_value);
     }
 }
 
