@@ -67,7 +67,7 @@ pub fn play_blackjack() {
         player.show_cards(&player.hand);
         player.show_hand_value(&player.hand_value);
 
-        let mut game_result = String::new();
+        let game_result:String;
         
         // if the player has 21 in his initial hand
         if player.hand_value == 21 && dealer.hand_value != 21 {
