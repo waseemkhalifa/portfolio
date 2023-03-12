@@ -244,7 +244,7 @@ impl User for Dealer {
     }
 
     fn show_hand_value(&self, hand_value: &i32) {
-        println!("Value of your Hand: {}", hand_value);
+        println!("Value of Dealer's Hand: {}", hand_value);
     }
 }
 
