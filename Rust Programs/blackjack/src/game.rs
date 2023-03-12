@@ -67,7 +67,7 @@ pub fn play_blackjack() {
         player.show_cards(&player.hand);
         player.show_hand_value(&player.hand_value);
 
-        let mut game_result = String::from("draw");
+        let mut game_result = String::new();
         
         // if the player has 21 in his initial hand
         if player.hand_value == 21 && dealer.hand_value != 21 {
@@ -96,8 +96,8 @@ pub fn play_blackjack() {
 
         player.round_result(game_result);
 
-        end_of_round(&mut player, &mut game_status);
-
+        game_status = end_of_round(&mut player, &mut game_status);
+        
         game_round+=1;
     }
 
@@ -107,7 +107,7 @@ pub fn play_blackjack() {
 fn game_result_calc(player: &mut Player, dealer: &mut Dealer, 
         deck:&mut Deck) -> String {
     
-    let mut game_result = String::from("draw");
+    let mut game_result = String::new();
     let mut player_choice = player.hit_stand();
     println!("");
 
@@ -130,11 +130,13 @@ fn game_result_calc(player: &mut Player, dealer: &mut Dealer,
             println!("");
             dealer.show_cards(&dealer.hand);
             dealer.show_hand_value(&dealer.hand_value);
+            println!("");
             println!("The dealer also has a blackjack!");
             println!("DRAW!");
             game_result = String::from("draw");
             break
         } else if player.hand_value >= 21 {
+            println!("");
             println!("BUST!");
             println!("YOU LOSE!");
             game_result = String::from("lost");
@@ -146,7 +148,7 @@ fn game_result_calc(player: &mut Player, dealer: &mut Dealer,
     }
 
     if player_choice == "Stand" {
-        
+        println!("");
         if dealer.hand_value == 21 {
             dealer.show_cards(&dealer.hand);
             dealer.show_hand_value(&dealer.hand_value);
@@ -205,7 +207,7 @@ fn end_of_round(player: &mut Player, game_status: &mut String) -> String {
         println!("You have no more money in the bank");
         println!("GAME ENDS - GOODBYE!");
         println!("");
-        *game_status = "End".to_string();
+        *game_status = String::from("End");
     } else {
         // we'll create a hashmap to map int choice to string
         let mut hm_choice: HashMap<i32, String> = HashMap::new();
@@ -239,7 +241,7 @@ fn end_of_round(player: &mut Player, game_status: &mut String) -> String {
             println!("Input only allows for 1 or 2");
         };
 
-        let game_status = hm_choice.get(&choice).unwrap().to_string();
+        *game_status = hm_choice.get(&choice).unwrap().to_string();
     }
     
     return game_status.to_string();
