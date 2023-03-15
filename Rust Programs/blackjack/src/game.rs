@@ -29,14 +29,14 @@ pub fn play_blackjack() {
 
     // will be used in our game loop, if game_status == "Continue"
     // continue the game else end the game
-    let mut game_status = String::from("Continue");
+    let mut game_status = GameStatus::Continue;
 
     // helper, if it's the first round we'll work out the intialised player
     // dealer card values. For subsequent rounds, we'll create a new deck
     // shuffle the cards and give fresh new cards to the player & dealer
     let mut game_round:i32 = 1;
 
-    while game_status == "Continue" {
+    while game_status == GameStatus::Continue {
 
         if game_round == 1 {
             player.hand_value = player.hand_value_calc(&player.hand);
@@ -100,6 +100,7 @@ pub fn play_blackjack() {
         player.round_result(game_result);
 
         game_status = end_of_round(&mut player, &mut game_status);
+        println!("{:?}", game_status);
         
         game_round+=1;
     }
@@ -207,7 +208,7 @@ fn game_result_calc(player: &mut Player, dealer: &mut Dealer,
 }
 
 // function for end of round
-fn end_of_round(player: &mut Player, game_status: &mut String) -> String {
+fn end_of_round(player: &mut Player, game_status: &mut GameStatus) -> GameStatus {
     println!("");
 
     let delay = std::time::Duration::from_millis(30);
@@ -216,12 +217,12 @@ fn end_of_round(player: &mut Player, game_status: &mut String) -> String {
         slow_println("You have no more money in the bank", delay);
         slow_println("GAME ENDS - GOODBYE!", delay);
         println!("");
-        *game_status = String::from("End");
+        let game_status = GameStatus::End;
     } else {
         // we'll create a hashmap to map int choice to string
-        let mut hm_choice: HashMap<i32, String> = HashMap::new();
-        hm_choice.insert(1, "Continue".to_string());
-        hm_choice.insert(2, "End".to_string());
+        let mut hm_choice: HashMap<i32, GameStatus> = HashMap::new();
+        hm_choice.insert(1, GameStatus::Continue);
+        hm_choice.insert(2, GameStatus::End);
 
         // this is a loop, which will only end if a valid input is entered
         let choice = loop {
@@ -250,9 +251,10 @@ fn end_of_round(player: &mut Player, game_status: &mut String) -> String {
             slow_println("Input only allows for 1 or 2", delay);
         };
 
-        *game_status = hm_choice.get(&choice).unwrap().to_string();
+        let game_status_2 = hm_choice.get(&choice).unwrap();
+        let game_status = *game_status_2;
 
-        if game_status == "End" {
+        if game_status == GameStatus::End {
             println!("");
             slow_println("Thank you for playing", delay);
             slow_println("GOODBYE!", delay);
@@ -260,5 +262,12 @@ fn end_of_round(player: &mut Player, game_status: &mut String) -> String {
         }
     }
     
-    return game_status.to_string();
+    return game_status;
+}
+
+// we will create an enum for game_status
+#[derive(Debug, PartialEq, Copy, Clone)]
+enum GameStatus {
+    Continue,
+    End
 }
