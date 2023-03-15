@@ -98,9 +98,8 @@ pub fn play_blackjack() {
         }
 
         player.round_result(game_result);
-
+        
         game_status = end_of_round(&mut player, &mut game_status);
-        println!("{:?}", game_status);
         
         game_round+=1;
     }
@@ -217,7 +216,7 @@ fn end_of_round(player: &mut Player, game_status: &mut GameStatus) -> GameStatus
         slow_println("You have no more money in the bank", delay);
         slow_println("GAME ENDS - GOODBYE!", delay);
         println!("");
-        let game_status = GameStatus::End;
+        *game_status = GameStatus::End;
     } else {
         // we'll create a hashmap to map int choice to string
         let mut hm_choice: HashMap<i32, GameStatus> = HashMap::new();
@@ -250,11 +249,10 @@ fn end_of_round(player: &mut Player, game_status: &mut GameStatus) -> GameStatus
             slow_println("Input not accepted!", delay);
             slow_println("Input only allows for 1 or 2", delay);
         };
+  
+        *game_status = *hm_choice.get(&choice).unwrap();
 
-        let game_status_2 = hm_choice.get(&choice).unwrap();
-        let game_status = *game_status_2;
-
-        if game_status == GameStatus::End {
+        if *game_status == GameStatus::End {
             println!("");
             slow_println("Thank you for playing", delay);
             slow_println("GOODBYE!", delay);
@@ -262,7 +260,7 @@ fn end_of_round(player: &mut Player, game_status: &mut GameStatus) -> GameStatus
         }
     }
     
-    return game_status;
+    return *game_status;
 }
 
 // we will create an enum for game_status
