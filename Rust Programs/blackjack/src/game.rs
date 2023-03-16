@@ -12,9 +12,24 @@ use std::io;
 use slowprint::slow_println;
 
 /* ----------------------- functions ----------------------- */
+// we will create an enum for game_status
+#[derive(Debug, PartialEq, Copy, Clone)]
+enum GameStatus {
+    Continue,
+    End
+}
+
+// we will create an enum for game_result
+#[derive(Debug, PartialEq, Copy, Clone)]
+pub enum GameResult {
+    Won,
+    Lost,
+    Draw
+}
+
 // this will our main game function 
 pub fn play_blackjack() {
-
+    
     let delay = std::time::Duration::from_millis(30);
 
     println!("");
@@ -29,14 +44,14 @@ pub fn play_blackjack() {
 
     // will be used in our game loop, if game_status == "Continue"
     // continue the game else end the game
-    let mut game_status = String::from("Continue");
+    let mut game_status = GameStatus::Continue;
 
     // helper, if it's the first round we'll work out the intialised player
     // dealer card values. For subsequent rounds, we'll create a new deck
     // shuffle the cards and give fresh new cards to the player & dealer
     let mut game_round:i32 = 1;
 
-    while game_status == "Continue" {
+    while game_status == GameStatus::Continue {
 
         if game_round == 1 {
             player.hand_value = player.hand_value_calc(&player.hand);
@@ -70,7 +85,7 @@ pub fn play_blackjack() {
         player.show_cards(&player.hand);
         player.show_hand_value(&player.hand_value);
 
-        let game_result:String;
+        let game_result:GameResult;
         
         // if the player has 21 in his initial hand
         if player.hand_value == 21 && dealer.hand_value != 21 {
@@ -81,7 +96,7 @@ pub fn play_blackjack() {
             dealer.show_hand_value(&dealer.hand_value);
             println!("");
             slow_println("YOU WIN!", delay);
-            game_result = String::from("won");
+            game_result = GameResult::Won;
         } else if player.hand_value == 21 && dealer.hand_value == 21 {
             println!("");
             slow_println("You have a blackjack!", delay);
@@ -91,14 +106,14 @@ pub fn play_blackjack() {
             println!("");
             slow_println("The dealer also has a blackjack!", delay);
             slow_println("DRAW!", delay);
-            game_result = String::from("draw");
+            game_result = GameResult::Draw;
         } else {
             game_result = game_result_calc(&mut player, &mut dealer, 
                 &mut deck);
         }
 
         player.round_result(game_result);
-
+        
         game_status = end_of_round(&mut player, &mut game_status);
         
         game_round+=1;
@@ -108,11 +123,11 @@ pub fn play_blackjack() {
 
 // function to work out if the player/dealer has won the round
 fn game_result_calc(player: &mut Player, dealer: &mut Dealer, 
-        deck:&mut Deck) -> String {
+        deck:&mut Deck) -> GameResult {
 
     let delay = std::time::Duration::from_millis(30);
 
-    let mut game_result = String::new();
+    let mut game_result = GameResult::Draw;
     let mut player_choice = player.hit_stand();
     println!("");
 
@@ -130,7 +145,7 @@ fn game_result_calc(player: &mut Player, dealer: &mut Dealer,
             dealer.show_hand_value(&dealer.hand_value);
             println!("");
             slow_println("YOU WIN!", delay);
-            game_result = String::from("won");
+            game_result = GameResult::Won;
             break
         } else if player.hand_value == 21 && dealer.hand_value == 21 {
             slow_println("You have a blackjack!", delay);
@@ -140,13 +155,13 @@ fn game_result_calc(player: &mut Player, dealer: &mut Dealer,
             println!("");
             slow_println("The dealer also has a blackjack!", delay);
             slow_println("DRAW!", delay);
-            game_result = String::from("draw");
+            game_result = GameResult::Draw;
             break
         } else if player.hand_value >= 21 {
             println!("");
             slow_println("BUST!", delay);
             slow_println("YOU LOSE!", delay);
-            game_result = String::from("lost");
+            game_result = GameResult::Lost;
             break
         } else {
             println!("");
@@ -156,17 +171,10 @@ fn game_result_calc(player: &mut Player, dealer: &mut Dealer,
 
     if player_choice == "Stand" {
         println!("");
-        if dealer.hand_value == 21 {
-            dealer.show_cards(&dealer.hand);
-            dealer.show_hand_value(&dealer.hand_value);
-            println!("");
-            slow_println("Dealer has a blackjack!", delay);
-            slow_println("YOU LOSE!", delay);
-            game_result = String::from("lost");
-        }
         
         // dealer will continue to hit if their hand is below the players
-        while dealer.hand_value < player.hand_value {
+        while dealer.hand_value < player.hand_value 
+                && dealer.hand_value != 21 {
             dealer.hand.push(deck.hit());
             dealer.hand_value = dealer.hand_value_calc(&dealer.hand);
             slow_println("Dealer hit!", delay);
@@ -178,28 +186,28 @@ fn game_result_calc(player: &mut Player, dealer: &mut Dealer,
             dealer.show_hand_value(&dealer.hand_value);
             println!("");
             slow_println("DRAW!", delay);
-            game_result = String::from("draw");
+            game_result = GameResult::Draw;
         } else if dealer.hand_value > player.hand_value 
                 && dealer.hand_value < 21 {
             dealer.show_cards(&dealer.hand);
             dealer.show_hand_value(&dealer.hand_value);
             println!("");
             slow_println("YOU LOSE!", delay);
-            game_result = String::from("lost");
+            game_result = GameResult::Lost;
         } else if dealer.hand_value > 21 {
             dealer.show_cards(&dealer.hand);
             dealer.show_hand_value(&dealer.hand_value);
             println!("");
             slow_println("DEALER IS BUST!", delay);
             slow_println("YOU WIN!", delay);
-            game_result = String::from("won");
+            game_result = GameResult::Won;
         } else if dealer.hand_value == 21 {
             dealer.show_cards(&dealer.hand);
             dealer.show_hand_value(&dealer.hand_value);
             println!("");
             slow_println("Dealer has a blackjack!", delay);
             slow_println("YOU LOSE!", delay);
-            game_result = String::from("lost");
+            game_result = GameResult::Lost;
         }   
     }
 
@@ -207,7 +215,7 @@ fn game_result_calc(player: &mut Player, dealer: &mut Dealer,
 }
 
 // function for end of round
-fn end_of_round(player: &mut Player, game_status: &mut String) -> String {
+fn end_of_round(player: &mut Player, game_status: &mut GameStatus) -> GameStatus {
     println!("");
 
     let delay = std::time::Duration::from_millis(30);
@@ -216,12 +224,12 @@ fn end_of_round(player: &mut Player, game_status: &mut String) -> String {
         slow_println("You have no more money in the bank", delay);
         slow_println("GAME ENDS - GOODBYE!", delay);
         println!("");
-        *game_status = String::from("End");
+        *game_status = GameStatus::End;
     } else {
         // we'll create a hashmap to map int choice to string
-        let mut hm_choice: HashMap<i32, String> = HashMap::new();
-        hm_choice.insert(1, "Continue".to_string());
-        hm_choice.insert(2, "End".to_string());
+        let mut hm_choice: HashMap<i32, GameStatus> = HashMap::new();
+        hm_choice.insert(1, GameStatus::Continue);
+        hm_choice.insert(2, GameStatus::End);
 
         // this is a loop, which will only end if a valid input is entered
         let choice = loop {
@@ -249,10 +257,10 @@ fn end_of_round(player: &mut Player, game_status: &mut String) -> String {
             slow_println("Input not accepted!", delay);
             slow_println("Input only allows for 1 or 2", delay);
         };
+  
+        *game_status = *hm_choice.get(&choice).unwrap();
 
-        *game_status = hm_choice.get(&choice).unwrap().to_string();
-
-        if game_status == "End" {
+        if *game_status == GameStatus::End {
             println!("");
             slow_println("Thank you for playing", delay);
             slow_println("GOODBYE!", delay);
@@ -260,5 +268,5 @@ fn end_of_round(player: &mut Player, game_status: &mut String) -> String {
         }
     }
     
-    return game_status.to_string();
+    return *game_status;
 }
