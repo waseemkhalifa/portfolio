@@ -4,6 +4,7 @@ use std::collections::HashMap;
 use crate::deck::Card;
 use crate::deck::Deck;
 use crate::deck::Ranks;
+use crate::game::GameResult;
 // this will allow the user to input their choice for the game
 use std::io;
 use slowprint::slow_println;
@@ -91,14 +92,14 @@ impl Player {
         return choice;
     }
 
-    pub fn round_result(&mut self, round_result: String) {
+    pub fn round_result(&mut self, round_result: GameResult) {
         println!("");
-        if round_result == "won" {
+        if round_result == GameResult::Won {
             let old_bank = self.bank;
             self.bank = self.bank + self.bet;
             println!("Your bank balance has increased from £{} to £{}", 
                 old_bank, self.bank);
-        } else if round_result == "lost" {
+        } else if round_result == GameResult::Lost {
             let old_bank = self.bank;
             self.bank = self.bank - self.bet;
             println!("Your bank balance has decreased from £{} to £{}", 
