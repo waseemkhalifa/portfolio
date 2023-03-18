@@ -1,8 +1,6 @@
 /* ----------------------- imports ----------------------- */
 use crate::deck::create_deck;
 use crate::user::User;
-use crate::user::initialise_dealer;
-use crate::user::initialise_player;
 use crate::user::Player;
 use crate::user::Dealer;
 use crate::deck::Deck;
@@ -39,8 +37,8 @@ pub fn play_blackjack() {
     let mut deck = create_deck();
     deck.shuffle_deck();
 
-    let mut player = initialise_player(&mut deck);
-    let mut dealer = initialise_dealer(&mut deck);
+    let mut player = Player::initialise_player(&mut deck);
+    let mut dealer = Dealer::initialise_dealer(&mut deck);
 
     // will be used in our game loop, if game_status == "Continue"
     // continue the game else end the game
