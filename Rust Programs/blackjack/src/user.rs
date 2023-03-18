@@ -19,6 +19,15 @@ pub struct Player {
 }
 
 impl Player {
+    pub fn initialise_player(deck:&mut Deck) -> Player {
+        Player {
+            bank: 100,
+            hand: deck.intial_hand(),
+            bet: 0,
+            hand_value: 0,
+        }
+    }
+
     pub fn make_bet(&mut self) {
         let delay = std::time::Duration::from_millis(30);
         // this is a loop, which will only end if a valid input is entered
@@ -119,6 +128,14 @@ pub struct Dealer {
 }
 
 impl Dealer {
+    pub fn initialise_dealer(deck:&mut Deck) -> Dealer {
+        Dealer {
+            hand: deck.intial_hand(),
+            hand_value: 0,
+            hidden_hand_value: 0,
+        }
+    }
+
     pub fn hidden_hand_value_calc(&self, hand: &Vec<Card>) -> i32 {
         let mut hand_map: HashMap<Ranks, i32> = HashMap::new();
         hand_map.insert(Ranks::Two, 2);
@@ -263,24 +280,5 @@ impl User for Dealer {
 
     fn show_hand_value(&self, hand_value: &i32) {
         println!("Value of Dealer's Hand: {}", hand_value);
-    }
-}
-
-// this will initialise our Player
-pub fn initialise_player(deck:&mut Deck) -> Player {
-    Player {
-        bank: 100,
-        hand: deck.intial_hand(),
-        bet: 0,
-        hand_value: 0,
-    }
-}
-
-// this will initialise our Dealer
-pub fn initialise_dealer(deck:&mut Deck) -> Dealer {
-    Dealer {
-        hand: deck.intial_hand(),
-        hand_value: 0,
-        hidden_hand_value: 0,
     }
 }
