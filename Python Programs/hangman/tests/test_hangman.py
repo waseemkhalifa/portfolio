@@ -110,13 +110,12 @@ def guess_outcome(actual_word, currently_guessed_word, guess):
             return currently_guessed_word
     # if the guess is one letter
     else:
-        for letter in actual_word:
-            if letter == guess:
+        for acl_letter, crt_letter in zip(actual_word, currently_guessed_word):
+            if acl_letter == guess:
                 output_string += guess
             else:
-                output_string += letter
+                output_string += crt_letter
     return output_string
-
 
 # ------------------------------------ tests --------------------------- #
 class word_frequency_finder_tests(unittest.TestCase):
@@ -203,11 +202,41 @@ class word_frequency_finder_tests(unittest.TestCase):
         self.assertEqual(self.test_output, self.test_expected)
 
     # test for dash_word function
-    def test_guess_outcome(self):
+    def test_guess_outcome_1(self):
         self.actual_word = "hello"
         self.current_guessed = "_e__o"
         self.test_input = "l"
         self.test_expected = "_ello"
+        self.test_output = guess_outcome(self.actual_word,
+                                         self.current_guessed,
+                                         self.test_input)
+        self.assertEqual(self.test_output, self.test_expected)
+    
+    def test_guess_outcome_2(self):
+        self.actual_word = "hello"
+        self.current_guessed = "he___"
+        self.test_input = "l"
+        self.test_expected = "hell_"
+        self.test_output = guess_outcome(self.actual_word,
+                                         self.current_guessed,
+                                         self.test_input)
+        self.assertEqual(self.test_output, self.test_expected)
+    
+    def test_guess_outcome_3(self):
+        self.actual_word = "hello"
+        self.current_guessed = "he___"
+        self.test_input = "hello"
+        self.test_expected = "hello"
+        self.test_output = guess_outcome(self.actual_word,
+                                         self.current_guessed,
+                                         self.test_input)
+        self.assertEqual(self.test_output, self.test_expected)
+    
+    def test_guess_outcome_4(self):
+        self.actual_word = "hello"
+        self.current_guessed = "h____"
+        self.test_input = "hello"
+        self.test_expected = "hello"
         self.test_output = guess_outcome(self.actual_word,
                                          self.current_guessed,
                                          self.test_input)
