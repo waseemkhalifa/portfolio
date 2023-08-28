@@ -242,6 +242,16 @@ class word_frequency_finder_tests(unittest.TestCase):
                                          self.test_input)
         self.assertEqual(self.test_output, self.test_expected)
 
+    def test_guess_outcome_5(self):
+        self.actual_word = "hello"
+        self.current_guessed = "h____"
+        self.test_input = "mel"
+        self.test_expected = "hello"
+        self.test_output = guess_outcome(self.actual_word,
+                                         self.current_guessed,
+                                         self.test_input)
+        self.assertNotEqual(self.test_output, self.test_expected)
+
 
 # ------------------------------------ main --------------------------- #
 if __name__ == "__main__":
