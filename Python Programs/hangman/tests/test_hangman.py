@@ -128,6 +128,7 @@ def guess_input():
         guess = input("Guess a letter OR the correct word: ")
         if guess.isalpha() == False:
             print()
+            print("INVALID INPUT!")
             print("Guess must not include numbers or symbols")
         else:
             input_value = True
