@@ -9,10 +9,12 @@ def dash_word(word):
     word_dashed = " ".join(word_list)
     return word_dashed
 
+
 # this function will remove numbers and symbols
 def clean_word(word):
     word = "".join(letter if letter.isalpha() else "" for letter in word)
     return word
+
 
 # this function will return the hangman hangman_stage
 def hangman_stage(wrong_guess_counter):
@@ -95,6 +97,7 @@ def hangman_stage(wrong_guess_counter):
 
     return stages[wrong_guess_counter]
 
+
 # this function will do the following:
     # if the correct word is guessed, it'll return the un-dashed word
     # if the correct letter is guessed, it'll un-dash letters in the word
@@ -116,6 +119,19 @@ def guess_outcome(actual_word, currently_guessed_word, guess):
             else:
                 output_string += crt_letter
     return output_string
+
+
+# this function takes the user's guess input
+def guess_input():
+    input_value = False
+    while input_value == False:
+        guess = input("Guess a letter OR the correct word: ")
+        if guess.isalpha() == False:
+            print()
+            print("Guess must not include numbers of symbols")
+        else:
+            input_value = True
+    return guess
 
 # ------------------------------------ tests --------------------------- #
 class word_frequency_finder_tests(unittest.TestCase):
@@ -139,6 +155,7 @@ class word_frequency_finder_tests(unittest.TestCase):
         self.test_output = dash_word(self.test_input)
         self.assertEqual(self.test_output, self.test_expected)
 
+
     # test for clean_word function
     def test_clean_word_hello(self):
         self.test_input = "he12314^^$!llo!!!"
@@ -157,6 +174,7 @@ class word_frequency_finder_tests(unittest.TestCase):
         self.test_expected = "a"
         self.test_output = clean_word(self.test_input)
         self.assertEqual(self.test_output, self.test_expected)
+
 
     # test for hangman_stage function
     def test_hangman_stage_second(self):
@@ -200,6 +218,7 @@ class word_frequency_finder_tests(unittest.TestCase):
                 """
         self.test_output = hangman_stage(self.test_input)
         self.assertEqual(self.test_output, self.test_expected)
+
 
     # test for dash_word function
     def test_guess_outcome_1(self):
@@ -252,6 +271,18 @@ class word_frequency_finder_tests(unittest.TestCase):
                                          self.test_input)
         self.assertNotEqual(self.test_output, self.test_expected)
 
+
+    # test for guess_input function
+    def test_guess_input_1(self):
+        self.test_expected = "hello"
+        self.test_output = guess_input()
+        self.assertEqual(self.test_output, self.test_expected)
+    
+    # test for guess_input function
+    def test_guess_input_2(self):
+        self.test_expected = "h"
+        self.test_output = guess_input()
+        self.assertEqual(self.test_output, self.test_expected)
 
 # ------------------------------------ main --------------------------- #
 if __name__ == "__main__":

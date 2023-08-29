@@ -140,6 +140,23 @@ def guess_outcome(actual_word, currently_guessed_word, guess):
                 output_string += crt_letter
     return output_string
 
+# this function takes the user's guess input
+def guess_input():
+    input_value = False
+    while input_value == False:
+        guess = input("Guess a letter OR the correct word: ")
+        if guess.isalpha() == False:
+            print()
+            print("Guess must not include numbers of symbols")
+        else:
+            input_value = True
+    return guess
+
+
+# this the main game function
+def main():
+    pass
+
 
 # ------------------------------------ main --------------------------------- #
 word_list = import_words()
