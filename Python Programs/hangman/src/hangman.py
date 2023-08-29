@@ -140,6 +140,7 @@ def guess_outcome(actual_word, currently_guessed_word, guess):
                 output_string += crt_letter
     return output_string
 
+
 # this function takes the user's guess input
 def guess_input():
     input_value = False
@@ -149,30 +150,60 @@ def guess_input():
         # or symbols
         if guess.isalpha() == False:
             print()
+            print("INVALID INPUT!")
             print("Guess must not include numbers or symbols")
         else:
             input_value = True
     return guess
 
+# this is our welcome message for the game
+def intro():
+    print()
+    print("- WELCOME TO THE HANGMAN GAME -")
+    print()
+    print("- To win, simply guess the dashed word")
+    print("- You can either input a letter at a time or guess the word")
+    print("- If after 7 attempts, the correct word is not guessed...")
+    print("HANGMAN!")
+    print()
 
-# this the main game function
-def main():
-    pass
-
+# this is our end message for the game
+def game_over():
+    print()
+    print("- THANKS FOR PLAYING THE HANGMAN GAME -")
+    print("- GAME OVER -")
+    print("- GOODBYE -")
+    print()
 
 # ------------------------------------ main --------------------------------- #
-word_list = import_words()
-word = get_word(word_list)
-word = clean_word(word)
-word_dashed = dash_word(word)
+# this the main game function
+def main():
+    # our game intro
+    intro()
 
-print(word)
-print(word_dashed)
+    # we'll import the word list
+    words_list = import_words()
+
+    # we'll get a random word from the word list
+    word_to_guess = get_word(words_list)
+
+    # we'll clean the word of any numbers of symbols
+    word_to_guess = clean_word(word_to_guess)
+
+    # we'll dash the word
+    word_to_guess_dashed = dash_word(word_to_guess)
+
+    game = False
+    while game == False:
+        print("Guess the following word")
+        print(word_to_guess_dashed)
+        print()
+
+        guessed_input = guess_input()
 
 
 
 
-
-
-
-
+# ------------------------------------ run program ---------------------------#
+if __name__ == "__main__":
+    main()

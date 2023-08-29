@@ -135,7 +135,7 @@ def guess_input():
     return guess
 
 # ------------------------------------ tests --------------------------- #
-class word_frequency_finder_tests(unittest.TestCase):
+class hangman_tests(unittest.TestCase):
 
     # test for dash_word function
     def test_dash_word_hello(self):
