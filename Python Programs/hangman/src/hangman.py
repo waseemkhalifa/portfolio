@@ -145,9 +145,11 @@ def guess_input():
     input_value = False
     while input_value == False:
         guess = input("Guess a letter OR the correct word: ")
+        # we'll continue asking the user for a guess if guess contains numbers 
+        # or symbols
         if guess.isalpha() == False:
             print()
-            print("Guess must not include numbers of symbols")
+            print("Guess must not include numbers or symbols")
         else:
             input_value = True
     return guess
