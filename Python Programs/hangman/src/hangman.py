@@ -125,6 +125,8 @@ def hangman_stage(wrong_guess_counter):
     # if the correct letter is guessed, it'll un-dash letters in the word
     # if in-correct, word will be left un-dashed
 def guess_outcome(actual_word, currently_guessed_word, guess):
+    actual_word = actual_word.replace(" ", "")
+    currently_guessed_word = currently_guessed_word.replace(" ", "")
     # empty helper string
     output_string = ""
     
@@ -138,9 +140,9 @@ def guess_outcome(actual_word, currently_guessed_word, guess):
     else:
         for acl_letter, crt_letter in zip(actual_word, currently_guessed_word):
             if acl_letter == guess:
-                output_string += guess
+                output_string += guess + " "
             else:
-                output_string += crt_letter
+                output_string += crt_letter + " "
     return output_string
 
 
@@ -173,8 +175,9 @@ def intro():
 # this is our end message for the game
 def game_over():
     print()
-    print("- THANKS FOR PLAYING THE HANGMAN GAME -")
     print("- GAME OVER -")
+    print()
+    print("- THANKS FOR PLAYING THE HANGMAN GAME -")
     print("- GOODBYE -")
     print()
 
@@ -210,12 +213,16 @@ def main():
                                       guessed_input)
         
         if guess_attempt == word_to_guess_dashed:
-            wrong_guess_counter = wrong_guess_counter + 1
+            wrong_guess_counter += 1
         elif guess_attempt == word_to_guess:
             wrong_guess_counter = 8
         
+        word_to_guess_dashed = guess_attempt
+        
         print(hangman_stage(wrong_guess_counter))
-        print(wrong_guess_counter)
+
+        # TO DO
+        # if the user inputs the same letter again, flag instead of accepting input
     
     game_over()
 
