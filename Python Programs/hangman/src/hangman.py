@@ -38,10 +38,11 @@ def dash_word(word):
 
 # this function will return the hangman hangman_stage
 def hangman_stage(wrong_guess_counter):
-
-    wrong_guess_counter = wrong_guess_counter - 1
     
     # these are the hangman stages
+    stage_0 = """
+                   
+                """
     stage_1 = """
                    --------
                    |      |
@@ -113,7 +114,8 @@ def hangman_stage(wrong_guess_counter):
                 """
 
     # we'll store the hangman stages in a list
-    stages = [stage_1, stage_2, stage_3, stage_4, stage_5, stage_6, stage_7]
+    stages = [stage_0, stage_1, stage_2, stage_3, stage_4, stage_5, stage_6, 
+              stage_7]
 
     return stages[wrong_guess_counter]
 
@@ -125,6 +127,7 @@ def hangman_stage(wrong_guess_counter):
 def guess_outcome(actual_word, currently_guessed_word, guess):
     # empty helper string
     output_string = ""
+    
     # if the guess is a word (more than one letter)
     if len(guess) > 1:
         if guess == actual_word:
@@ -193,16 +196,28 @@ def main():
     # we'll dash the word
     word_to_guess_dashed = dash_word(word_to_guess)
 
-    game = False
-    while game == False:
-        print("Guess the following word")
+    print("Guess the following word")
+
+    wrong_guess_counter = 0
+
+    while wrong_guess_counter < 7:
         print(word_to_guess_dashed)
-        print()
 
         guessed_input = guess_input()
 
-
-
+        guess_attempt = guess_outcome(word_to_guess, 
+                                      word_to_guess_dashed, 
+                                      guessed_input)
+        
+        if guess_attempt == word_to_guess_dashed:
+            wrong_guess_counter = wrong_guess_counter + 1
+        elif guess_attempt == word_to_guess:
+            wrong_guess_counter = 8
+        
+        print(hangman_stage(wrong_guess_counter))
+        print(wrong_guess_counter)
+    
+    game_over()
 
 # ------------------------------------ run program ---------------------------#
 if __name__ == "__main__":
