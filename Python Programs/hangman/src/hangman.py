@@ -125,24 +125,23 @@ def hangman_stage(wrong_guess_counter):
     # if the correct letter is guessed, it'll un-dash letters in the word
     # if in-correct, word will be left un-dashed
 def guess_outcome(actual_word, currently_guessed_word, guess):
-    actual_word = actual_word.replace(" ", "")
-    currently_guessed_word = currently_guessed_word.replace(" ", "")
     # empty helper string
     output_string = ""
     
     # if the guess is a word (more than one letter)
     if len(guess) > 1:
-        if guess == actual_word:
+        if guess == actual_word.replace(" ", ""):
             return actual_word
         else:
             return currently_guessed_word
     # if the guess is one letter
     else:
-        for acl_letter, crt_letter in zip(actual_word, currently_guessed_word):
-            if acl_letter == guess:
+        for acl_ltr, crt_ltr in zip(actual_word.replace(" ", ""), 
+                                          currently_guessed_word.replace(" ", "")):
+            if acl_ltr == guess:
                 output_string += guess + " "
             else:
-                output_string += crt_letter + " "
+                output_string += crt_ltr + " "
     return output_string
 
 
@@ -205,6 +204,7 @@ def main():
 
     while wrong_guess_counter < 7:
         print(word_to_guess_dashed)
+        print()
 
         guessed_input = guess_input()
 
@@ -212,9 +212,9 @@ def main():
                                       word_to_guess_dashed, 
                                       guessed_input)
         
-        if guess_attempt == word_to_guess_dashed:
+        if guess_attempt.replace(" ", "") == word_to_guess_dashed.replace(" ", ""):
             wrong_guess_counter += 1
-        elif guess_attempt == word_to_guess:
+        elif guess_attempt.replace(" ", "") == word_to_guess.replace(" ", ""):
             wrong_guess_counter = 8
         
         word_to_guess_dashed = guess_attempt
@@ -223,6 +223,8 @@ def main():
 
         # TO DO
         # if the user inputs the same letter again, flag instead of accepting input
+        # win/lose message
+        # what the actual word was
     
     game_over()
 
