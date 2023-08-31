@@ -40,10 +40,10 @@ def dash_word(word):
 def hangman_stage(wrong_guess_counter):
     
     # these are the hangman stages
-    stage_0 = """
+    stage_7 = """
                    
                 """
-    stage_1 = """
+    stage_6 = """
                    --------
                    |      |
                    |      
@@ -53,27 +53,27 @@ def hangman_stage(wrong_guess_counter):
                    -
                 """
 
-    stage_2 = """
+    stage_5 = """
                    --------
                    |      |
                    |      O
                    |    
                    |      
-                   |     
-                   -
-                """
-
-    stage_3 = """
-                   --------
-                   |      |
-                   |      O
-                   |      |
-                   |      |
                    |     
                    -
                 """
 
     stage_4 = """
+                   --------
+                   |      |
+                   |      O
+                   |      |
+                   |      |
+                   |     
+                   -
+                """
+
+    stage_3 = """
                    --------
                    |      |
                    |      O
@@ -83,7 +83,7 @@ def hangman_stage(wrong_guess_counter):
                    -
                 """
     
-    stage_5 = """
+    stage_2 = """
                    --------
                    |      |
                    |      O
@@ -93,7 +93,7 @@ def hangman_stage(wrong_guess_counter):
                    -
                 """
     
-    stage_6 = """
+    stage_1 = """
                    --------
                    |      |
                    |      O
@@ -103,7 +103,7 @@ def hangman_stage(wrong_guess_counter):
                    -
                 """
     
-    stage_7 = """
+    stage_0 = """
                    --------
                    |      |
                    |      O
@@ -150,6 +150,7 @@ def guess_input():
     input_value = False
     while input_value == False:
         guess = input("Guess a letter OR the correct word: ")
+        guess = guess.lower()
         # we'll continue asking the user for a guess if guess contains numbers 
         # or symbols
         if guess.isalpha() == False:
@@ -159,6 +160,7 @@ def guess_input():
         else:
             input_value = True
     return guess
+
 
 # this is our welcome message for the game
 def intro():
@@ -171,12 +173,38 @@ def intro():
     print("HANGMAN!")
     print()
 
+
 # this is our end message for the game
 def game_over():
     print()
     print("- GAME OVER -")
     print()
+
+    input_value = False
+    while input_value == False:
+        input_choice = input("Would you like to play again? (Y or N): ")
+        input_choice = input_choice.upper()
+        if input_choice in ["Y", "N"]:
+            if input_choice == "Y":
+                reset_counter = 7
+                input_value = True
+            elif input_choice == "N":
+                reset_counter = 0
+                input_value = True
+        else:
+            print('Input only allows for Y or N')
+    return reset_counter
+
+
+def correct_word(word):
+    print("The correct word was: " + word)
+
+
+# this is our welcome message for the game
+def outro():
+    print()
     print("- THANKS FOR PLAYING THE HANGMAN GAME -")
+    print()
     print("- GOODBYE -")
     print()
 
@@ -200,9 +228,9 @@ def main():
 
     print("Guess the following word")
 
-    wrong_guess_counter = 0
+    wrong_guess_counter = 7
 
-    while wrong_guess_counter < 7:
+    while wrong_guess_counter > 0:
         print(word_to_guess_dashed)
         print()
 
@@ -213,9 +241,9 @@ def main():
                                       guessed_input)
         
         if guess_attempt.replace(" ", "") == word_to_guess_dashed.replace(" ", ""):
-            wrong_guess_counter += 1
+            wrong_guess_counter -= 1
         elif guess_attempt.replace(" ", "") == word_to_guess.replace(" ", ""):
-            wrong_guess_counter = 8
+            break
         
         word_to_guess_dashed = guess_attempt
         
@@ -224,9 +252,14 @@ def main():
         # TO DO
         # if the user inputs the same letter again, flag instead of accepting input
         # win/lose message
-        # what the actual word was
+        # make every input lower case
     
+    # show the correct word
+    correct_word(word_to_guess)
+
     game_over()
+
+    outro()
 
 # ------------------------------------ run program ---------------------------#
 if __name__ == "__main__":
