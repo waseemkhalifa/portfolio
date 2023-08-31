@@ -186,14 +186,14 @@ def game_over():
         input_choice = input_choice.upper()
         if input_choice in ["Y", "N"]:
             if input_choice == "Y":
-                reset_counter = 7
+                game = True
                 input_value = True
             elif input_choice == "N":
-                reset_counter = 0
+                game = False
                 input_value = True
         else:
             print('Input only allows for Y or N')
-    return reset_counter
+    return game
 
 
 def correct_word(word):
@@ -217,47 +217,50 @@ def main():
     # we'll import the word list
     words_list = import_words()
 
-    # we'll get a random word from the word list
-    word_to_guess = get_word(words_list)
+    game = True
+    while game == True:
 
-    # we'll clean the word of any numbers of symbols
-    word_to_guess = clean_word(word_to_guess)
+        # we'll get a random word from the word list
+        word_to_guess = get_word(words_list)
 
-    # we'll dash the word
-    word_to_guess_dashed = dash_word(word_to_guess)
+        # we'll clean the word of any numbers of symbols
+        word_to_guess = clean_word(word_to_guess)
 
-    print("Guess the following word")
+        # we'll dash the word
+        word_to_guess_dashed = dash_word(word_to_guess)
 
-    wrong_guess_counter = 7
+        print("Guess the following word")
 
-    while wrong_guess_counter > 0:
-        print(word_to_guess_dashed)
-        print()
+        wrong_guess_counter = 7
 
-        guessed_input = guess_input()
+        while wrong_guess_counter > 0:
+            print(word_to_guess_dashed)
+            print()
 
-        guess_attempt = guess_outcome(word_to_guess, 
-                                      word_to_guess_dashed, 
-                                      guessed_input)
+            guessed_input = guess_input()
+
+            guess_attempt = guess_outcome(word_to_guess, 
+                                        word_to_guess_dashed, 
+                                        guessed_input)
+            
+            if guess_attempt.replace(" ", "") == word_to_guess_dashed.replace(" ", ""):
+                wrong_guess_counter -= 1
+            elif guess_attempt.replace(" ", "") == word_to_guess.replace(" ", ""):
+                break
+            
+            word_to_guess_dashed = guess_attempt
+            
+            print(hangman_stage(wrong_guess_counter))
+
+            # TO DO
+            # if the user inputs the same letter again, flag instead of accepting input
+            # win/lose message
+            # make every input lower case
         
-        if guess_attempt.replace(" ", "") == word_to_guess_dashed.replace(" ", ""):
-            wrong_guess_counter -= 1
-        elif guess_attempt.replace(" ", "") == word_to_guess.replace(" ", ""):
-            break
-        
-        word_to_guess_dashed = guess_attempt
-        
-        print(hangman_stage(wrong_guess_counter))
+        # show the correct word
+        correct_word(word_to_guess)
 
-        # TO DO
-        # if the user inputs the same letter again, flag instead of accepting input
-        # win/lose message
-        # make every input lower case
-    
-    # show the correct word
-    correct_word(word_to_guess)
-
-    game_over()
+        game = game_over()
 
     outro()
 
