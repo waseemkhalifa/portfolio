@@ -149,6 +149,7 @@ def guess_outcome(actual_word, currently_guessed_word, guess):
 def guess_input(previous_guesses):
     print("Previous guesses: ", end="")
     print(previous_guesses)
+    
     input_value = False
     
     while input_value == False:
@@ -162,19 +163,16 @@ def guess_input(previous_guesses):
             print("INVALID INPUT!")
             print("Guess must not include numbers or symbols")
         else:
-            made_previous_guess = False
             # if the guess matches any previous guesses, we'll continue to
             # ask the user to make another guess
             for previous_guess in previous_guesses:
                 if guess == previous_guess:
                     print()
                     print("This guess has already been inputted - Please make another guess")
-                    made_previous_guess = True
-        
-        # we'll only accept an input if it's not alpha and is not a previous 
-        # guess
-        if made_previous_guess == False:
-            input_value = True
+                # we'll only accept an input if it's not alpha and is not a  
+                # previous guess
+                else:
+                    input_value = True
 
     return guess
 
