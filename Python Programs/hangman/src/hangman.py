@@ -146,11 +146,15 @@ def guess_outcome(actual_word, currently_guessed_word, guess):
 
 
 # this function takes the user's guess input
-def guess_input():
+def guess_input(previous_guesses):
+    print("Previous guesses: ", end="")
+    print(previous_guesses)
     input_value = False
+    
     while input_value == False:
         guess = input("Guess a letter OR the correct word: ")
         guess = guess.lower()
+        
         # we'll continue asking the user for a guess if guess contains numbers 
         # or symbols
         if guess.isalpha() == False:
@@ -158,8 +162,27 @@ def guess_input():
             print("INVALID INPUT!")
             print("Guess must not include numbers or symbols")
         else:
+            made_previous_guess = False
+            # if the guess matches any previous guesses, we'll continue to
+            # ask the user to make another guess
+            for previous_guess in previous_guesses:
+                if guess == previous_guess:
+                    print()
+                    print("This guess has already been inputted - Please make another guess")
+                    made_previous_guess = True
+        
+        # we'll only accept an input if it's not alpha and is not a previous 
+        # guess
+        if made_previous_guess == False:
             input_value = True
+
     return guess
+
+
+# this function will store all previous inputs
+def previous_guess_input(lst, guess_input):
+    lst.append(guess_input)
+    return lst
 
 
 # this is our welcome message for the game
@@ -174,12 +197,9 @@ def intro():
     print()
 
 
-# this is our end message for the game
+# we ask the player if they'd like to continue playing the game
 def game_over():
     print()
-    print("- GAME OVER -")
-    print()
-
     input_value = False
     while input_value == False:
         input_choice = input("Would you like to play again? (Y or N): ")
@@ -203,8 +223,8 @@ def correct_word(word):
 # this is our welcome message for the game
 def outro():
     print()
+    print("- GAME OVER -")
     print("- THANKS FOR PLAYING THE HANGMAN GAME -")
-    print()
     print("- GOODBYE -")
     print()
 
@@ -231,17 +251,20 @@ def main():
 
         print("Guess the following word")
 
-        wrong_guess_counter = 7
+        # a list to store all guesses
+        previous_guesses = []
 
+        wrong_guess_counter = 7
         while wrong_guess_counter > 0:
             print(word_to_guess_dashed)
             print()
 
-            guessed_input = guess_input()
+            guessed_input = guess_input(previous_guesses)
+            previous_guesses = previous_guess_input(previous_guesses, guessed_input)
 
-            guess_attempt = guess_outcome(word_to_guess, 
-                                        word_to_guess_dashed, 
-                                        guessed_input)
+            guess_attempt = guess_outcome(word_to_guess,
+                                          word_to_guess_dashed,
+                                          guessed_input)
             
             if guess_attempt.replace(" ", "") == word_to_guess_dashed.replace(" ", ""):
                 wrong_guess_counter -= 1
@@ -253,9 +276,7 @@ def main():
             print(hangman_stage(wrong_guess_counter))
 
             # TO DO
-            # if the user inputs the same letter again, flag instead of accepting input
             # win/lose message
-            # make every input lower case
         
         # show the correct word
         correct_word(word_to_guess)
