@@ -155,6 +155,11 @@ def guess_input(previous_guesses):
     while input_value == False:
         guess = input("Guess a letter OR the correct word: ")
         guess = guess.lower()
+
+        # this variable will have a default value of True
+        # it will be assigned false if the guess input is:
+        # either a previous guess or contains numbers/symbols
+        valid_guess = True
         
         # we'll continue asking the user for a guess if guess contains numbers 
         # or symbols
@@ -162,17 +167,20 @@ def guess_input(previous_guesses):
             print()
             print("INVALID INPUT!")
             print("Guess must not include numbers or symbols")
+            valid_guess = False
         else:
             # if the guess matches any previous guesses, we'll continue to
             # ask the user to make another guess
             for previous_guess in previous_guesses:
                 if guess == previous_guess:
                     print()
-                    print("This guess has already been inputted - Please make another guess")
-                # we'll only accept an input if it's not alpha and is not a  
-                # previous guess
-                else:
-                    input_value = True
+                    print(guess + " has already been inputted - Please make another guess")
+                    valid_guess = False
+        
+        # we'll only accept an input if it's not alpha and is not a  
+        # previous guess
+        if valid_guess == True:
+            input_value = True
 
     return guess
 
@@ -195,6 +203,11 @@ def intro():
     print()
 
 
+# we'll display the correct word to the user
+def correct_word(word):
+    print("The correct word was: " + word)
+
+
 # we ask the player if they'd like to continue playing the game
 def game_over():
     print()
@@ -212,10 +225,6 @@ def game_over():
         else:
             print('Input only allows for Y or N')
     return game
-
-
-def correct_word(word):
-    print("The correct word was: " + word)
 
 
 # this is our welcome message for the game
@@ -273,14 +282,18 @@ def main():
             
             print(hangman_stage(wrong_guess_counter))
 
-            # TO DO
-            # win/lose message
+        if guess_attempt.replace(" ", "") == word_to_guess.replace(" ", ""):
+            print("You guessed the word correctly!")
+        else:
+            print("HANGMAN! - You failed to guess correctly!")
         
         # show the correct word
         correct_word(word_to_guess)
 
+        # we'll ask the user if they'd like to play again
         game = game_over()
 
+    # good bye message
     outro()
 
 # ------------------------------------ run program ---------------------------#
