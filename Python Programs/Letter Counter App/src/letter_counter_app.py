@@ -12,7 +12,7 @@ def input_user_name():
     name = input("What is your name: ")
     # converts the input string to proper case or title case. 
     # that is, all words begin with uppercase and the rest are lowercase.
-    name = name.title()
+    name = name.title().strip()
     return name
 
 
