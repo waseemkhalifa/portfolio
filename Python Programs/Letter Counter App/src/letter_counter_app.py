@@ -7,7 +7,7 @@ def print_welcome():
     print()
 
 
-# we ask for the user's name and return an output
+# we ask for the user's name
 def input_user_name():
     name = input("What is your name: ")
     # converts the input string to proper case or title case. 
@@ -43,10 +43,22 @@ def input_letter_to_count():
     letter = input("Which letter would you like to count the occurrences of: ")
     return letter
 
+
 # this function will return a count of occurences of a letter
 # inside of a message that's supplied
 def count_letter_occurence(letter, message):
-    pass
+    letter = letter.lower()
+    message = message.lower()
+    count_of_letters = message.count(letter)
+    return count_of_letters
+
+
+# this is the output message of the program
+# it will tell the user the letter occurences in their message
+def print_app_output(name, letter, count_of_letters):
+    output_string = f"{name}, your message has {count_of_letters} {letter}'s in it."
+    print()
+    print(output_string)
 
 
 # ------------------------------------ main --------------------------------- #
@@ -66,13 +78,9 @@ def main():
 
     count_of_letters = count_letter_occurence(letter, message)
 
-    
+    print_app_output(name, letter, count_of_letters)
+
 
 # ------------------------------------ run program ---------------------------#
 if __name__ == "__main__":
     main()
-
-    
-
-
-
