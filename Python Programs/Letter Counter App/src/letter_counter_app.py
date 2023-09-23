@@ -60,6 +60,7 @@ def print_app_output(name, letter, count_of_letters):
                         "in it."
     print()
     print(output_string)
+    print()
 
 
 # ------------------------------------ main --------------------------------- #
