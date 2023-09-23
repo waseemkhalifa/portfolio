@@ -56,7 +56,8 @@ def count_letter_occurence(letter, message):
 # this is the output message of the program
 # it will tell the user the letter occurences in their message
 def print_app_output(name, letter, count_of_letters):
-    output_string = f"{name}, your message has {count_of_letters} {letter}'s in it."
+    output_string = f"{name}, your message has {count_of_letters} {letter}'s "\
+                        "in it."
     print()
     print(output_string)
 
