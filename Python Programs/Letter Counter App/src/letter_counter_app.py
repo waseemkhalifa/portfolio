@@ -1,8 +1,9 @@
 # ------------------------------------ functions --------------------------- #
 
 # this is our welcome message for the app
-def print_welcome():
-    print("Welcome to the letter counter app")
+def welcome():
+    welcome = "Welcome to the letter counter app"
+    return welcome
 
 
 # we ask for the user's name
@@ -15,15 +16,16 @@ def input_user_name():
 
 
 # we welcome the user with a message here with their name
-def print_hello_name(name):
+def hello_name(name):
     output_string = f"Hello, {name}!"
-    print(output_string)
+    return output_string
 
 
 # this message will let a user know what the app does
-def print_app_explanation():
-    print("I will count the number of times that a specific letter occurs in "\
-          "a message.")
+def app_explanation():
+    explnation = "I will count the number of times that a specific letter "\
+          " occurs in a message."
+    return explnation
 
 
 # this function will ask the user for a message
@@ -50,10 +52,10 @@ def count_letter_occurence(letter, message):
 
 # this is the output message of the program
 # it will tell the user the letter occurences in their message
-def print_app_output(name, letter, count_of_letters):
+def app_output(name, letter, count_of_letters):
     output_string = f"{name}, your message has {count_of_letters} {letter}'s "\
                         "in it."
-    print(output_string)
+    return output_string
 
 
 # ------------------------------------ main --------------------------------- #
@@ -61,16 +63,17 @@ def print_app_output(name, letter, count_of_letters):
 def main():
     
     print()
-    print_welcome()
+    print
+    print(welcome())
     print()
 
     name = input_user_name()
 
     print()
-    print_hello_name(name)
+    print(hello_name(name))
     
     print()
-    print_app_explanation()
+    print(app_explanation())
     print()
 
     message = input_message()
@@ -81,7 +84,7 @@ def main():
     count_of_letters = count_letter_occurence(letter, message)
 
     print()
-    print_app_output(name, letter, count_of_letters)
+    print(app_output(name, letter, count_of_letters))
     print()
 
 
