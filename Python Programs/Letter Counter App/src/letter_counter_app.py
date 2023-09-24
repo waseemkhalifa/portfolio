@@ -68,27 +68,36 @@ def app_output(name, letter, count_of_letters):
 # this the main app function
 def main():
     
+    # welcome message for our app
     print()
     print(welcome())
     print()
 
+    # we'll ask the user to input their name
+    # we'll also clean up
     name = input_user_name()
     name = title_whitespace(name)
 
+    # we'll print out the name entered
     print()
     print(hello_name(name))
     
+    # we'll print out the app explanation
     print()
     print(app_explanation())
     print()
 
+    # we'll ask the user to input a message
     message = input_message()
     print()
 
+    # we'll ask the user what letter they'd like to count
     letter = input_letter_to_count()
 
+    # this will count the occurances of the letter
     count_of_letters = count_letter_occurence(letter, message)
 
+    # final output
     print()
     print(app_output(name, letter, count_of_letters))
     print()
