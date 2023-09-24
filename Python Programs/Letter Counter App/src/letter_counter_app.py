@@ -9,9 +9,15 @@ def welcome():
 # we ask for the user's name
 def input_user_name():
     name = input("What is your name: ")
+    return name
+
+
+# this will title and strip white space of a string
+def title_whitespace(name):
     # converts the input string to proper case or title case. 
     # that is, all words begin with uppercase and the rest are lowercase.
     name = name.title().strip()
+    name = " ".join(name.split())
     return name
 
 
@@ -23,9 +29,9 @@ def hello_name(name):
 
 # this message will let a user know what the app does
 def app_explanation():
-    explnation = "I will count the number of times that a specific letter"\
+    explanation = "I will count the number of times that a specific letter"\
           " occurs in a message."
-    return explnation
+    return explanation
 
 
 # this function will ask the user for a message
@@ -67,6 +73,7 @@ def main():
     print()
 
     name = input_user_name()
+    name = title_whitespace(name)
 
     print()
     print(hello_name(name))
