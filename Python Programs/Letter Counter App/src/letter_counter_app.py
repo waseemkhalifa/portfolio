@@ -63,7 +63,6 @@ def app_output(name, letter, count_of_letters):
 def main():
     
     print()
-    print
     print(welcome())
     print()
 
