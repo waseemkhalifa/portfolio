@@ -23,7 +23,7 @@ def hello_name(name):
 
 # this message will let a user know what the app does
 def app_explanation():
-    explnation = "I will count the number of times that a specific letter "\
+    explnation = "I will count the number of times that a specific letter"\
           " occurs in a message."
     return explnation
 
