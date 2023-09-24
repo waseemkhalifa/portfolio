@@ -2,9 +2,7 @@
 
 # this is our welcome message for the app
 def print_welcome():
-    print()
     print("Welcome to the letter counter app")
-    print()
 
 
 # we ask for the user's name
@@ -19,16 +17,13 @@ def input_user_name():
 # we welcome the user with a message here with their name
 def print_hello_name(name):
     output_string = f"Hello, {name}!"
-    print()
     print(output_string)
 
 
 # this message will let a user know what the app does
 def print_app_explanation():
-    print()
     print("I will count the number of times that a specific letter occurs in "\
           "a message.")
-    print()
 
 
 # this function will ask the user for a message
@@ -58,29 +53,36 @@ def count_letter_occurence(letter, message):
 def print_app_output(name, letter, count_of_letters):
     output_string = f"{name}, your message has {count_of_letters} {letter}'s "\
                         "in it."
-    print()
     print(output_string)
-    print()
 
 
 # ------------------------------------ main --------------------------------- #
 # this the main app function
 def main():
+    
+    print()
     print_welcome()
+    print()
 
     name = input_user_name()
 
+    print()
     print_hello_name(name)
     
+    print()
     print_app_explanation()
+    print()
 
     message = input_message()
+    print()
 
     letter = input_letter_to_count()
 
     count_of_letters = count_letter_occurence(letter, message)
 
+    print()
     print_app_output(name, letter, count_of_letters)
+    print()
 
 
 # ------------------------------------ run program ---------------------------#
