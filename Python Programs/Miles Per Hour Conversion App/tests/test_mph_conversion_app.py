@@ -8,7 +8,7 @@ import mph_conversion_app as mca
 
 
 # ------------------------------------ tests --------------------------- #
-class letter_counter_app_tests(unittest.TestCase):
+class mph_conversion_app_tests(unittest.TestCase):
 
     # test 1
     def test_1_no_decimal(self):

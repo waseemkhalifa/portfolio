@@ -8,7 +8,7 @@ import temperature_conversion_app as tca
 
 
 # ------------------------------------ tests --------------------------- #
-class letter_counter_app_tests(unittest.TestCase):
+class temperature_conversion_app_tests(unittest.TestCase):
 
     # fahrenheit to celsius tests 
     def test_f_to_c_1(self):
