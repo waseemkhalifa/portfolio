@@ -87,6 +87,7 @@ def main():
     area = calc_area(height, base)
 
     # final output
+    print()
     print_output(hypotenuse, area)
     print()
 
