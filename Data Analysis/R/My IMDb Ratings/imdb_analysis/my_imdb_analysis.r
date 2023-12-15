@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------
 # set working directory
 #--------------------------------------------------------------------------
-setwd('/home/waseem/Documents/Self-Development/git_repos/portfolio/Data Analysis/R/My IMDb Ratings/')
+setwd('imdb_analysis/')
 
 
 #--------------------------------------------------------------------------
