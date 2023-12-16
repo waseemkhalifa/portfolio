@@ -10,7 +10,7 @@ file_films:str = "imdb_analysis/ratings.csv"
 api_endpoint:str = "http://www.omdbapi.com/"
 
 
-# ------------------------------------ functions --------------------------- #
+# ------------------------------------ functions & classes ----------------- #
 def import_file_txt(filename:str):
     file = open(filename, "r")
     file_ouptut = file.read()
@@ -23,7 +23,7 @@ def import_file_csv(filename:str):
 
 
 class Films:
-    """ This class will handle the API import and retrieving of data """
+    """ This class will handle the API retrieving of data """
     
     def __init__(self,
                  api_key:str, 
@@ -32,9 +32,27 @@ class Films:
                  plot:str = "short",
                  r = "json"):
         
+        self.api_key = api_key, 
+        self.films = films,
+        self.url = url,
+        self.plot = plot,
+        self.r = r
+    
+    def get_film(self):
+        
+        for film in self.films:
+            
+            payload = {"i": film, 
+                        "plot": self.plot, 
+                        "r": self.r, 
+                        "apikey": self.api_key}
+            
+            self.retrieved_film = requests.get(self.url, params=payload).json()
 
-payload = {"i": "tt0099685", "plot": "short", "r": "json", 'apikey': api_key}
-data = requests.get("http://www.omdbapi.com/", params=payload).json()
+            self.output_films = self.output_films + self.retrieved_film
+        
+        return self.output_films
+
 
 
 
@@ -42,6 +60,29 @@ data = requests.get("http://www.omdbapi.com/", params=payload).json()
 api_key = import_file_txt(file_api_key)
 
 films = import_file_csv(file_films)
+
+test = ["tt0100150", "tt0100157"]
+
+film_output = Films(api_key=api_key, films=test)
+
+film_output.get_film()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
