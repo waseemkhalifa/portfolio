@@ -1,6 +1,7 @@
 # ------------------------------------ imports ----------------------------- #
 import requests
 import pandas as pd
+from dataclasses import dataclass
 
 
 # ------------------------------------ variables --------------------------- #
@@ -17,12 +18,24 @@ def import_file_txt(filename:str):
     file.close()
     return file_ouptut
 
+
 def import_file_csv(filename:str):
     file_ouptut = pd.read_csv(filename)
     return file_ouptut
 
 
-class Films:
+@dataclass
+class Film:
+    film_id:str
+    title:str
+    director:str
+    writer:str
+    actors:str
+    box_office:str
+    title_type:str
+
+
+class GetFilms:
     """ This class will handle the API retrieving of data """
     
     def __init__(self,
@@ -32,13 +45,19 @@ class Films:
                  plot:str = "short",
                  r = "json"):
         
-        self.api_key = api_key, 
-        self.films = films,
-        self.url = url,
-        self.plot = plot,
+        self.api_key = api_key
+        self.films = films
+        self.url = url
+        self.plot = plot
         self.r = r
+
+    def __str__(self):
+        return f"api_key:{self.api_key}, films:{self.films}, url:{self.url},\
+                    plot:{self.plot}, r:{self.r}"
     
     def get_film(self):
+
+        output_films:list[Film] = []
         
         for film in self.films:
             
@@ -47,11 +66,19 @@ class Films:
                         "r": self.r, 
                         "apikey": self.api_key}
             
-            self.retrieved_film = requests.get(self.url, params=payload).json()
+            retrieved_film:dict = requests.get(self.url, params=payload).json()
 
-            self.output_films = self.output_films + self.retrieved_film
+            current_film:Film = Film(film_id=retrieved_film.get("Title"),
+                title=retrieved_film.get("Title"),
+                director=retrieved_film.get("Director"),
+                writer=retrieved_film.get("Writer"),
+                actors=retrieved_film.get("Actors"),
+                box_office=retrieved_film.get("BoxOffice"),
+                title_type=retrieved_film.get("Type")
+            )
+            output_films.append(current_film)
         
-        return self.output_films
+        return output_films
 
 
 
@@ -63,12 +90,10 @@ films = import_file_csv(file_films)
 
 test = ["tt0100150", "tt0100157"]
 
-film_output = Films(api_key=api_key, films=test)
+film_output = GetFilms(api_key=api_key, films=test)
+print(film_output)
 
-film_output.get_film()
-
-
-
+film = film_output.get_film()
 
 
 
