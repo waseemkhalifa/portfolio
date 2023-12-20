@@ -2,37 +2,19 @@
 
 import requests
 import pandas as pd
-from dataclasses import dataclass, astuple, fields, asdict
-import csv
+from dataclasses import dataclass, asdict
 
 
 # ------------------------------------ variables --------------------------- #
 
 file_api_key:str = "imdb_api/api_key.txt"
 
-file_films:str = "imdb_analysis/ratings.csv"
+file_ratings:str = "imdb_analysis/ratings.csv"
 
 api_endpoint:str = "http://www.omdbapi.com/"
 
 
 # ------------------------------------ functions & classes ----------------- #
-
-def import_file_txt(filename:str):
-    file = open(filename, "r")
-    file_ouptut = file.read()
-    file.close()
-    return file_ouptut
-
-
-def import_file_csv(filename:str):
-    file_ouptut = pd.read_csv(filename)
-    return file_ouptut
-
-
-def dataclass_to_csv(film:list, filename:str):
-    df = pd.json_normalize(asdict(obj) for obj in film)
-    df.to_csv(f"{filename}.csv", index=False)
-
 
 @dataclass
 class Film:
@@ -53,9 +35,6 @@ class Film:
     awards:str
     imdb_rating:str
     imdb_votes:str
-
-    def __iter__(self):
-        return iter(astuple(self))
 
 
 class GetFilms:
@@ -114,21 +93,56 @@ class GetFilms:
         return output_films
 
 
+def import_file_txt(filename:str):
+    file = open(filename, "r")
+    file_ouptut = file.read()
+    file.close()
+    return file_ouptut
+
+
+def import_file_csv(filename:str):
+    file_ouptut = pd.read_csv(filename)
+    return file_ouptut
+
+
+def dataclass_to_csv(film:list, ratings, filename:str):
+    df = pd.json_normalize(asdict(obj) for obj in film)
+    df = df.merge(ratings, how="left", on="film_id")
+    df.to_csv(f"{filename}.csv", index=False)
+
+
+def titles_to_export(df):
+    list_title_type:list = ["tvMovie", "movie"]
+    df = df[df["Title Type"].isin(list_title_type)].reset_index(drop = True)
+    df = df[["Const", "Your Rating", "Date Rated"]]
+    df = df.rename(columns = {"Const": "film_id", "Your Rating": "my_rating",
+                    "Date Rated": "rated_date"})
+    
+    return df
+
+
+def titles_list(df):
+    lst:list = []
+    lst = df["film_id"].tolist()
+
+    return lst
+
+
 # ------------------------------------ main --------------------------------- #
 
 api_key = import_file_txt(file_api_key)
 
-films = import_file_csv(file_films)
+raw_ratings = import_file_csv(file_ratings)
 
-test = ["tt0100150", "tt0100157"]
+ratings = titles_to_export(raw_ratings)
 
-film_output = GetFilms(api_key=api_key, films=test)
+titles = titles_list(ratings)
 
-film = film_output.get_film()
+film_output = GetFilms(api_key=api_key, films=titles)
 
-dataclass_to_csv(film, "film")
+films = film_output.get_film()
 
+dataclass_to_csv(films, ratings, "imdb_analysis/films")
 
-
-
-
+test = pd.json_normalize(asdict(obj) for obj in films)
+test = test[test["film_id"] != None]
