@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------
 # set working directory
 #--------------------------------------------------------------------------
-setwd('imdb_analysis/')
+setwd('imdb_analysis')
 
 
 #--------------------------------------------------------------------------
@@ -26,7 +26,7 @@ fn_mode <- function(x){ ux <- unique(x)
 #--------------------------------------------------------------------------
 
 # we'll load the csv from our location
-raw_dataset <- data.table(read.csv('ratings.csv', stringsAsFactors = F))
+raw_dataset <- data.table(read.csv('films.csv', stringsAsFactors = F))
 
 
 #--------------------------------------------------------------------------
@@ -37,18 +37,13 @@ str(raw_dataset)
 
 dataset <- data.table(
   raw_dataset %>%
-    rename(
-      film_id = Const,
-      my_rating = Your.Rating,
-      rated_date = Date.Rated,
-      title_type = Title.Type,
-      imdb_rating = IMDb.Rating,
-      runtime_mins = Runtime..mins.,
-      year_of_release = Year,
-      number_of_votes = Num.Votes
-    ) %>%
-    rename_with(tolower) %>%
-    mutate(rated_date = ymd(rated_date))
+    rename(runtime_min = runtime) %>%
+    mutate(
+      rated_date = ymd(rated_date),
+      box_office = as.double(gsub("\\$|,", '', box_office)),
+      released = dmy(released),
+      runtime_min = as.integer(gsub(" min", '', runtime_min)),
+    )
 )
 
 str(dataset)
