@@ -108,6 +108,7 @@ def import_file_csv(filename:str):
 def dataclass_to_csv(film:list, ratings, filename:str):
     df = pd.json_normalize(asdict(obj) for obj in film)
     df = df.merge(ratings, how="left", on="film_id")
+    df = df[~df["film_id"].isnull()]
     df.to_csv(f"{filename}.csv", index=False)
 
 
@@ -143,6 +144,3 @@ film_output = GetFilms(api_key=api_key, films=titles)
 films = film_output.get_film()
 
 dataclass_to_csv(films, ratings, "imdb_analysis/films")
-
-test = pd.json_normalize(asdict(obj) for obj in films)
-test = test[test["film_id"] != None]
