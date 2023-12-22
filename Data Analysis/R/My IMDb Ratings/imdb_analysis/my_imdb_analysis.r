@@ -21,7 +21,8 @@ library(stringr)
 fn_mode <- function(x){ ux <- unique(x)
   ux[which.max(tabulate(match(x, ux)))] }
 
-viz_export_folder <- "/home/waseem/Documents/Self-Development/git_repos/portfolio/Data Analysis/R/My IMDb Ratings/plots/"
+viz_export_folder <- paste0("/home/waseem/Documents/Self-Development/",
+                  "git_repos/portfolio/Data Analysis/R/My IMDb Ratings/plots/"
 
 
 #--------------------------------------------------------------------------
@@ -550,17 +551,30 @@ ggsave(actors_viz,
 #----------------------------------------------------
 # films by imdb_rating
 #----------------------------------------------------
-  <- data.table(
+imdb_rating_hist <- data.table(
   dataset %>%
     select(film_id, title, imdb_rating)
 ) %>%
   ggplot(aes(x = imdb_rating)) +
-	geom_histogram(binwidth = 0.25, colour = "#000000", fill = "#f2db83") + 
-	ggtitle("Films by IMDB Rating") +
-	labs(y = "No. of Films", x = "IMDB Rating") +
-	scale_x_continuous(breaks = seq(2.25, 9.75, 0.25), lim = c(2.25, 9.75)) +
-	scale_y_continuous(labels = scales::comma, breaks = seq(0, 200, 5)) +
-  theme(axis.text.x = element_text(angle = 90))
+	
+  geom_histogram(binwidth = 0.25, colour = "#dba506", fill = "#000000") + 
+
+  labs(title = "No. of Films by IMDb Rating", 
+
+      subtitle = str_wrap(""),
+
+       caption="source: IMDb",
+       x = "IMDB Rating", 
+       y = "No. of Films") +
+	
+  scale_x_continuous(breaks = seq(2.25, 9.75, 0.25), lim = c(2.25, 9.75)) +
+	
+  scale_y_continuous(labels = scales::comma, 
+                      expand = expansion(add=c(0,0)),
+                      breaks = seq(0, 180, 5), lim = c(0, 180)) +
+  
+  theme(panel.background = element_rect(fill="#dba506"),
+        plot.background = element_rect(fill = "#ffffff"))
 
 
 #----------------------------------------------------
@@ -589,7 +603,7 @@ imdb_votes_hist <- data.table(
 	
   geom_histogram(binwidth = 10000, colour = "#dba506", fill = "#000000") + 
 
-  labs(title = "No. of Films by Runtime (Minutes)", 
+  labs(title = "No. of Films by IMDb Votes", 
 
       subtitle = str_wrap(""),
 
