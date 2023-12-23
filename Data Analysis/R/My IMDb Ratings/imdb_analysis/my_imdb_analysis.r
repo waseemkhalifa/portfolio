@@ -22,7 +22,7 @@ fn_mode <- function(x){ ux <- unique(x)
   ux[which.max(tabulate(match(x, ux)))] }
 
 viz_export_folder <- paste0("/home/waseem/Documents/Self-Development/",
-                  "git_repos/portfolio/Data Analysis/R/My IMDb Ratings/plots/"
+                  "git_repos/portfolio/Data Analysis/R/My IMDb Ratings/plots/")
 
 
 #--------------------------------------------------------------------------
@@ -83,19 +83,20 @@ year_rated_viz <- year_rated %>%
   
   geom_bar(stat="identity", width=0.8, fill="#000000") +
   
-  scale_y_continuous(breaks = seq(0, 280, 10), limits = c(0, 280), 
+  scale_y_continuous(breaks = seq(0, 310, 10), limits = c(0, 310), 
                       expand = expansion(add=c(0,0))) +
   
   labs(title = "No. of Films Rated Per Year", 
 
-      subtitle = str_wrap("I watched a lot of films during 2006-2010.\n
-          This was during my time at 6th Form and University (ah freedom!).\n
-          I also had a lovefilm account during this time (Film4 also deserves a worthy mention!),\n
-          which opened up a whole new world of films I had never come across before."),
+      subtitle = str_wrap("I watched a lot of films during 2006-2010,\n
+          which was when I was 'studying' at 6th Form and University \n
+          (ah freedom!)."),
 
        caption="source: IMDb",
        x = "Year Rated", 
        y = "No. of Films") +
+  
+  geom_text(aes(label = films), color="#000000", vjust=-0.5, size=3) +
   
   theme(panel.background = element_rect(fill="#dba506"),
         plot.background = element_rect(fill = "#ffffff"))
@@ -129,18 +130,20 @@ decade_viz <- decade %>%
   
   geom_bar(stat="identity", width=0.8, fill="#000000") +
   
-  scale_y_continuous(breaks = seq(0, 400, 15), limits = c(0, 400), 
+  scale_y_continuous(breaks = seq(0, 420, 15), limits = c(0, 420), 
                       expand = expansion(add=c(0,0))) +
   
   labs(title = "No. of Films Rated Based on Release Decade", 
 
-      subtitle = str_wrap("Most of the films I've watched are from the 90s to 2010s. \n
+      subtitle = str_wrap("Most of the films I've watched are from the 90s to 2000s. \n
                           I clearly need to catch up on some 80s classics!"),
 
        caption="source: IMDb",
        x = "Decade Film was released in", 
        y = "No. of Films") +
   
+  geom_text(aes(label = films), color="#000000", vjust=-0.5, size=3) +
+
   theme(panel.background = element_rect(fill="#dba506"),
         plot.background = element_rect(fill = "#ffffff"))
 
@@ -171,7 +174,7 @@ director <- data.table(
 director_viz <- director %>%
   ggplot(aes(x=reorder(director, films), y=films)) + 
 
-  geom_point(size=5) +
+  geom_point(size=1) +
   
   geom_segment(aes(x=director, xend=director, y=0, yend=films)) + 
   
@@ -181,16 +184,17 @@ director_viz <- director %>%
   labs(title = "No. of Films by Director", 
 
       subtitle = str_wrap("Swedish director Ingmar Bergman tops the list quite\n 
-          comfortably. With his films usually being 90 mins, and with many of \n
-          being shown on Film4, it's largely not a suprise he's topped the list.\n
-          I believe Chris Nolan will eventually overtake him here."),
+          comfortably. Though I believe Chris Nolan will eventually overtake \n 
+          him here."),
 
        caption="source: IMDb",
        x = "Directors", 
        y = "No. of Films") +
   
+
   theme(panel.background = element_rect(fill="#dba506"),
         plot.background = element_rect(fill = "#ffffff")) +
+  
   coord_flip()
 
 
@@ -222,11 +226,11 @@ genre <- data.table(
 genre_viz <- genre %>%
   ggplot(aes(x=reorder(genre, films), y=films)) + 
 
-  geom_point(size=5) +
+  geom_point(size=2) +
   
   geom_segment(aes(x=genre, xend=genre, y=0, yend=films)) + 
   
-  scale_y_continuous(breaks = seq(0, 575, 10), limits = c(0, 575), 
+  scale_y_continuous(breaks = seq(0, 650, 20), limits = c(0, 650), 
                       expand = expansion(add=c(0,0))) +
   
   labs(title = "No. of Films by Genre", 
@@ -266,14 +270,13 @@ rating_viz <- rating %>%
   
   geom_bar(stat="identity", width=0.8, fill="#000000") +
   
-  scale_y_continuous(breaks = seq(0, 335, 10), limits = c(0, 335), 
+  scale_y_continuous(breaks = seq(0, 410, 20), limits = c(0, 410), 
                       expand = expansion(add=c(0,0))) +
   
   labs(title = "No. of Films by Rating", 
 
-      subtitle = str_wrap("No real suprise most films have been rated 7 or 8, \n
-        I generally avoid any films rated less than 7 on IMDB, to avoid \n
-        dissapointment and more importantly - a waste of my time. \n
+      subtitle = str_wrap("No real suprises here, I've rated most films a 7 or 8, \n
+        I generally avoid watching films rated less than 7 on IMDB. \n
         No films have been rated 1 or 10, as no film is truely that bad or \n
         perfect. Only 53 films have been rated the highest rating of 9."),
 
@@ -281,6 +284,8 @@ rating_viz <- rating %>%
        x = "Rating (out of 10)", 
        y = "No. of Films") +
   
+  geom_text(aes(label = films), color="#000000", vjust=-0.5, size=3) +
+
   theme(panel.background = element_rect(fill="#dba506"),
         plot.background = element_rect(fill = "#ffffff"))
 
@@ -296,13 +301,29 @@ runtime_box <- data.table(
   dataset %>%
     select(film_id, title, runtime_min)
 ) %>%
-  ggplot(aes(y = runtime_min)) +
-	geom_boxplot(color="#ffffff", fill = "#000000", width=0.15) +
-	ggtitle("Runtime (Minutes)") +
-	labs(y = "Minutes") +
-	scale_y_continuous(breaks = seq(55, 200, 10), limits = c(55, 200)) +
+  ggplot(aes(y = runtime_min, x = "")) +
+	
+  geom_boxplot(color="#ffffff", fill = "#000000") +
+
+  labs(title = "Films by Runtime (Minutes)", 
+
+      subtitle = str_wrap("75% of films I've seen are 2 hours and \n
+                          15 mins long."),
+
+       caption="source: IMDb",
+       y = "Minutes") +
+	
+  scale_y_continuous(breaks = seq(55, 200, 10), limits = c(55, 200),
+                      labels = scales::comma) +
+  
   theme(panel.background = element_rect(fill="#dba506"),
         plot.background = element_rect(fill = "#ffffff"))
+
+ggsave(runtime_box, 
+      file = paste0(viz_export_folder, "films_by_runtime_box.png"),
+      width = 9.25, height = 5, units = 'in')
+
+
 
 
 runtime_hist <- data.table(
@@ -322,15 +343,20 @@ runtime_hist <- data.table(
        x = "Minutes", 
        y = "No. of Films") +
 	
-  scale_x_continuous(breaks = seq(55, 200, 5), lim = c(55, 200)) +
+  scale_x_continuous(breaks = seq(50, 250, 5), lim = c(50, 250)) +
 	
   scale_y_continuous(labels = scales::comma, 
                       expand = expansion(add=c(0,0)),
-                      breaks = seq(0, 95, 5), lim = c(0, 95)) +
+                      breaks = seq(0, 105, 5), lim = c(0, 105)) +
   
   theme(panel.background = element_rect(fill="#dba506"),
-        plot.background = element_rect(fill = "#ffffff"))
+        plot.background = element_rect(fill = "#ffffff"),
+        axis.text.x = element_text(angle = 90))
 
+
+ggsave(runtime_hist, 
+      file = paste0(viz_export_folder, "runtime_histogram.png"),
+      width = 9.25, height = 5, units = 'in')
 
 
 #----------------------------------------------------
@@ -360,23 +386,23 @@ language <- data.table(
 language_viz <- language %>%
   ggplot(aes(x=reorder(language, films), y=films)) + 
 
-  geom_point(size=5) +
+  geom_point(size=2) +
   
   geom_segment(aes(x=language, xend=language, y=0, yend=films)) + 
   
-  scale_y_continuous(breaks = seq(0, 760, 50), limits = c(0, 760), 
+  scale_y_continuous(breaks = seq(0, 900, 50), limits = c(0, 900), 
                       expand = expansion(add=c(0,0))) +
   
   labs(title = "No. of Films by Language", 
 
-      subtitle = str_wrap("Unsprisingly English makes up the majority of the \n
+      subtitle = str_wrap("Unsurprisingly English makes up the majority of the \n
             films I've rated, with Hindi/Urdu films coming in second."),
 
        caption="source: IMDb",
        x = "Language", 
        y = "No. of Films") +
   
-  geom_text(aes(label = films), vjust = 2) +
+  geom_text(aes(label = films), hjust=-0.8, size=3) +
   
   theme(panel.background = element_rect(fill="#dba506"),
         plot.background = element_rect(fill = "#ffffff")) +
@@ -412,30 +438,30 @@ country <- data.table(
 country_viz <- country %>%
   ggplot(aes(x=reorder(country, films), y=films)) + 
 
-  geom_point(size=5) +
+  geom_point(size=2) +
   
   geom_segment(aes(x=country, xend=country, y=0, yend=films)) + 
   
-  scale_y_continuous(breaks = seq(0, 600, 50), limits = c(0, 600), 
+  scale_y_continuous(breaks = seq(0, 710, 50), limits = c(0, 710), 
                       expand = expansion(add=c(0,0))) +
   
   labs(title = "No. of Films by Country", 
 
       subtitle = str_wrap("Unsprisingly USA/UK & India makes up the majority \n
-            of the films I've rated, with Hindi/Urdu films coming in second."),
+            of the films I've rated."),
 
        caption="source: IMDb",
        x = "Language", 
        y = "No. of Films") +
   
-  geom_text(aes(label = films), vjust = 2) +
+  geom_text(aes(label = films), hjust=-0.8, size=3) +
   
   theme(panel.background = element_rect(fill="#dba506"),
         plot.background = element_rect(fill = "#ffffff")) +
   coord_flip()
 
 
-ggsave(language_viz, 
+ggsave(country_viz, 
       file = paste0(viz_export_folder, "films_by_country.png"),
       width = 9.25, height = 5, units = 'in')
 
@@ -460,14 +486,12 @@ writer <- data.table(
 writer_viz <- writer %>%
   ggplot(aes(x=reorder(writer, films), y=films)) + 
 
-  geom_point(size=5) +
+  geom_point(size=2) +
   
   geom_segment(aes(x=writer, xend=writer, y=0, yend=films)) + 
   
-  scale_y_continuous(breaks = seq(0, 18, 1), limits = c(0, 18), 
+  scale_y_continuous(breaks = seq(0, 17, 1), limits = c(0, 17), 
                       expand = expansion(add=c(0,0))) +
-  
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
   
   labs(title = "No. of Films by Writer", 
 
@@ -509,21 +533,19 @@ actors <- data.table(
             ) %>%
 		mutate(percent = films / sum(films)) %>%
     arrange(-films) %>%
-    filter(films >= 9)
+    filter(films >= 10)
 )
 
 
 actors_viz <- actors %>%
   ggplot(aes(x=reorder(actors, films), y=films)) + 
 
-  geom_point(size=5) +
+  geom_point(size=2) +
   
   geom_segment(aes(x=actors, xend=actors, y=0, yend=films)) + 
   
-  scale_y_continuous(breaks = seq(0, 20, 1), limits = c(0, 20), 
+  scale_y_continuous(breaks = seq(0, 21, 1), limits = c(0, 21), 
                       expand = expansion(add=c(0,0))) +
-  
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
   
   labs(title = "No. of Films by Actors", 
 
@@ -536,7 +558,7 @@ actors_viz <- actors %>%
        y = "No. of Films") +
   
   geom_text(aes(label = paste0("Avg. Rating: ", rating_avg), 
-            vjust = 2, hjust = 1.15)) +
+            vjust = 2, hjust = 1.15), size=2) +
   
   theme(panel.background = element_rect(fill="#dba506"),
         plot.background = element_rect(fill = "#ffffff")) +
@@ -561,20 +583,27 @@ imdb_rating_hist <- data.table(
 
   labs(title = "No. of Films by IMDb Rating", 
 
-      subtitle = str_wrap(""),
+      subtitle = str_wrap("Most of the films I've watched are also rated \n
+        highly by other users at IMDb."),
 
        caption="source: IMDb",
        x = "IMDB Rating", 
        y = "No. of Films") +
 	
-  scale_x_continuous(breaks = seq(2.25, 9.75, 0.25), lim = c(2.25, 9.75)) +
+  scale_x_continuous(breaks = seq(2.5, 9.5, 0.25), lim = c(2.5, 9.5)) +
 	
   scale_y_continuous(labels = scales::comma, 
                       expand = expansion(add=c(0,0)),
-                      breaks = seq(0, 180, 5), lim = c(0, 180)) +
+                      breaks = seq(0, 215, 10), lim = c(0, 215)) +
   
   theme(panel.background = element_rect(fill="#dba506"),
-        plot.background = element_rect(fill = "#ffffff"))
+        plot.background = element_rect(fill = "#ffffff"),
+        axis.text.x = element_text(angle = 90))
+
+
+ggsave(imdb_rating_hist, 
+      file = paste0(viz_export_folder, "films_by_imdb_rating.png"),
+      width = 9.25, height = 5, units = 'in')
 
 
 #----------------------------------------------------
@@ -585,14 +614,28 @@ imdb_votes_box <- data.table(
   dataset %>%
     select(film_id, title, imdb_votes)
 ) %>%
-  ggplot(aes(y = imdb_votes)) +
-	geom_boxplot(color="#ffffff", fill = "#000000", width=0.15) +
-	ggtitle("Films by IMDB Votes") +
-	labs(y = "IMDB Votes") +
-	scale_y_continuous(breaks = seq(0, 850000, 50000), limits = c(0, 850000),
+  ggplot(aes(y = imdb_votes, x = "")) +
+	
+  geom_boxplot(color="#ffffff", fill = "#000000") +
+
+  labs(title = "Films by IMDb Votes", 
+
+      subtitle = str_wrap("25% of films I've rated have less than 50k IMDb \n
+                            votes. Generally it seems I rate more obsure films \n
+                            than popular ones on IMDb based on votes."),
+
+       caption="source: IMDb",
+       y = "IMDB Votes") +
+	
+  scale_y_continuous(breaks = seq(0, 850000, 50000), limits = c(0, 850000),
                       labels = scales::comma) +
+  
   theme(panel.background = element_rect(fill="#dba506"),
         plot.background = element_rect(fill = "#ffffff"))
+
+ggsave(imdb_votes_box, 
+      file = paste0(viz_export_folder, "films_by_imdb_votes_box.png"),
+      width = 9.25, height = 5, units = 'in')
 
 
 imdb_votes_hist <- data.table(
@@ -601,21 +644,29 @@ imdb_votes_hist <- data.table(
 ) %>%
   ggplot(aes(x = imdb_votes)) +
 	
-  geom_histogram(binwidth = 10000, colour = "#dba506", fill = "#000000") + 
+  geom_histogram(binwidth = 5000, colour = "#dba506", fill = "#000000") + 
 
   labs(title = "No. of Films by IMDb Votes", 
 
-      subtitle = str_wrap(""),
+      subtitle = str_wrap("A suprise to me, I've watched alot more obsure \n
+          films than I had thought"),
 
        caption="source: IMDb",
        x = "IMDB Votes", 
        y = "No. of Films") +
 	
-  scale_x_continuous(breaks = seq(0, 850000, 10000), lim = c(0, 850000)) +
+  scale_x_continuous(breaks = seq(0, 800000, 20000), lim = c(0, 800000),
+                      labels = scales::comma) +
 	
   scale_y_continuous(labels = scales::comma, 
                       expand = expansion(add=c(0,0)),
-                      breaks = seq(0, 65, 5), lim = c(0, 65)) +
+                      breaks = seq(0, 50, 5), lim = c(0, 50)) +
   
   theme(panel.background = element_rect(fill="#dba506"),
-        plot.background = element_rect(fill = "#ffffff"))
+        plot.background = element_rect(fill = "#ffffff"),
+        axis.text.x = element_text(angle = 90))
+
+
+ggsave(imdb_votes_hist, 
+      file = paste0(viz_export_folder, "films_by_imdb_votes.png"),
+      width = 9.25, height = 5, units = 'in')
