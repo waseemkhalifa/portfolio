@@ -29,9 +29,11 @@ for row in soup.find(class_='list-data'):
     soup.find(class_='list-data').find('a').get_text()
 
 
-# shows film_id and title
-for title in soup.find(class_='list-data').find_all('a'):
-    print(title)
+# shows film_id
+for title in soup.find(class_='list-data').find_all('td', style="width: 90%;"):
+    text:str = title.find('a').attrs.get('href', 'Not Found')
+    text = text.split("/",2)[2]
+    print(text)
 
 
 # shows title
@@ -42,6 +44,20 @@ for title in soup.find(class_='list-data').find_all('td', style="width: 90%;"):
 # shows year
 for title in soup.find(class_='list-data').find_all(class_="hidden-links"):
     print(title.find('a').get_text())
+
+
+# shows the highest rank
+for title in soup.find(class_='list-data').find_all(class_="tac hidden-xs hidden-sm"):
+    print(title.find('span').get_text())
+
+
+# shows first entry date
+for title in soup.find(class_='list-data').find_all("td", class_="nowrap tac hidden-xs"):
+    if title.find("a") != None:
+        text:str = title.find('a').attrs.get('href', 'Not Found')
+        text = text.split("/",2)[2]
+        print(text)
+    
 
 
 
