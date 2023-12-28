@@ -42,7 +42,6 @@ raw_top_250 <- data.table(read.csv("imdb_top_250_all.csv",
 #--------------------------------------------------------------------------
 
 str(raw_dataset)
-
 dataset <- data.table(
   raw_dataset %>%
     rename(
@@ -57,8 +56,16 @@ dataset <- data.table(
       imdb_votes = as.integer(gsub(",", "", imdb_votes))
     )
 )
-
 str(dataset)
+
+
+str(raw_top_250)
+top_250 <- data.table(
+  raw_top_250 %>%
+    mutate(first_entry_date = ymd(first_entry_date))
+)
+str(top_250)
+
 
 
 #--------------------------------------------------------------------------
@@ -674,3 +681,25 @@ imdb_votes_hist <- data.table(
 ggsave(imdb_votes_hist, 
       file = paste0(viz_export_folder, "films_by_imdb_votes.png"),
       width = 9.25, height = 5, units = 'in')
+
+
+#----------------------------------------------------
+# IMDb top 250 analysis
+#----------------------------------------------------
+top250 <- data.table(
+  left_join(dataset, 
+            select(top_250, -title, -year),
+            by = "film_id")) %>%
+  mutate(historic_250 = ifelse(is.na(highest_rank) == T, FALSE, TRUE))
+)
+
+top250 %>% filter(historic_250 == TRUE)
+
+450/1139
+
+
+
+
+
+
+
