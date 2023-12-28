@@ -97,8 +97,8 @@ def lists_to_csv(film_ids:list, titles:list, years:list, highest_ranks:list,
     """ Creates a dataframe from the lists and exports as a csv """
     df = pd.DataFrame(list(zip(film_ids, titles, years, highest_ranks, 
                                first_entry_dates)),
-                        columns =["film_ids", "titles", "years", 
-                                  "highest_ranks", "first_entry_dates"])
+                        columns =["film_id", "title", "year", 
+                                  "highest_rank", "first_entry_date"])
     df.to_csv(f"{filename}.csv", index=False)
 
 
@@ -132,7 +132,7 @@ def main(url:str,
         first_entry_dates = get_first_entry_date(parsed, first_entry_dates)
 
     lists_to_csv(film_ids, titles, years, highest_ranks, first_entry_dates, 
-                 "imdb_analysis/imdb_top_250_all")
+                 "My IMDb Ratings/imdb_analysis/imdb_top_250_all")
 
 
 main(url, current_page, current_titles, max_titles, film_ids, titles, years, 
