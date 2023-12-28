@@ -52,41 +52,41 @@ def get_current_titles(parsed):
 
 def get_film_id(parsed, film_ids:list):
     """ Gets the film_ids on the current page and appends to a list """
-    for t in parsed.find(class_='list-data').find_all('td', style="width: 90%;"):
-        text:str = t.find('a').attrs.get('href', 'Not Found')
+    for t in parsed.find(class_="list-data").find_all("td", style="width: 90%;"):
+        text:str = t.find("a").attrs.get("href", "Not Found")
         text = text.split("/",2)[2]
         film_ids.append(text)
     return film_ids
 
 def get_title(parsed, titles:list):
     """ Gets the titles on the current page and appends to a list """
-    for t in parsed.find(class_='list-data').find_all('td', style="width: 90%;"):
-        text:str = t.find('a').get_text()
+    for t in parsed.find(class_="list-data").find_all("td", style="width: 90%;"):
+        text:str = t.find("a").get_text()
         titles.append(text)
     return titles
 
 
 def get_year(parsed, years:list):
     """ Gets the year of release on the current page and appends to a list """
-    for t in parsed.find(class_='list-data').find_all(class_="hidden-links"):
-        text:str = t.find('a').get_text()
+    for t in parsed.find(class_="list-data").find_all(class_="hidden-links"):
+        text:str = t.find("a").get_text()
         years.append(text)
     return years
 
 
 def get_highest_rank(parsed, highest_ranks:list):
     """ Gets the highest rank on the current page and appends to a list """
-    for t in parsed.find(class_='list-data').find_all(class_="tac hidden-xs hidden-sm"):
-        text:str = t.find('span').get_text()
+    for t in parsed.find(class_="list-data").find_all(class_="tac hidden-xs hidden-sm"):
+        text:str = t.find("span").get_text()
         highest_ranks.append(text)
     return highest_ranks
 
 
 def get_first_entry_date(parsed, first_entry_dates:list):
     """ Gets the first entry dates on the current page and appends to a list """
-    for t in parsed.find(class_='list-data').find_all("td", class_="nowrap tac hidden-xs"):
+    for t in parsed.find(class_="list-data").find_all("td", class_="nowrap tac hidden-xs"):
         if t.find("a") != None:
-            text:str = t.find('a').attrs.get('href', 'Not Found')
+            text:str = t.find("a").attrs.get("href", "Not Found")
             text = text.split("/",2)[2]
             first_entry_dates.append(text)
     return first_entry_dates
@@ -97,11 +97,12 @@ def lists_to_csv(film_ids:list, titles:list, years:list, highest_ranks:list,
     """ Creates a dataframe from the lists and exports as a csv """
     df = pd.DataFrame(list(zip(film_ids, titles, years, highest_ranks, 
                                first_entry_dates)),
-                        columns =['film_ids', 'titles', 'years', 
-                                  'highest_ranks', 'first_entry_dates'])
+                        columns =["film_ids", "titles", "years", 
+                                  "highest_ranks", "first_entry_dates"])
     df.to_csv(f"{filename}.csv", index=False)
 
 
+# ------------------------------------ main --------------------------------- #
 def main(url:str, 
          current_page:int, 
          current_titles:int, 
@@ -134,6 +135,5 @@ def main(url:str,
                  "imdb_analysis/imdb_top_250_all")
 
 
-# ------------------------------------ main --------------------------------- #
 main(url, current_page, current_titles, max_titles, film_ids, titles, years, 
      highest_ranks, first_entry_dates)
