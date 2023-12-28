@@ -92,6 +92,16 @@ def get_first_entry_date(parsed, first_entry_dates:list):
     return first_entry_dates
 
 
+def lists_to_csv(film_ids:list, titles:list, years:list, highest_ranks:list, 
+                 first_entry_dates:list, filename:str):
+    """ Creates a dataframe from the lists and exports as a csv """
+    df = pd.DataFrame(list(zip(film_ids, titles, years, highest_ranks, 
+                               first_entry_dates)),
+                        columns =['film_ids', 'titles', 'years', 
+                                  'highest_ranks', 'first_entry_dates'])
+    df.to_csv(f"{filename}.csv", index=False)
+
+
 def main(url:str, 
          current_page:int, 
          current_titles:int, 
@@ -120,61 +130,10 @@ def main(url:str,
         highest_ranks = get_highest_rank(parsed, highest_ranks)
         first_entry_dates = get_first_entry_date(parsed, first_entry_dates)
 
-
-
+    lists_to_csv(film_ids, titles, years, highest_ranks, first_entry_dates, 
+                 "imdb_analysis/imdb_top_250_all")
 
 
 # ------------------------------------ main --------------------------------- #
-
-
-
-# Send an HTTP GET request to the website
-response = requests.get(url)
-
-
-# Parse the HTML code using BeautifulSoup
-soup = BeautifulSoup(response.content, 'html.parser')
-
-
-# Extract the relevant information from the HTML code
-
-# shows film_id
-for title in soup.find(class_='list-data').find_all('td', style="width: 90%;"):
-    text:str = title.find('a').attrs.get('href', 'Not Found')
-    text = text.split("/",2)[2]
-    print(text)
-
-
-# shows title
-for title in soup.find(class_='list-data').find_all('td', style="width: 90%;"):
-    print(title.find('a').get_text())
-
-
-# shows year
-for title in soup.find(class_='list-data').find_all(class_="hidden-links"):
-    print(title.find('a').get_text())
-
-
-# shows the highest rank
-for title in soup.find(class_='list-data').find_all(class_="tac hidden-xs hidden-sm"):
-    print(title.find('span').get_text())
-
-
-# shows first entry date
-for title in soup.find(class_='list-data').find_all("td", class_="nowrap tac hidden-xs"):
-    if title.find("a") != None:
-        text:str = title.find('a').attrs.get('href', 'Not Found')
-        text = text.split("/",2)[2]
-        print(text)
-    
-
-
-
-
-
-
-# Store the information in a pandas dataframe
-df = pd.DataFrame(films, columns=['Title', 'Year', 'Rating'])
-
-
-
+main(url, current_page, current_titles, max_titles, film_ids, titles, years, 
+     highest_ranks, first_entry_dates)
