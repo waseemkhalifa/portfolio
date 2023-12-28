@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------
 # set working directory
 #--------------------------------------------------------------------------
-setwd("imdb_analysis")
+setwd("My IMDb Ratings/imdb_analysis")
 
 
 #--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ fn_mode <- function(x){ ux <- unique(x)
   ux[which.max(tabulate(match(x, ux)))] }
 
 viz_export_folder <- paste0("/home/waseem/Documents/Self-Development/",
-                  "git_repos/portfolio/Data Analysis/R/My IMDb Ratings/plots/")
+                  "git_repos/portfolio/Data Analysis/My IMDb Ratings/plots/")
 
 
 #--------------------------------------------------------------------------
@@ -32,8 +32,9 @@ viz_export_folder <- paste0("/home/waseem/Documents/Self-Development/",
 # we"ll load the csv from our location
 raw_dataset <- data.table(read.csv("films.csv", stringsAsFactors = F))
 
-
-
+# we"ll load the csv from our location
+raw_top_250 <- data.table(read.csv("imdb_top_250_all.csv", 
+                          stringsAsFactors = F))
 
 
 #--------------------------------------------------------------------------
