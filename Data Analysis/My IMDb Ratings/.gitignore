@@ -1,3 +1,4 @@
 *.csv
 api_key.txt
 /plots
+*.vscode
