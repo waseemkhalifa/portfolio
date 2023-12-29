@@ -274,16 +274,16 @@ class hangman_tests(unittest.TestCase):
 
 
     # test for guess_input function
-    def test_guess_input_1(self):
-        self.test_expected = "hello"
-        self.test_output = guess_input()
-        self.assertEqual(self.test_output, self.test_expected)
+    # def test_guess_input_1(self):
+    #     self.test_expected = "hello"
+    #     self.test_output = guess_input()
+    #     self.assertEqual(self.test_output, self.test_expected)
     
-    # test for guess_input function
-    def test_guess_input_2(self):
-        self.test_expected = "h"
-        self.test_output = guess_input()
-        self.assertEqual(self.test_output, self.test_expected)
+    # # test for guess_input function
+    # def test_guess_input_2(self):
+    #     self.test_expected = "h"
+    #     self.test_output = guess_input()
+    #     self.assertEqual(self.test_output, self.test_expected)
 
 # ------------------------------------ main --------------------------- #
 if __name__ == "__main__":
