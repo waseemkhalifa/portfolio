@@ -687,17 +687,11 @@ ggsave(imdb_votes_hist,
 # IMDb top 250 analysis
 #----------------------------------------------------
 top250 <- data.table(
-  left_join(dataset, 
-            select(top_250, -title, -year),
-            by = "film_id")) %>%
-  mutate(historic_250 = ifelse(is.na(highest_rank) == T, FALSE, TRUE))
+  left_join(select(top_250, -title, -year),
+            dataset,
+            by = "film_id") %>%
+  mutate(historic_250 = ifelse(is.na(my_rating) == T, FALSE, TRUE))
 )
-
-top250 %>% filter(historic_250 == TRUE)
-
-450/1139
-
-
 
 
 
