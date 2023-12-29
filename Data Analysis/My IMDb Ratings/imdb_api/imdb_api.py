@@ -9,7 +9,7 @@ from dataclasses import dataclass, asdict
 
 file_api_key:str = "imdb_api/api_key.txt"
 
-file_ratings:str = "imdb_analysis/ratings.csv"
+file_ratings:str = "import_files/ratings.csv"
 
 api_endpoint:str = "http://www.omdbapi.com/"
 
@@ -143,4 +143,4 @@ film_output = GetFilms(api_key=api_key, films=titles)
 
 films = film_output.get_film()
 
-dataclass_to_csv(films, ratings, "imdb_analysis/films")
+dataclass_to_csv(films, ratings, "import_files/films")

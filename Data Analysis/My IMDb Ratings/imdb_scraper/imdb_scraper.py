@@ -132,7 +132,7 @@ def main(url:str,
         first_entry_dates = get_first_entry_date(parsed, first_entry_dates)
 
     lists_to_csv(film_ids, titles, years, highest_ranks, first_entry_dates, 
-                 "My IMDb Ratings/imdb_analysis/imdb_top_250_all")
+                 "import_files/imdb_top_250_all")
 
 
 main(url, current_page, current_titles, max_titles, film_ids, titles, years, 

@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------
 # set working directory
 #--------------------------------------------------------------------------
-setwd("My IMDb Ratings/imdb_analysis")
+# setwd("My IMDb Ratings/imdb_analysis")
 
 
 #--------------------------------------------------------------------------
@@ -30,10 +30,10 @@ viz_export_folder <- paste0("/home/waseem/Documents/Self-Development/",
 #--------------------------------------------------------------------------
 
 # we"ll load the csv from our location
-raw_dataset <- data.table(read.csv("films.csv", stringsAsFactors = F))
+raw_dataset <- data.table(read.csv("import_files/films.csv", stringsAsFactors = F))
 
 # we"ll load the csv from our location
-raw_top_250 <- data.table(read.csv("imdb_top_250_all.csv", 
+raw_top_250 <- data.table(read.csv("import_files/imdb_top_250_all.csv", 
                           stringsAsFactors = F))
 
 
