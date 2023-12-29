@@ -5,7 +5,7 @@ import random
 
 # this function will import the word file as a list
 def import_words():
-    with open("words.txt", "r") as words:
+    with open("src/words.txt", "r") as words:
         imported_words = []
         for word in words:
             word = word.strip()
