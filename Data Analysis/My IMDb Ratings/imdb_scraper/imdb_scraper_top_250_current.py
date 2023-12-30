@@ -10,17 +10,25 @@ import pandas as pd
 # URL of the website to scrape
 url = "https://www.imdb.com/chart/top/"
 
-req = Request(url , headers={'User-Agent': 'Mozilla/5.0'})
+request = Request(url , headers={"User-Agent": "Mozilla/5.0"})
 
-film_ids = []
-titles = []
+films:dict = {
+    "film_id":[],
+    "title":[],
+    "rating":[],
+    "year":[],
+    "imdb_rating":[],
+    "my_rating":[]
+}
+
+file_name:str = "import_files/imdb_top_250_current"
 
 
 # ------------------------------------ functions & classes ----------------- #
 
-def get_request(req):
+def get_request(request):
     """ Scrapes the raw data from the provided URL """
-    response = urlopen(req).read()
+    response = urlopen(request).read()
     return response
 
 
@@ -30,48 +38,36 @@ def parse_request(response):
     return parsed
 
 
-def get_film_id(parsed, film_ids:list):
-    """ Gets the film_ids on the current page and appends to a list """
-    for t in parsed.find(class_="list-data").find_all("td", style="width: 90%;"):
-        text:str = t.find("a").attrs.get("href", "Not Found")
-        text = text.split("/",2)[2]
-        film_ids.append(text)
-    return film_ids
+def get_films(parsed, films:dict) -> dict:
+    """ Gets the film_ids, titles and ranking and appends to a dict """
+    for film in parsed.find_all(class_="ipc-title-link-wrapper"):
+        if "title" in film.attrs.get("href", "Not Found"):
+            films["film_id"].append(film.attrs.get("href", "Not Found").split("/")[2].split("/")[0])
+        
+        if "." in film.get_text():
+            films["ranking"].append(film.get_text().split(".")[0].strip())
 
-def get_title(parsed, titles:list):
-    """ Gets the titles on the current page and appends to a list """
-    for t in parsed.find(class_="list-data").find_all("td", style="width: 90%;"):
-        text:str = t.find("a").get_text()
-        titles.append(text)
-    return titles
+        if "." in film.get_text():
+            films["title"].append(film.get_text().split(".")[1].strip())
+    return films
 
 
-def lists_to_csv(film_ids:list, titles:list, years:list, highest_ranks:list, 
-                 first_entry_dates:list, filename:str):
-    """ Creates a dataframe from the lists and exports as a csv """
-    df = pd.DataFrame(list(zip(film_ids, titles, years, highest_ranks, 
-                               first_entry_dates)),
-                        columns =["film_id", "title", "year", 
-                                  "highest_rank", "first_entry_date"])
+def dict_to_csv(films:dict, filename:str):
+    """ Creates a dataframe from the dictionary and exports as a csv """
+    df = pd.DataFrame.from_dict(films)
     df.to_csv(f"{filename}.csv", index=False)
 
 
 # ------------------------------------ main --------------------------------- #
-def main(url:str, film_ids:list, titles:list):
+def main(request:str, films:dict, file_name:file_name):
 
-    response = get_request(req)
+    response = get_request(request)
 
     parsed = parse_request(response)
 
-    parsed.find_all(class_="ipc-title__text")
-    parsed.find_all(class_="ipc-title-link-wrapper")
+    films = get_films(parsed, films)
 
-    film_ids = get_film_id(parsed, film_ids)
-
-    titles = get_title(parsed, titles)
-
-    lists_to_csv(film_ids, titles, "import_files/imdb_top_250_all")
+    dict_to_csv(films, file_name)
 
 
-main(url, film_ids, titles)
-
+main(request, films, file_name)
