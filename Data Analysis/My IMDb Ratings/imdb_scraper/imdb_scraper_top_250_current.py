@@ -15,7 +15,7 @@ request = Request(url , headers={"User-Agent": "Mozilla/5.0"})
 films:dict = {
     "film_id":[],
     "title":[],
-    "rating":[],
+    "ranking":[],
     "year":[],
     "imdb_rating":[],
     "my_rating":[]
@@ -49,6 +49,15 @@ def get_films(parsed, films:dict) -> dict:
 
         if "." in film.get_text():
             films["title"].append(film.get_text().split(".")[1].strip())
+    
+    for film in parsed.find_all(class_="sc-43986a27-8 jHYIIK cli-title-metadata-item"):
+        if any(i.isdigit() for i in film):
+            if len(film.get_text()) == 4:
+                films["year"].append(film.get_text())
+    
+    for film in parsed.find_all(class_="ipc-rating-star ipc-rating-star--base ipc-rating-star--imdb sc-9ab53865-1 iXEijC ratingGroup--imdb-rating"):
+        films["imdb_rating"].append(film.get_text()[0:3])
+
     return films
 
 
@@ -71,3 +80,9 @@ def main(request:str, films:dict, file_name:file_name):
 
 
 main(request, films, file_name)
+
+
+# this gets year
+for film in parsed.find_all("aria-label"):
+    film
+
