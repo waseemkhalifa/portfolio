@@ -34,7 +34,7 @@ def parse_request(response):
     return parsed
 
 
-def get_max_titles(parsed):
+def get_max_titles(parsed) -> int:
     """ Gets the maximum number of titles on the site """
     max_titles = parsed.find(class_="text-center space-above").find("p").get_text()
     max_titles = max_titles.strip()
@@ -42,7 +42,7 @@ def get_max_titles(parsed):
     return max_titles
 
 
-def get_current_titles(parsed):
+def get_current_titles(parsed) -> int:
     """ Gets the maximum number of titles on the current page """
     current_titles = parsed.find(class_="text-center space-above").find("p").get_text()
     current_titles = current_titles.strip()
@@ -50,15 +50,15 @@ def get_current_titles(parsed):
     return current_titles
 
 
-def get_film_id(parsed, film_ids:list):
+def get_film_id(parsed, film_ids:list) -> list:
     """ Gets the film_ids on the current page and appends to a list """
     for t in parsed.find(class_="list-data").find_all("td", style="width: 90%;"):
         text:str = t.find("a").attrs.get("href", "Not Found")
-        text = text.split("/",2)[2]
+        text = text.split("/")[2]
         film_ids.append(text)
     return film_ids
 
-def get_title(parsed, titles:list):
+def get_title(parsed, titles:list) -> list:
     """ Gets the titles on the current page and appends to a list """
     for t in parsed.find(class_="list-data").find_all("td", style="width: 90%;"):
         text:str = t.find("a").get_text()
@@ -66,7 +66,7 @@ def get_title(parsed, titles:list):
     return titles
 
 
-def get_year(parsed, years:list):
+def get_year(parsed, years:list) -> list:
     """ Gets the year of release on the current page and appends to a list """
     for t in parsed.find(class_="list-data").find_all(class_="hidden-links"):
         text:str = t.find("a").get_text()
@@ -74,7 +74,7 @@ def get_year(parsed, years:list):
     return years
 
 
-def get_highest_rank(parsed, highest_ranks:list):
+def get_highest_rank(parsed, highest_ranks:list) -> list:
     """ Gets the highest rank on the current page and appends to a list """
     for t in parsed.find(class_="list-data").find_all(class_="tac hidden-xs hidden-sm"):
         text:str = t.find("span").get_text()
@@ -82,12 +82,12 @@ def get_highest_rank(parsed, highest_ranks:list):
     return highest_ranks
 
 
-def get_first_entry_date(parsed, first_entry_dates:list):
+def get_first_entry_date(parsed, first_entry_dates:list) -> list:
     """ Gets the first entry dates on the current page and appends to a list """
     for t in parsed.find(class_="list-data").find_all("td", class_="nowrap tac hidden-xs"):
         if t.find("a") != None:
             text:str = t.find("a").attrs.get("href", "Not Found")
-            text = text.split("/",2)[2]
+            text = text.split("/")[2]
             first_entry_dates.append(text)
     return first_entry_dates
 
