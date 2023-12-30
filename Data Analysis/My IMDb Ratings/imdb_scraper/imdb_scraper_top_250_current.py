@@ -17,8 +17,7 @@ films:dict = {
     "title":[],
     "ranking":[],
     "year":[],
-    "imdb_rating":[],
-    "my_rating":[]
+    "imdb_rating":[]
 }
 
 file_name:str = "import_files/imdb_top_250_current"
@@ -80,9 +79,3 @@ def main(request:str, films:dict, file_name:file_name):
 
 
 main(request, films, file_name)
-
-
-# this gets year
-for film in parsed.find_all("aria-label"):
-    film
-
