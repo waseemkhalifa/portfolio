@@ -46,9 +46,13 @@ def compound_calculator(current_pension_holdings:float,
 
     compound_principle:float = current_pension_holdings * (1.0 + assumed_yearly_growth / 12.0)**(12.0 * years_to_compound)
 
-    future_value:float = 100.0 * (((1.0 + assumed_yearly_growth / 12.0)**(12.0 * years_to_compound) - 1.0) / (assumed_yearly_growth / 12))
+    future_value:float = deposit * (((1.0 + assumed_yearly_growth / 12.0)**(12.0 * years_to_compound) - 1.0) / (assumed_yearly_growth / 12))
 
-    compounded_return:float = compound_principle + future_value
+    compounded_return:float = round(compound_principle + future_value, 2)
+
+    print(assumed_yearly_growth),
+    print(compound_principle),
+    print(future_value),
 
     return compounded_return
 
@@ -66,6 +70,7 @@ compounded_return = compound_calculator(current_pension_holdings,
                                         age_to_retire,
                                         assumed_yearly_growth)
 
+print()
 print(compounded_return)
 
 
