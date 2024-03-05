@@ -50,10 +50,6 @@ def compound_calculator(current_pension_holdings:float,
 
     compounded_return:float = round(compound_principle + future_value, 2)
 
-    print(assumed_yearly_growth),
-    print(compound_principle),
-    print(future_value),
-
     return compounded_return
 
 
