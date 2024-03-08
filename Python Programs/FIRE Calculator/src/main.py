@@ -14,9 +14,11 @@ def main():
                                             current_age,
                                             age_to_retire,
                                             assumed_yearly_growth)
+    
+    currency_symbol = input_currency_symbol()
 
     print()
-    print(compounded_return)
+    print(f"Your pension returns would be {currency_symbol}{compounded_return:,}")
 
 
 

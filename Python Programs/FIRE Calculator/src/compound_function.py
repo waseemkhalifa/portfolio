@@ -1,9 +1,8 @@
-
 def compound_calculator(current_holdings:float,
                         deposit:float,
                         start_age:float,
                         end_age:float,
-                        assumed_yearly_growth:float):
+                        assumed_yearly_growth:float) -> float:
     
     years_to_compound:float = end_age - start_age
 
