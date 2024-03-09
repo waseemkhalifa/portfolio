@@ -58,11 +58,10 @@ def input_currency_symbol() -> float:
     acceptable_input:list[str] = ["$", "€", "£", "₹", "¥"]
 
     while True:
-        try:
             currency_symbol:str = input("Enter the currency you'd like to see your results in ($, €, £, ₹, ¥): ")
             if any(currency_symbol in x for x in acceptable_input) & len(currency_symbol.strip()) == 1:
                 break
-        finally:
-            print(f"{currency_symbol} is an unacceptable input, please enter one of the following: ($, €, £, ₹, ¥)")
+            else:
+                print(f"{currency_symbol} is an unacceptable input, please enter one of the following: ($, €, £, ₹, ¥)")
             
     return currency_symbol

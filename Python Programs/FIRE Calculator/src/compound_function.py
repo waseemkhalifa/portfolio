@@ -14,6 +14,6 @@ def compound_calculator(current_holdings:float,
 
     future_value:float = deposit * (((1.0 + assumed_yearly_growth / months_in_year)**(months_in_year * years_to_compound) - 1.0) / (assumed_yearly_growth / months_in_year))
 
-    compounded_return:float = round(compound_principle + future_value, 2)
+    compounded_return:float = compound_principle + future_value
 
     return compounded_return

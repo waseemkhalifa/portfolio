@@ -16,7 +16,7 @@ def main():
                                                     age_to_retire,
                                                     pension_assumed_yearly_growth)
     
-
+    print()
     isa_current_holdings = input_current_holdings("ISA")
     isa_deposit = input_deposits("ISA")
     
@@ -30,12 +30,12 @@ def main():
                                                 isa_assumed_yearly_growth)
 
 
-
+    print()
     currency_symbol = input_currency_symbol()
 
     print()
-    print(f"Your pension returns would be:  {currency_symbol}{pension_compounded_return:,}")
-    print(f"Your ISA returns would be:      {currency_symbol}{isa_compounded_return:,}")
+    print(f"Your pension returns would be:  {currency_symbol}{round(pension_compounded_return):,}")
+    print(f"Your ISA returns would be:      {currency_symbol}{round(isa_compounded_return):,}")
 
 
 
