@@ -42,7 +42,7 @@ def input_age(classification:str) -> float:
 
 def input_assumed_yearly_growth(classification:str) -> float:
     while True:
-        assumed_yearly_growth:str = input("Enter assumed yearly growth (0.00-100.00) for your {classification}: ")
+        assumed_yearly_growth:str = input(f"Enter assumed yearly growth (0.00-100.00) for your {classification}: ")
         
         try:
             assumed_yearly_growth:float = float(assumed_yearly_growth)
