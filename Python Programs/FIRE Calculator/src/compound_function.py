@@ -23,11 +23,14 @@ def compound_calculator(current_holdings:float,
 
             yearly_breakdown["Year"].append(year)
             yearly_breakdown["Deposits"].append(current_holdings)
+            yearly_breakdown["Cummulative Deposits"].append(current_holdings)
             yearly_breakdown["Compound Growth"].append(0)
+            yearly_breakdown["Cummulative Compound Growth"].append(0)
             yearly_breakdown["Balance"].append(current_holdings)
 
         else:
-            previous_return:float = current_holdings if year == 1 else compounded_return
+            previous_compounded_return:float = current_holdings if year == 1 else compounded_return
+            previous_deposit:float = current_holdings if year == 1 else previous_deposit + (deposit*months_in_year)
             
             compound_principle:float = compound_principle_calc(current_holdings, 
                                                                assumed_yearly_growth, 
@@ -42,11 +45,15 @@ def compound_calculator(current_holdings:float,
             
             compounded_return:float = compound_principle + future_value
 
-            compound_growth:float = (compounded_return - previous_return) - (months_in_year * deposit)
+            compound_growth:float = (compounded_return - previous_compounded_return) - (months_in_year * deposit)
+
+            previous_compound_growth:float = compound_growth if year == 1 else previous_compound_growth + compound_growth
 
             yearly_breakdown["Year"].append(year)
             yearly_breakdown["Deposits"].append(deposit*12)
+            yearly_breakdown["Cummulative Deposits"].append(previous_deposit + (deposit*months_in_year))
             yearly_breakdown["Compound Growth"].append(compound_growth)
+            yearly_breakdown["Cummulative Compound Growth"].append(previous_compound_growth)
             yearly_breakdown["Balance"].append(compounded_return)
         
         year+=1
@@ -83,22 +90,7 @@ def future_value_calc(deposit:float,
     miy = months_in_year
     
     future_value:float = ((1.0 + ayg / miy)**(miy * year) - 1.0)
-    future_value:float = future_value / (ayg / miy)
+    future_value = future_value / (ayg / miy)
     future_value = future_value * dep
 
     return future_value
-
-
-
-
-
-
-compounded_return = compound_calculator(25000,
-                              2500,
-                              34,
-                              52,
-                              5)
-
-print(compounded_return[1])
-
-
