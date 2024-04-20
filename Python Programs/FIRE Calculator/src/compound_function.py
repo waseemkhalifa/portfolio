@@ -12,9 +12,9 @@ def compound_calculator(current_holdings:float,
 
     yearly_breakdown = {"Year":[], 
                         "Deposits":[],
-                        "Cummulative Deposits":[],
+                        "Cumulative Deposits":[],
                         "Compound Growth":[],
-                        "Cummulative Compound Growth":[],
+                        "Cumulative Compound Growth":[],
                         "Balance":[]}
 
     for year in range(years_to_compound):
@@ -23,9 +23,9 @@ def compound_calculator(current_holdings:float,
 
             yearly_breakdown["Year"].append(year)
             yearly_breakdown["Deposits"].append(current_holdings)
-            yearly_breakdown["Cummulative Deposits"].append(current_holdings)
+            yearly_breakdown["Cumulative Deposits"].append(current_holdings)
             yearly_breakdown["Compound Growth"].append(0)
-            yearly_breakdown["Cummulative Compound Growth"].append(0)
+            yearly_breakdown["Cumulative Compound Growth"].append(0)
             yearly_breakdown["Balance"].append(current_holdings)
 
         else:
@@ -51,9 +51,9 @@ def compound_calculator(current_holdings:float,
 
             yearly_breakdown["Year"].append(year)
             yearly_breakdown["Deposits"].append(deposit*12)
-            yearly_breakdown["Cummulative Deposits"].append(previous_deposit + (deposit*months_in_year))
+            yearly_breakdown["Cumulative Deposits"].append(previous_deposit + (deposit*months_in_year))
             yearly_breakdown["Compound Growth"].append(compound_growth)
-            yearly_breakdown["Cummulative Compound Growth"].append(previous_compound_growth)
+            yearly_breakdown["Cumulative Compound Growth"].append(previous_compound_growth)
             yearly_breakdown["Balance"].append(compounded_return)
         
         year+=1
