@@ -58,7 +58,7 @@ def compound_calculator(current_holdings:float,
         
         year+=1
 
-    return compounded_return, yearly_breakdown
+    return yearly_breakdown
 
 
 
