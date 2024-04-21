@@ -26,15 +26,15 @@ def input_deposits(classification:str) -> float:
 
 
 
-def input_age(classification:str) -> float:
+def input_age(classification:str) -> int:
     while True:
         age:str = input(f"Enter your {classification} age (0-100): ")
         
         try:
-            age:float = float(age)
+            age:int = int(age)
             break
         except ValueError:
-            print(f"{age} is an unacceptable input, please enter a numerical value")
+            print(f"{age} is an unacceptable input, please enter a whole number")
 
     return age
 
