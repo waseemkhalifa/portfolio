@@ -18,7 +18,9 @@ def main():
                                          current_age,
                                          age_to_retire,
                                          pension_assumed_yearly_growth)
-    pension_compounded_return = pension_return["Balance"][-1]
+    pension_total_return = pension_return["Balance"][-1]
+    pension_total_contribution = pension_return["Cumulative Deposits"][-1]
+    pension_total_compound_return = pension_return["Cumulative Compound Growth"][-1]
     
     print()
     isa_current_holdings = input_current_holdings("ISA")
@@ -32,7 +34,9 @@ def main():
                                      current_age,
                                      fire_age,
                                      isa_assumed_yearly_growth)
-    isa_compounded_return:float = isa_return["Balance"][-1]
+    isa_total_return = isa_return["Balance"][-1]
+    isa_total_contribution = isa_return["Cumulative Deposits"][-1]
+    isa_total_compound_return = isa_return["Cumulative Compound Growth"][-1]
 
 
     print()
@@ -41,14 +45,17 @@ def main():
 
     print("- Pension -")
     print(tabulate_list(pension_return))
-    print(f"Total returns:  {currency_symbol}{round(pension_compounded_return):,}")
-    print(f"Total contributions:  {currency_symbol}{round(pension_compounded_return):,}")
+    print(f"Total Returns:          {currency_symbol}{round(pension_total_return):,}")
+    print(f"Total Contributions:    {currency_symbol}{round(pension_total_contribution):,}")
+    print(f"Total Compound Growth:  {currency_symbol}{round(pension_total_compound_return):,}")
     
     
     print()
     print("- ISA -")
     print(tabulate_list(isa_return))
-    print(f"Total ISA returns:  {currency_symbol}{round(isa_compounded_return):,}")
+    print(f"Total Returns:          {currency_symbol}{round(isa_total_return):,}")
+    print(f"Total Contributions:    {currency_symbol}{round(isa_total_contribution):,}")
+    print(f"Total Compound Growth:  {currency_symbol}{round(isa_total_compound_return):,}")
 
 
 
