@@ -1,5 +1,6 @@
 from input_functions import *
 from compound_function import *
+from tabulated_returns import *
 
 
 
@@ -36,10 +37,18 @@ def main():
 
     print()
     currency_symbol = input_currency_symbol()
-
     print()
-    print(f"Your pension returns would be:  {currency_symbol}{round(pension_compounded_return):,}")
-    print(f"Your ISA returns would be:      {currency_symbol}{round(isa_compounded_return):,}")
+
+    print("- Pension -")
+    print(tabulate_list(pension_return))
+    print(f"Total returns:  {currency_symbol}{round(pension_compounded_return):,}")
+    print(f"Total contributions:  {currency_symbol}{round(pension_compounded_return):,}")
+    
+    
+    print()
+    print("- ISA -")
+    print(tabulate_list(isa_return))
+    print(f"Total ISA returns:  {currency_symbol}{round(isa_compounded_return):,}")
 
 
 
