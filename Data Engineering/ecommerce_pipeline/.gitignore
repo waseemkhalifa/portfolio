@@ -1,0 +1,4 @@
+venv
+airflow/logs
+standalone_admin_password.txt
+api_key.txt
