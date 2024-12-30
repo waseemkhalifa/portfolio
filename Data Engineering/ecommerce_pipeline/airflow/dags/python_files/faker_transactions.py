@@ -1,6 +1,8 @@
 ## ------------ Imports ------------ ##
 import random
 
+from datetime import datetime, timedelta
+
 from dataclasses import dataclass, asdict
 
 from faker import Faker 
@@ -11,6 +13,7 @@ from faker.providers import DynamicProvider
 ## ------------ Defaults/Variables ------------ ##
 TRANSACTION_MIN = 1
 TRANSACTION_MAX = 9
+CURRENT_DATETIME = datetime.now().strftime("%Y-%m-%d %H-%M-%S")
 
 
 fake = Faker("en_GB")
@@ -27,6 +30,7 @@ fake.add_provider(product_provider)
 @dataclass
 class Transaction:
     transaction_id:str
+    transaction_datetime:str
     user_id:str 
     user_prefix:str
     first_name:str
@@ -48,6 +52,7 @@ def get_transactions(TRANSACTION_MIN, TRANSACTION_MAX) -> list[Transaction]:
     for x in range(random.randint(TRANSACTION_MIN, TRANSACTION_MAX)):
         transaction:Transaction = Transaction(
             transaction_id = fake.uuid4(),
+            transaction_datetime = CURRENT_DATETIME,
             user_id = fake.uuid4(),
             user_prefix = fake.prefix(),
             first_name = fake.first_name(),
