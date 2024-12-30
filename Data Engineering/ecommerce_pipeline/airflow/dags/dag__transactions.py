@@ -22,7 +22,8 @@ default_args = {
 TRANSACTION_MIN = 1
 TRANSACTION_MAX = 9
 LOCAL_FILE = "transactions.json"
-NAME_FOR_S3_FILE = 'transactions_s3.json'
+NAME_FOR_S3_FILE = 'transactions'
+CURRENT_DATETIME = datetime.now().strftime("%Y-%m-%d %H-%M-%S")
 
 
 
@@ -45,7 +46,7 @@ def task__list_to_json_file(ti):
 
 def task__save_json_file_to_s3(ti):
     export_to_s3.save_json_file_to_s3(local_file=LOCAL_FILE, 
-                                      file_name=NAME_FOR_S3_FILE)
+                                      file_name=NAME_FOR_S3_FILE+CURRENT_DATETIME+".json")
 
 
 

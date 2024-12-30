@@ -6,3 +6,4 @@ airflow/airflow.db
 airflow/airflow-webserver.pid
 aws_credentials.py
 __pycache__
+transactions.json
