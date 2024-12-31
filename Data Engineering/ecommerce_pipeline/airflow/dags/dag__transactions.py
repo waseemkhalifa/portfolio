@@ -80,7 +80,7 @@ with DAG(
     )
 
     save_file_to_s3 = PythonOperator(
-        task_id="save_json_file_to_s3",
+        task_id="save_file_to_s3",
         python_callable=task__save_file_to_s3
     )
 
