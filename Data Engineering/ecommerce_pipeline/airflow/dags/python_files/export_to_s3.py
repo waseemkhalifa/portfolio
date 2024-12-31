@@ -14,7 +14,7 @@ AWS_SECRET_KEY = aws_credentials.aws_secret_access_key
 
 
 ## ------------ Functions ------------ ##
-def save_json_file_to_s3(
+def save_file_to_s3(
         local_file, 
         file_name,
         service_name="s3",

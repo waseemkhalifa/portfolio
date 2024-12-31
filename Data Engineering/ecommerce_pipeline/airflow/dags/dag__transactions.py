@@ -45,9 +45,9 @@ def task__list_to_json_file(ti):
                                           file_name=LOCAL_FILE)
 
 
-def task__save_json_file_to_s3(ti):
-    export_to_s3.save_json_file_to_s3(local_file=LOCAL_FILE, 
-                                      file_name=NAME_FOR_S3_FILE+CURRENT_DATETIME+".json")
+def task__save_file_to_s3(ti):
+    export_to_s3.save_file_to_s3(local_file=LOCAL_FILE, 
+                                 file_name=NAME_FOR_S3_FILE+CURRENT_DATETIME+".json")
 
 
 def task__delete_file():
@@ -79,9 +79,9 @@ with DAG(
         python_callable=task__list_to_json_file
     )
 
-    save_json_file_to_s3 = PythonOperator(
+    save_file_to_s3 = PythonOperator(
         task_id="save_json_file_to_s3",
-        python_callable=task__save_json_file_to_s3
+        python_callable=task__save_file_to_s3
     )
 
     delete_file = PythonOperator(
@@ -91,6 +91,5 @@ with DAG(
 
     get_transactions>>dataclass_to_json
     dataclass_to_json>>list_to_json_file
-    list_to_json_file>>save_json_file_to_s3
-    save_json_file_to_s3>>delete_file
-    
+    list_to_json_file>>save_file_to_s3
+    save_file_to_s3>>delete_file
