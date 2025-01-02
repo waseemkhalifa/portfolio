@@ -55,5 +55,3 @@ def download_s3_files(
             Key = key["Key"],
             Filename = download_file_path    
         )
-
-download_s3_files()
