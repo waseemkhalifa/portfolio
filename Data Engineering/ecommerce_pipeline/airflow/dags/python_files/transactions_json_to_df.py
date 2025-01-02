@@ -8,7 +8,7 @@ DF_COLUMNS = ["transaction_id", "transaction_datetime", "transaction_data"]
 
 
 ## ------------ Functions ------------ ##
-def json_to_dataframe(lst, df_columns=DF_COLUMNS) -> pd.DataFrame:
+def transactions_json_to_dataframe(lst, df_columns=DF_COLUMNS) -> pd.DataFrame:
     """
     Takes list of json objects and converts them into a DataFrame
     """
