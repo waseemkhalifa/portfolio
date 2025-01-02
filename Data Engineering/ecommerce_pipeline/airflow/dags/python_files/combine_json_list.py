@@ -3,13 +3,9 @@ import os
 import pandas as pd
 
 
-## ------------ Defaults/Variables ------------ ##
-DIRECTORY = 'downloads'
-
-
 
 ## ------------ Functions ------------ ##
-def json_files_list(directory=DIRECTORY) -> list:
+def json_files_list(directory) -> list:
     """
     Takes json files in a supplied directory and combines them to a list
     """
