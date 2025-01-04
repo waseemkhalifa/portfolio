@@ -1,7 +1,6 @@
 ## ------------ Imports ------------ ##
 import pandas as pd 
 import redshift_connector
-redshift_connector.paramstyle = "named"
 import awswrangler as wr
 import boto3
 
@@ -35,8 +34,11 @@ def dataframe_to_redshift(transaction_json_list,
                           aws_secret_access_key=AWS_SECRET_KEY,
                           aws_redshift_host=AWS_REDSHIFT_HOST,
                           aws_redshift_user=AWS_REDSHIFT_USER,
-                          aws_redshift_password=AWS_REDSHIFT_PASSWORD
-                          ):
+                          aws_redshift_password=AWS_REDSHIFT_PASSWORD):
+
+    """
+    Take a list of JSONs, converts to DataFrame and loads to Redshift
+    """
 
     df = j2f.transactions_json_to_dataframe(lst=transaction_json_list)
 
@@ -52,13 +54,15 @@ def dataframe_to_redshift(transaction_json_list,
         password=aws_redshift_password
     )
 
-    wr.s3.delete_objects(f"s3://{s3_bucket}/filename.csv")
+    
+
+    wr.s3.delete_objects(boto3_session=s3_session,
+                         path=f"s3://{s3_bucket}/filename.parquet")
 
     wr.redshift.copy(
         boto3_session=s3_session,
         df = df,
-        # path = f"s3://{s3_bucket}/filename.parquet", # temp S3 path
-        path = f"s3://{s3_bucket}/filename.csv", # temp S3 path
+        path = f"s3://{s3_bucket}/filename.parquet", # temp S3 path
         con = redshift_conn,
         table = redshift_target_table, # target table
         schema = redshift_target_schema, # target database/schema in redshift

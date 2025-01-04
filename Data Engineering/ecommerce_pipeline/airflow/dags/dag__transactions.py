@@ -12,7 +12,7 @@ import python_files.export_to_s3 as export_to_s3
 import python_files.delete_file as remove_file
 import python_files.import_from_s3 as import_files_from_s3
 import python_files.combine_json_list as combine_json_to_list
-import python_files.df_to_redshift as dataframe_to_redshift
+import python_files.df_to_redshift as d2f
 import python_files.delete_s3_file as remove_s3_files
 import python_files.delete_folder as remove_directory
 
@@ -70,11 +70,11 @@ def task__combine_json_list():
 
 
 def task__df_to_redshift(ti):
-    dataframe_to_redshift.upload_df_to_redshift(
+    d2f.dataframe_to_redshift(
         transaction_json_list=ti.xcom_pull(task_ids="combine_json_list"),
-        target_redshift_db=TARGET_REDSHIFT_DB,
-        target_redshift_schema=TARGET_REDSHIFT_SCHEMA,
-        target_redshift_table=TARGET_REDSHIFT_TABLE)
+        redshift_target_db=TARGET_REDSHIFT_DB,
+        redshift_target_schema=TARGET_REDSHIFT_SCHEMA,
+        redshift_target_table=TARGET_REDSHIFT_TABLE)
 
 
 def task__delete_s3_file():

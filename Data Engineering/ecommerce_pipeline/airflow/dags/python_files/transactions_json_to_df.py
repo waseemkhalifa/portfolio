@@ -1,5 +1,6 @@
 ## ------------ Imports ------------ ##
 import pandas as pd
+import json
 
 
 ## ------------ Defaults/Variables ------------ ##
@@ -15,12 +16,12 @@ def transactions_json_to_dataframe(lst,
     
     df = pd.DataFrame(columns=df_columns)
 
-    for json in lst:
-        for transaction in json:
+    for obj in lst:
+        for transaction in obj:
             # List of new values
-            temp_df = [json[transaction][0]["transaction_id"], 
-                       json[transaction][0]["transaction_datetime"], 
-                       json[transaction][0]]
+            temp_df = [obj[transaction][0]["transaction_id"], 
+                       obj[transaction][0]["transaction_datetime"], 
+                       json.dumps(obj[transaction][0])]
             # New data as pandas.DataFrame
             temp_df = pd.DataFrame(columns=df.columns, data=[temp_df])
             # Overwrite original dataframe
