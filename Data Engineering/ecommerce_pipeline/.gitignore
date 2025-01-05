@@ -8,3 +8,4 @@ aws_credentials.py
 __pycache__
 transactions.json
 /downloads
+.vscode
