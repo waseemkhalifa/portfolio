@@ -92,7 +92,8 @@ with DAG(
     dag_id="transactions",
     description="This is a pipeline of trasactions into Redshift",
     start_date=datetime(2024,12,29),
-    schedule_interval="@daily",
+    # schedule_interval="@daily",
+    schedule_interval=None,
     catchup=False,
 ) as dag:
 
