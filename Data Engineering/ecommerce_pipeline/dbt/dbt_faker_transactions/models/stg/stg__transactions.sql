@@ -1,7 +1,7 @@
 {{ config(
     materialized="table",
     database="dbt",
-    schema="source"
+    schema="staging"
 )}}
 
 WITH transactions AS (
