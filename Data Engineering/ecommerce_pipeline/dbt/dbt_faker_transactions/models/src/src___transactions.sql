@@ -1,4 +1,3 @@
-
 {{ config(
     materialized="table",
     database="dbt",
@@ -6,7 +5,7 @@
 )}}
 
 
-WITH src AS (
+WITH transactions AS (
     SELECT 
         transaction_id::VARCHAR             AS transaction_id,
         TO_TIMESTAMP(transaction_date, 
@@ -16,4 +15,4 @@ WITH src AS (
         {{ source('src__faker_transactions', 'faker__transactions') }}
 )
 
-SELECT * FROM src
+SELECT * FROM transactions
