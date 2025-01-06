@@ -6,9 +6,8 @@
 
 WITH transactions AS (
     SELECT 
-        transaction_id::VARCHAR                         AS transaction_id,
-        TO_TIMESTAMP(transaction_date, 
-                    'YYY-MM-DD HH-MI-SS')               AS transaction_date,
+        transaction_id,
+        transaction_date,
         
         transaction_data.user_id::VARCHAR               AS user_id,
         transaction_data.user_prefix::VARCHAR           AS user_prefix,

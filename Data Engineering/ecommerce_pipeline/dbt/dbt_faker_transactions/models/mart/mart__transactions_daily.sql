@@ -12,4 +12,3 @@ FROM
     {{ ref('fct__transactions') }} AS trans
 GROUP BY 
     1
-
