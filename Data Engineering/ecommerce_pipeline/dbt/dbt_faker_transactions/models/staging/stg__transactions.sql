@@ -12,8 +12,8 @@ WITH transactions AS (
         
         transaction_data.user_id::VARCHAR               AS user_id,
         transaction_data.user_prefix::VARCHAR           AS user_prefix,
-        transaction_data.first_name::VARCHAR            AS first_name,
-        transaction_data.last_name::VARCHAR             AS last_name,
+        transaction_data.first_name::VARCHAR            AS user_first_name,
+        transaction_data.last_name::VARCHAR             AS user_last_name,
         transaction_data.user_email::VARCHAR            AS user_email,
         transaction_data.product_id::VARCHAR            AS product_id,
         transaction_data.product_category::VARCHAR      AS product_category
@@ -30,8 +30,8 @@ final AS (
         
         user_id,
         user_prefix,
-        first_name,
-        last_name,
+        user_first_name,
+        user_last_name,
         user_email,
         product_id,
         product_category
