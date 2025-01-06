@@ -19,7 +19,7 @@ WITH transactions AS (
         transaction_data.product_category::VARCHAR      AS product_category
     
     FROM 
-        {{ ref('src___transactions') }}
+        {{ ref('src__transactions') }}
 ),
 
 
