@@ -1,4 +1,0 @@
-# just a note on how I set up a virtual enviroment
-1. python3 -m venv /home/waseem/Documents/venv/ccwc
-2. source /home/waseem/Documents/venv/ccwc/bin/activate
-3. pip install -e .
