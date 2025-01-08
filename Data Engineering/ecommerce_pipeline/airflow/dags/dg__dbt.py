@@ -15,6 +15,7 @@ PATH_DBT_PROJECT = '"/home/waseem/Documents/Self-Development/git_repos/portfolio
 PATH_DBT_VENV = '"/home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/ecommerce_pipeline/dbt-env/bin/activate"'
 PATH_AIRFLOW_HOME = '"/home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/ecommerce_pipeline/airflow"'
 
+DBT_COMMAND_PREFIX = f"cd {PATH_AIRFLOW_HOME} && source {PATH_DBT_VENV} && cd {PATH_DBT_PROJECT} &&"
 
 
 ## ------------ Dags & Tasks ------------ ##
@@ -30,7 +31,12 @@ with DAG(
 
     dbt_run = BashOperator(
         task_id="dbt_run",
-        bash_command=f"cd {PATH_AIRFLOW_HOME} && source {PATH_DBT_VENV} && cd {PATH_DBT_PROJECT} && dbt run"
+        bash_command=f"{DBT_COMMAND_PREFIX} dbt run"
     )
 
-    dbt_run
+    dbt_clean = BashOperator(
+        task_id="dbt_clean",
+        bash_command=f"{DBT_COMMAND_PREFIX} dbt clean"
+    )
+
+    dbt_run >> dbt_clean
