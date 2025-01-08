@@ -9,3 +9,11 @@ __pycache__
 transactions.json
 /downloads
 .vscode
+dbt-env
+
+airflow/dags/dbt/dbt_faker_transactions/profiles.yml
+airflow/dags/dbt/dbt_faker_transactions/target/
+airflow/dags/dbt/dbt_faker_transactions/dbt_packages/
+airflow/dags/dbt/dbt_faker_transactions/logs
+*.user.yml
+

@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: src__faker_transactions
+    database: prod  
+    schema: datalake  
+    tables:
+      - name: faker__transactions
