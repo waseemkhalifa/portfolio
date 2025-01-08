@@ -11,9 +11,9 @@ transactions.json
 .vscode
 dbt-env
 
-dbt/dbt_faker_transactions/profiles.yml
-dbt/dbt_faker_transactions/target/
-dbt/dbt_faker_transactions/dbt_packages/
-dbt/dbt_faker_transactions/logs/
-dbt/dbt_faker_transactions/.user.yml
+airflow/dags/dbt/dbt_faker_transactions/profiles.yml
+airflow/dags/dbt/dbt_faker_transactions/target/
+airflow/dags/dbt/dbt_faker_transactions/dbt_packages/
+airflow/dags/dbt/dbt_faker_transactions/logs
+*.user.yml
 

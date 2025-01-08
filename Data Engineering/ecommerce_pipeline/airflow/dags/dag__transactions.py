@@ -89,7 +89,7 @@ def task__delete_folder():
 ## ------------ Dags & Tasks ------------ ##
 with DAG(
     default_args=default_args,
-    dag_id="transactions",
+    dag_id="extract_load_transactions",
     description="This is a pipeline of trasactions into Redshift",
     start_date=datetime(2024,12,29),
     # schedule_interval="@daily",
