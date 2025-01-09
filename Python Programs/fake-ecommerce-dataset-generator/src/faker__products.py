@@ -26,7 +26,9 @@ def fake_products(num_of_products:int) -> dict:
     products:list[dict] = []
 
     for x in range(0, num_of_products):
-        products.append({"product_id": fake.uuid4(), 
-                         "product_category":fake.product_category()})
+        product = {"product_id": fake.uuid4(),
+                   "product_category":fake.product_category()}
+        
+        products.append(product)
 
     return products
