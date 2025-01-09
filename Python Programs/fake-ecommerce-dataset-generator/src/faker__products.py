@@ -1,5 +1,6 @@
 ## ------------------------ Imports ------------------------ ##
 import random
+import json
 
 from faker import Faker 
 from faker.providers import DynamicProvider
@@ -22,9 +23,10 @@ fake.add_provider(product_provider)
 ## ------------------------ Functions ------------------------ ##
 def fake_products(num_of_products:int) -> dict:
 
-    products = {}
+    products:list[dict] = []
 
     for x in range(0, num_of_products):
-        products[fake.uuid4()] = fake.product_category()
-    
+        products.append({"product_id": fake.uuid4(), 
+                         "product_category":fake.product_category()})
+
     return products
