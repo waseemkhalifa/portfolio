@@ -71,13 +71,10 @@ def fake_product_prices(product_category) -> float:
     return product_price
 
 
-def fake_product(faker_seed:int) -> list:
+def fake_product() -> list:
     """ 
     Generates a json object with product data
     """
-
-    Faker.seed(faker_seed)
-
 
     product_id = fake.uuid4()
     product_category = fake.product_category()

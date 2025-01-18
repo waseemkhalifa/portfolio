@@ -11,12 +11,10 @@ fake = Faker()
 
 
 ## ------------------------ Functions ------------------------ ##
-def fake_customer(faker_seed:int) -> dict:
+def fake_customer() -> dict:
     """ 
     Generates a json object with user data
     """
-
-    Faker.seed(faker_seed)
         
     gender = random.choice(["m","f"])
     customer_id = fake.uuid4()
