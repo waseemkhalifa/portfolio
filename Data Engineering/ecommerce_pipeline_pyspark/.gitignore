@@ -1,0 +1,12 @@
+venv
+airflow/logs
+standalone_admin_password.txt
+api_key.txt
+airflow/airflow.db
+airflow/airflow-webserver.pid
+aws_credentials.py
+__pycache__
+.vscode
+etl
+transactions.json
+downloads
