@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from airflow.models import DAG
 from airflow.operators.python import PythonOperator
 
-import python_files.ecommerce_dataset_generator.src.faker__transactions as faker_transactions
+import python_files.ecommerce_dataset_generator.src.fake__transactions as faker_transactions
 import python_files.export_list_as_json as export_list_as_json
 
 import python_files.transform_load.dim_products as dim_products
@@ -17,7 +17,6 @@ import python_files.transform_load.load_to_redshift as d2f
 import python_files.export_to_s3 as export_to_s3
 import python_files.delete_file as remove_file
 import python_files.import_from_s3 as import_files_from_s3
-import python_files.combine_json_list as combine_json_to_list
 import python_files.delete_s3_file as remove_s3_files
 import python_files.delete_folder as remove_directory
 
@@ -62,15 +61,11 @@ def task__import_from_s3():
     import_files_from_s3.download_s3_files()
 
 
-def task__combine_json_list():
-    return combine_json_to_list.json_files_list(directory=DIRECTORY)
-
-
 def task__transform():
-    dim_products.main(filepath=LOCAL_FILE)
-    dim_transactions.main(filepath=LOCAL_FILE)
-    dim_transactions_lineitem.main(filepath=LOCAL_FILE)
-    fct_transactions.main(filepath=LOCAL_FILE)
+    dim_products.main(directory=DIRECTORY)
+    dim_transactions.main(directory=DIRECTORY)
+    dim_transactions_lineitem.main(directory=DIRECTORY)
+    fct_transactions.main(directory=DIRECTORY)
 
 
 def task__load_to_redshift():
@@ -109,6 +104,7 @@ def task__delete_s3_file():
 
 def task__delete_folder():
     remove_directory.delete_folder(directory=DIRECTORY)
+    remove_directory.delete_folder(directory="etl")
 
 
 
@@ -135,32 +131,26 @@ with DAG(
     )
 
 
-    # save_file_to_s3 = PythonOperator(
-    #     task_id="save_file_to_s3",
-    #     python_callable=task__save_file_to_s3
-    # )
+    save_file_to_s3 = PythonOperator(
+        task_id="save_file_to_s3",
+        python_callable=task__save_file_to_s3
+    )
 
 
-    # delete_local_file = PythonOperator(
-    #     task_id="delete_local_file",
-    #     python_callable=task__delete_file
-    # )
+    delete_local_file = PythonOperator(
+        task_id="delete_local_file",
+        python_callable=task__delete_file
+    )
 
 
-    # import_from_s3 = PythonOperator(
-    #     task_id="import_from_s3",
-    #     python_callable=task__import_from_s3
-    # )
-
-
-    # combine_json_list = PythonOperator(
-    #     task_id="combine_json_list",
-    #     python_callable=task__combine_json_list
-    # )
+    import_from_s3 = PythonOperator(
+        task_id="import_from_s3",
+        python_callable=task__import_from_s3
+    )
 
 
     transform = PythonOperator(
-        task_id="dim_products",
+        task_id="transform",
         python_callable=task__transform
     )
 
@@ -171,16 +161,23 @@ with DAG(
     )
 
 
-    # delete_s3_file = PythonOperator(
-    #     task_id="delete_s3_file",
-    #     python_callable=task__delete_s3_file
-    # )
+    delete_s3_file = PythonOperator(
+        task_id="delete_s3_file",
+        python_callable=task__delete_s3_file
+    )
 
-    # delete_folder = PythonOperator(
-    #     task_id="delete_folder",
-    #     python_callable=task__delete_folder
-    # )
+
+    delete_folder = PythonOperator(
+        task_id="delete_folder",
+        python_callable=task__delete_folder
+    )
+
 
     get_transactions >> list_to_json_file
-    list_to_json_file >> transform
+    list_to_json_file >> save_file_to_s3
+    save_file_to_s3 >> delete_local_file
+    delete_local_file >> import_from_s3
+    import_from_s3 >> transform
     transform >> load_to_redshift
+    load_to_redshift >> delete_s3_file
+    delete_s3_file >> delete_folder
