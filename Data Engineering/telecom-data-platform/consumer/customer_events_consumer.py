@@ -12,6 +12,12 @@ consumer = KafkaConsumer(
 
 for message in consumer:
 
-    print(
-        message.value
-    )
+    with open(
+        "data/customer_events.jsonl",
+        "a"
+    ) as file:
+
+        file.write(
+            json.dumps(message.value)
+            + "\n"
+        )
