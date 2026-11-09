@@ -25,7 +25,6 @@ consumer = KafkaConsumer(
 
 
 # Open the output file once
-
 try:
     with open("data/customer_events.jsonl", "a", encoding="utf-8") as file:
         for message in consumer:
@@ -38,4 +37,3 @@ except KeyboardInterrupt:
 finally:
     consumer.close()
     print("Kafka consumer stopped successfully.")
-
