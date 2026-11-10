@@ -1,1 +1,4 @@
 .venv
+checkpoints/customer_events
+data/bronze
+data/silver
