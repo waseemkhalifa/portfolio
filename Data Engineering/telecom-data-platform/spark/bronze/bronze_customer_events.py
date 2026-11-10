@@ -25,13 +25,37 @@ spark.sparkContext.setLogLevel("WARN")
 # ==================================================
 
 customer_schema = StructType([
+    # Common event fields
     StructField("event_id", StringType(), True),
     StructField("customer_id", IntegerType(), True),
     StructField("event_type", StringType(), True),
     StructField("event_timestamp", StringType(), True),
     StructField("channel", StringType(), True),
+
+    # Signup fields
+    StructField("package_name", StringType(), True),
+    StructField("monthly_charge", DoubleType(), True),
     StructField("contract_length_months", IntegerType(), True),
-    StructField("renewal_discount", FloatType(), True)
+
+    # Package upgrade/downgrade fields
+    StructField("old_package", StringType(), True),
+    StructField("new_package", StringType(), True),
+    StructField("monthly_charge_increase", DoubleType(), True),
+    StructField("monthly_charge_decrease", DoubleType(), True),
+
+    # Add-on purchase fields
+    StructField("add_on_name", StringType(), True),
+    StructField("add_on_cost", DoubleType(), True),
+
+    # Contract renewal fields
+    StructField("renewal_discount", DoubleType(), True),
+
+    # Customer support fields
+    StructField("case_type", StringType(), True),
+    StructField("resolved_first_contact", BooleanType(), True),
+
+    # Customer churn fields
+    StructField("churn_reason", StringType(), True)
 ])
 
 
