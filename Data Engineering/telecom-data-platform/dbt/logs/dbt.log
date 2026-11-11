@@ -1,0 +1,73 @@
+[0m09:57:55.464490 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x700195c77c50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x70019546a8a0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x700194afd160>]}
+
+
+============================== 09:57:55.466568 | 9877100f-96af-42fd-945a-d09b79f67f1f ==============================
+[0m09:57:55.466568 [info ] [MainThread]: Running with dbt=1.12.6
+[0m09:57:55.466988 [debug] [MainThread]: running dbt with arguments {'send_anonymous_usage_stats': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'fail_fast': 'False', 'cache_selected_only': 'False', 'empty': 'None', 'target_path': 'None', 'no_print': 'None', 'warn_error': 'None', 'profiles_dir': '/home/waseem/.dbt', 'hints_enabled': 'True', 'version_check': 'True', 'log_path': 'logs', 'write_json': 'True', 'introspect': 'True', 'invocation_command': 'dbt init telecom_data_platform', 'log_cache_events': 'False', 'debug': 'False', 'use_colors': 'True', 'maximum_seed_size_mib': '1', 'indirect_selection': 'eager', 'use_experimental_parser': 'False', 'static_parser': 'True', 'quiet': 'False', 'printer_width': '80', 'log_format': 'default', 'partial_parse': 'True'}
+[0m09:57:55.473280 [debug] [MainThread]: Starter project path: /home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/telecom-data-platform/.venv/lib/python3.12/site-packages/dbt/include/starter_project
+[0m09:57:55.474720 [info ] [MainThread]: Setting up your profile.
+[0m09:58:01.755641 [info ] [MainThread]: Running dbt debug to validate the project...
+[0m09:58:01.756205 [info ] [MainThread]: dbt version: 1.12.6
+[0m09:58:01.756475 [info ] [MainThread]: python version: 3.12.3
+[0m09:58:01.756702 [info ] [MainThread]: python path: /home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/telecom-data-platform/.venv/bin/python3
+[0m09:58:01.756914 [info ] [MainThread]: os info: Linux-7.0.11-76070011-generic-x86_64-with-glibc2.39
+[0m09:58:01.816886 [info ] [MainThread]: Using profiles dir at /home/waseem/.dbt
+[0m09:58:01.817484 [info ] [MainThread]: Using profiles.yml file at /home/waseem/.dbt/profiles.yml
+[0m09:58:01.817938 [info ] [MainThread]: Using dbt_project.yml file at /home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/telecom-data-platform/dbt/telecom_data_platform/dbt_project.yml
+[0m09:58:01.819854 [info ] [MainThread]: adapter type: duckdb
+[0m09:58:01.820283 [info ] [MainThread]: adapter version: 1.11.1
+[0m09:58:01.942826 [info ] [MainThread]: Configuration:
+[0m09:58:01.943487 [info ] [MainThread]:   profiles.yml file [[32mOK found and valid[0m]
+[0m09:58:01.943801 [info ] [MainThread]:   dbt_project.yml file [[32mOK found and valid[0m]
+[0m09:58:01.944133 [info ] [MainThread]: Required dependencies:
+[0m09:58:01.944476 [debug] [MainThread]: Executing "git --help"
+[0m09:58:01.946553 [debug] [MainThread]: STDOUT: "b"usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]\n           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]\n           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]\n           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]\n           [--config-env=<name>=<envvar>] <command> [<args>]\n\nThese are common Git commands used in various situations:\n\nstart a working area (see also: git help tutorial)\n   clone     Clone a repository into a new directory\n   init      Create an empty Git repository or reinitialise an existing one\n\nwork on the current change (see also: git help everyday)\n   add       Add file contents to the index\n   mv        Move or rename a file, a directory, or a symlink\n   restore   Restore working tree files\n   rm        Remove files from the working tree and from the index\n\nexamine the history and state (see also: git help revisions)\n   bisect    Use binary search to find the commit that introduced a bug\n   diff      Show changes between commits, commit and working tree, etc\n   grep      Print lines matching a pattern\n   log       Show commit logs\n   show      Show various types of objects\n   status    Show the working tree status\n\ngrow, mark and tweak your common history\n   branch    List, create, or delete branches\n   commit    Record changes to the repository\n   merge     Join two or more development histories together\n   rebase    Reapply commits on top of another base tip\n   reset     Reset current HEAD to the specified state\n   switch    Switch branches\n   tag       Create, list, delete or verify a tag object signed with GPG\n\ncollaborate (see also: git help workflows)\n   fetch     Download objects and refs from another repository\n   pull      Fetch from and integrate with another repository or a local branch\n   push      Update remote refs along with associated objects\n\n'git help -a' and 'git help -g' list available subcommands and some\nconcept guides. See 'git help <command>' or 'git help <concept>'\nto read about a specific subcommand or concept.\nSee 'git help git' for an overview of the system.\n""
+[0m09:58:01.947134 [debug] [MainThread]: STDERR: "b''"
+[0m09:58:01.947510 [info ] [MainThread]:  - git [[32mOK found[0m]
+
+[0m09:58:01.947803 [info ] [MainThread]: Connection:
+[0m09:58:01.948153 [info ] [MainThread]:   database: dev
+[0m09:58:01.948448 [info ] [MainThread]:   schema: main
+[0m09:58:01.948897 [info ] [MainThread]:   path: dev.duckdb
+[0m09:58:01.949281 [info ] [MainThread]:   config_options: None
+[0m09:58:01.949654 [info ] [MainThread]:   extensions: None
+[0m09:58:01.950070 [info ] [MainThread]:   settings: {}
+[0m09:58:01.950454 [info ] [MainThread]:   external_root: .
+[0m09:58:01.950840 [info ] [MainThread]:   use_credential_provider: None
+[0m09:58:01.951388 [info ] [MainThread]:   attach: None
+[0m09:58:01.951896 [info ] [MainThread]:   filesystems: None
+[0m09:58:01.952310 [info ] [MainThread]:   remote: None
+[0m09:58:01.952588 [info ] [MainThread]:   plugins: None
+[0m09:58:01.952914 [info ] [MainThread]:   disable_transactions: False
+[0m09:58:01.953497 [info ] [MainThread]: Registered adapter: duckdb=1.11.1
+[0m09:58:02.036491 [debug] [MainThread]: Acquiring new duckdb connection 'debug'
+[0m09:58:02.054480 [debug] [MainThread]: Using duckdb connection "debug"
+[0m09:58:02.055128 [debug] [MainThread]: On debug: select 1 as id
+[0m09:58:02.055653 [debug] [MainThread]: Opening a new connection, currently in state init
+[0m09:58:02.094826 [debug] [MainThread]: SQL status: OK in 0.039 seconds
+[0m09:58:02.095732 [debug] [MainThread]: On debug: Close
+[0m09:58:02.096070 [info ] [MainThread]:   Connection test: [[32mOK connection ok[0m]
+
+[0m09:58:02.096376 [info ] [MainThread]: [32mAll checks passed![0m
+[0m09:58:02.096652 [info ] [MainThread]: Your new dbt project "telecom_data_platform" was created!
+Initialized new project in /home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/telecom-data-platform/dbt/telecom_data_platform/telecom_data_platform
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m09:58:02.097347 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": true, "command_wall_clock_time": 6.6995764, "process_in_blocks": "16", "process_kernel_time": 0.138027, "process_mem_max_rss": "163340", "process_out_blocks": "104", "process_user_time": 1.447288}
+[0m09:58:02.097750 [debug] [MainThread]: Command `dbt init` succeeded at 09:58:02.097673 after 6.70 seconds
+[0m09:58:02.098026 [debug] [MainThread]: Connection 'debug' was properly closed.
+[0m09:58:02.098308 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x70019573c890>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x70018f4300e0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x70018facd310>]}
+[0m09:58:02.098627 [debug] [MainThread]: Flushing usage events
+[0m09:58:02.569899 [debug] [MainThread]: An error was encountered while trying to flush usage events
