@@ -71,3 +71,99 @@ Happy modeling!
 [0m09:58:02.098308 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x70019573c890>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x70018f4300e0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x70018facd310>]}
 [0m09:58:02.098627 [debug] [MainThread]: Flushing usage events
 [0m09:58:02.569899 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m10:29:19.848633 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7e37be8f0560>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7e37be951460>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7e37c21fcb60>]}
+
+
+============================== 10:29:19.850923 | 9a809c9f-11eb-4a1d-997d-e8ccacc1e2c7 ==============================
+[0m10:29:19.850923 [info ] [MainThread]: Running with dbt=1.12.6
+[0m10:29:19.851405 [debug] [MainThread]: running dbt with arguments {'empty': 'None', 'static_parser': 'True', 'indirect_selection': 'eager', 'target_path': 'None', 'fail_fast': 'False', 'profiles_dir': '/home/waseem/.dbt', 'no_print': 'None', 'hints_enabled': 'True', 'send_anonymous_usage_stats': 'True', 'use_experimental_parser': 'False', 'introspect': 'True', 'printer_width': '80', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'debug': 'False', 'quiet': 'False', 'invocation_command': 'dbt docs generate', 'maximum_seed_size_mib': '1', 'warn_error': 'None', 'log_path': 'logs', 'log_format': 'default', 'partial_parse': 'True', 'log_cache_events': 'False', 'use_colors': 'True', 'write_json': 'True', 'cache_selected_only': 'False', 'version_check': 'True'}
+[0m10:29:19.851815 [error] [MainThread]: [[31mERROR[0m]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/telecom-data-platform/dbt/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m10:29:19.852514 [debug] [MainThread]: Resource report: {"command_name": "generate", "command_success": false, "command_wall_clock_time": 0.06930058, "process_in_blocks": "0", "process_kernel_time": 0.09796, "process_mem_max_rss": "109436", "process_out_blocks": "8", "process_user_time": 1.251501}
+[0m10:29:19.852944 [debug] [MainThread]: Command `dbt docs generate` failed at 10:29:19.852867 after 0.07 seconds
+[0m10:29:19.853252 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7e37bd972570>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7e37bdb3b0e0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7e37bf498980>]}
+[0m10:29:19.853545 [debug] [MainThread]: Flushing usage events
+[0m10:29:20.293556 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m10:52:29.326645 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fa6835acef0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fa682a605c0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fa683dda060>]}
+
+
+============================== 10:52:29.328930 | 71a69a44-0497-4b09-8bea-a07da24496de ==============================
+[0m10:52:29.328930 [info ] [MainThread]: Running with dbt=1.12.6
+[0m10:52:29.329447 [debug] [MainThread]: running dbt with arguments {'version_check': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'quiet': 'False', 'log_format': 'default', 'use_experimental_parser': 'False', 'partial_parse': 'True', 'debug': 'False', 'cache_selected_only': 'False', 'log_path': 'logs', 'static_parser': 'True', 'target_path': 'None', 'printer_width': '80', 'no_print': 'None', 'log_cache_events': 'False', 'empty': 'None', 'introspect': 'True', 'indirect_selection': 'eager', 'use_colors': 'True', 'hints_enabled': 'True', 'send_anonymous_usage_stats': 'True', 'invocation_command': 'dbt debug', 'profiles_dir': '/home/waseem/.dbt', 'write_json': 'True', 'warn_error': 'None', 'fail_fast': 'False', 'maximum_seed_size_mib': '1'}
+[0m10:52:29.336162 [info ] [MainThread]: dbt version: 1.12.6
+[0m10:52:29.336651 [info ] [MainThread]: python version: 3.12.3
+[0m10:52:29.337018 [info ] [MainThread]: python path: /home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/telecom-data-platform/.venv/bin/python3
+[0m10:52:29.337385 [info ] [MainThread]: os info: Linux-7.0.11-76070011-generic-x86_64-with-glibc2.39
+[0m10:52:29.342738 [info ] [MainThread]: Error importing adapter: No module named 'dbt.adapters.redshift'
+[0m10:52:29.452636 [info ] [MainThread]: Using profiles dir at /home/waseem/.dbt
+[0m10:52:29.453059 [info ] [MainThread]: Using profiles.yml file at /home/waseem/.dbt/profiles.yml
+[0m10:52:29.453325 [info ] [MainThread]: Using dbt_project.yml file at /home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/telecom-data-platform/dbt/dbt_project.yml
+[0m10:52:29.453588 [info ] [MainThread]: Configuration:
+[0m10:52:29.453822 [info ] [MainThread]:   profiles.yml file [[31mERROR invalid[0m]
+[0m10:52:29.454053 [info ] [MainThread]:   dbt_project.yml file [[31mERROR not found[0m]
+[0m10:52:29.454273 [info ] [MainThread]: Required dependencies:
+[0m10:52:29.454509 [debug] [MainThread]: Executing "git --help"
+[0m10:52:29.455895 [debug] [MainThread]: STDOUT: "b"usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]\n           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]\n           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]\n           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]\n           [--config-env=<name>=<envvar>] <command> [<args>]\n\nThese are common Git commands used in various situations:\n\nstart a working area (see also: git help tutorial)\n   clone     Clone a repository into a new directory\n   init      Create an empty Git repository or reinitialise an existing one\n\nwork on the current change (see also: git help everyday)\n   add       Add file contents to the index\n   mv        Move or rename a file, a directory, or a symlink\n   restore   Restore working tree files\n   rm        Remove files from the working tree and from the index\n\nexamine the history and state (see also: git help revisions)\n   bisect    Use binary search to find the commit that introduced a bug\n   diff      Show changes between commits, commit and working tree, etc\n   grep      Print lines matching a pattern\n   log       Show commit logs\n   show      Show various types of objects\n   status    Show the working tree status\n\ngrow, mark and tweak your common history\n   branch    List, create, or delete branches\n   commit    Record changes to the repository\n   merge     Join two or more development histories together\n   rebase    Reapply commits on top of another base tip\n   reset     Reset current HEAD to the specified state\n   switch    Switch branches\n   tag       Create, list, delete or verify a tag object signed with GPG\n\ncollaborate (see also: git help workflows)\n   fetch     Download objects and refs from another repository\n   pull      Fetch from and integrate with another repository or a local branch\n   push      Update remote refs along with associated objects\n\n'git help -a' and 'git help -g' list available subcommands and some\nconcept guides. See 'git help <command>' or 'git help <concept>'\nto read about a specific subcommand or concept.\nSee 'git help git' for an overview of the system.\n""
+[0m10:52:29.456441 [debug] [MainThread]: STDERR: "b''"
+[0m10:52:29.456845 [info ] [MainThread]:  - git [[32mOK found[0m]
+
+[0m10:52:29.457120 [info ] [MainThread]: Connection test skipped since no profile was found
+[0m10:52:29.457462 [info ] [MainThread]: [31m2 checks failed:[0m
+[0m10:52:29.457713 [info ] [MainThread]: Could not load dbt_project.yml
+Profile loading failed for the following reason:
+Runtime Error
+  Credentials in profile "dbt_faker_transactions", target "dev" invalid: Runtime Error
+    Could not find adapter type redshift!
+
+
+[0m10:52:29.457941 [info ] [MainThread]: Project loading failed for the following reason:
+ project path </home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/telecom-data-platform/dbt/dbt_project.yml> not found
+
+[0m10:52:29.458650 [debug] [MainThread]: Resource report: {"command_name": "debug", "command_success": false, "command_wall_clock_time": 0.19543344, "process_in_blocks": "0", "process_kernel_time": 0.087903, "process_mem_max_rss": "124568", "process_out_blocks": "24", "process_user_time": 1.33054}
+[0m10:52:29.459043 [debug] [MainThread]: Command `dbt debug` failed at 10:52:29.458967 after 0.20 seconds
+[0m10:52:29.459344 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fa6829b53d0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fa683dfa7e0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fa6828333b0>]}
+[0m10:52:29.459646 [debug] [MainThread]: Flushing usage events
+[0m10:52:30.109783 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m10:53:24.383009 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x76be0a804ef0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x76be0ad22540>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x76be0b0328d0>]}
+
+
+============================== 10:53:24.385432 | fb81ca84-ec24-4b26-a54e-d88552627913 ==============================
+[0m10:53:24.385432 [info ] [MainThread]: Running with dbt=1.12.6
+[0m10:53:24.385891 [debug] [MainThread]: running dbt with arguments {'invocation_command': 'dbt debug', 'static_parser': 'True', 'send_anonymous_usage_stats': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'version_check': 'True', 'log_cache_events': 'False', 'use_colors': 'True', 'hints_enabled': 'True', 'log_format': 'default', 'log_path': 'logs', 'profiles_dir': '/home/waseem/.dbt', 'write_json': 'True', 'quiet': 'False', 'fail_fast': 'False', 'partial_parse': 'True', 'target_path': 'None', 'use_experimental_parser': 'False', 'warn_error': 'None', 'cache_selected_only': 'False', 'empty': 'None', 'no_print': 'None', 'indirect_selection': 'eager', 'debug': 'False', 'printer_width': '80', 'introspect': 'True', 'maximum_seed_size_mib': '1'}
+[0m10:53:24.392855 [info ] [MainThread]: dbt version: 1.12.6
+[0m10:53:24.393221 [info ] [MainThread]: python version: 3.12.3
+[0m10:53:24.393474 [info ] [MainThread]: python path: /home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/telecom-data-platform/.venv/bin/python3
+[0m10:53:24.393705 [info ] [MainThread]: os info: Linux-7.0.11-76070011-generic-x86_64-with-glibc2.39
+[0m10:53:24.397294 [info ] [MainThread]: Error importing adapter: No module named 'dbt.adapters.redshift'
+[0m10:53:24.508126 [info ] [MainThread]: Using profiles dir at /home/waseem/.dbt
+[0m10:53:24.508537 [info ] [MainThread]: Using profiles.yml file at /home/waseem/.dbt/profiles.yml
+[0m10:53:24.508853 [info ] [MainThread]: Using dbt_project.yml file at /home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/telecom-data-platform/dbt/dbt_project.yml
+[0m10:53:24.509151 [info ] [MainThread]: Configuration:
+[0m10:53:24.509409 [info ] [MainThread]:   profiles.yml file [[31mERROR invalid[0m]
+[0m10:53:24.509663 [info ] [MainThread]:   dbt_project.yml file [[31mERROR not found[0m]
+[0m10:53:24.509920 [info ] [MainThread]: Required dependencies:
+[0m10:53:24.510190 [debug] [MainThread]: Executing "git --help"
+[0m10:53:24.511656 [debug] [MainThread]: STDOUT: "b"usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]\n           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]\n           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]\n           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]\n           [--config-env=<name>=<envvar>] <command> [<args>]\n\nThese are common Git commands used in various situations:\n\nstart a working area (see also: git help tutorial)\n   clone     Clone a repository into a new directory\n   init      Create an empty Git repository or reinitialise an existing one\n\nwork on the current change (see also: git help everyday)\n   add       Add file contents to the index\n   mv        Move or rename a file, a directory, or a symlink\n   restore   Restore working tree files\n   rm        Remove files from the working tree and from the index\n\nexamine the history and state (see also: git help revisions)\n   bisect    Use binary search to find the commit that introduced a bug\n   diff      Show changes between commits, commit and working tree, etc\n   grep      Print lines matching a pattern\n   log       Show commit logs\n   show      Show various types of objects\n   status    Show the working tree status\n\ngrow, mark and tweak your common history\n   branch    List, create, or delete branches\n   commit    Record changes to the repository\n   merge     Join two or more development histories together\n   rebase    Reapply commits on top of another base tip\n   reset     Reset current HEAD to the specified state\n   switch    Switch branches\n   tag       Create, list, delete or verify a tag object signed with GPG\n\ncollaborate (see also: git help workflows)\n   fetch     Download objects and refs from another repository\n   pull      Fetch from and integrate with another repository or a local branch\n   push      Update remote refs along with associated objects\n\n'git help -a' and 'git help -g' list available subcommands and some\nconcept guides. See 'git help <command>' or 'git help <concept>'\nto read about a specific subcommand or concept.\nSee 'git help git' for an overview of the system.\n""
+[0m10:53:24.512013 [debug] [MainThread]: STDERR: "b''"
+[0m10:53:24.512291 [info ] [MainThread]:  - git [[32mOK found[0m]
+
+[0m10:53:24.512569 [info ] [MainThread]: Connection test skipped since no profile was found
+[0m10:53:24.512894 [info ] [MainThread]: [31m2 checks failed:[0m
+[0m10:53:24.513168 [info ] [MainThread]: Could not load dbt_project.yml
+Profile loading failed for the following reason:
+Runtime Error
+  Credentials in profile "dbt_faker_transactions", target "dev" invalid: Runtime Error
+    Could not find adapter type redshift!
+
+
+[0m10:53:24.513472 [info ] [MainThread]: Project loading failed for the following reason:
+ project path </home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/telecom-data-platform/dbt/dbt_project.yml> not found
+
+[0m10:53:24.514158 [debug] [MainThread]: Resource report: {"command_name": "debug", "command_success": false, "command_wall_clock_time": 0.20111808, "process_in_blocks": "0", "process_kernel_time": 0.095961, "process_mem_max_rss": "124592", "process_out_blocks": "16", "process_user_time": 1.375448}
+[0m10:53:24.514564 [debug] [MainThread]: Command `dbt debug` failed at 10:53:24.514483 after 0.20 seconds
+[0m10:53:24.514880 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x76be0a9574d0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x76be0afe0a70>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x76be0ae6dd00>]}
+[0m10:53:24.515238 [debug] [MainThread]: Flushing usage events
+[0m10:53:24.951137 [debug] [MainThread]: An error was encountered while trying to flush usage events

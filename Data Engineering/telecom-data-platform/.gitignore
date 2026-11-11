@@ -4,4 +4,4 @@ checkpoints/billing_events
 checkpoints/network_events
 data/bronze
 data/silver
-
+dbt/logs/dbt.log
