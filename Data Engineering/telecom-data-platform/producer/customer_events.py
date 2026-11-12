@@ -43,7 +43,7 @@ def generate_event():
 
     event = {
         "event_id": str(uuid.uuid4()),
-        "customer_id": random.randint(1000, 9999),
+        "customer_id": random.randint(10, 99),
         "event_type": event_type,
         "event_timestamp": fake.iso8601(),
         "channel": random.choice(channels)
