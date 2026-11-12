@@ -5,3 +5,5 @@ checkpoints/network_events
 data/bronze
 data/silver
 dbt/logs/dbt.log
+.vscode
+data/gold/gold.duckdb
