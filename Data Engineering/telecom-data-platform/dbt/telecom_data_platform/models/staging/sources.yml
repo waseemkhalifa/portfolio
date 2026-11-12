@@ -7,57 +7,76 @@ sources:
     meta:
       external_location: "/home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/telecom-data-platform/data/silver/{name}/*.parquet"
     tables:
-  
+
       - name: customer_events
         description: "Raw customer events covering signups, package changes, add-on purchases, contract renewals, customer support interactions and churn events."
+
         columns:
           - name: event_id
             description: "Unique identifier for each customer event."
             data_tests:
               - not_null
               - unique
+
           - name: customer_id
             description: "Unique identifier of the customer."
             data_tests:
               - not_null
+
           - name: event_type
             description: "Type of customer event, such as signup, upgrade, downgrade, renewal or churn."
+
           - name: event_timestamp
             description: "Timestamp indicating when the customer event occurred."
+
           - name: channel
             description: "Channel through which the customer event was generated."
+
           # Signup fields
           - name: package_name
             description: "Name of the package selected by the customer during signup."
+
           - name: monthly_charge
             description: "Monthly recurring charge associated with the customer's package."
+
           - name: contract_length_months
             description: "Duration of the customer's contract in months."
+
           # Package upgrade/downgrade fields
           - name: old_package
             description: "Previous package before an upgrade or downgrade."
+
           - name: new_package
             description: "New package selected by the customer."
+
           - name: monthly_charge_increase
             description: "Increase in monthly charge resulting from a package change."
+
           - name: monthly_charge_decrease
             description: "Decrease in monthly charge resulting from a package change."
+
           # Add-on purchase fields
           - name: add_on_name
             description: "Name of the add-on purchased by the customer."
+
           - name: add_on_cost
             description: "Cost of the purchased add-on."
+
           # Contract renewal fields
           - name: renewal_discount
             description: "Discount applied to the customer during contract renewal."
+
           # Customer support fields
           - name: case_type
             description: "Type of customer support case."
+
           - name: resolved_first_contact
             description: "Indicates whether the support case was resolved during the first contact."
+
           # Customer churn fields
           - name: churn_reason
             description: "Reason provided for the customer's churn."
+
 
       - name: billing_events
         description: "Raw billing events data ingested from Kafka into the silver layer."
@@ -74,6 +93,7 @@ sources:
             description: "Amount associated with the billing event."
           - name: currency
             description: "Currency in which the billing event amount is denominated."
+
 
       - name: network_events
         description: "Raw network events data ingested from Kafka into the silver layer."

@@ -1,0 +1,67 @@
+version: 2
+
+models:
+  - name: stg_customer_events
+    description: >
+      Staging model for customer events. Standardises data types
+      and prepares Silver customer event data for downstream transformations.
+
+    columns:
+      - name: event_id
+        description: "Unique identifier for each customer event."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: customer_id
+        description: "Unique identifier of the customer associated with the event."
+        data_tests:
+          - not_null
+
+      - name: event_type
+        description: "Type of customer event, such as signup, upgrade, downgrade, renewal or churn."
+
+      - name: event_timestamp
+        description: "Timestamp indicating when the customer event occurred."
+
+      - name: channel
+        description: "Channel through which the customer event was generated."
+
+      - name: package_name
+        description: "Name of the package selected by the customer during signup."
+
+      - name: monthly_charge
+        description: "Monthly recurring charge associated with the customer's package."
+
+      - name: contract_length_months
+        description: "Duration of the customer's contract in months."
+
+      - name: old_package
+        description: "Previous package before an upgrade or downgrade."
+
+      - name: new_package
+        description: "New package selected by the customer."
+
+      - name: monthly_charge_increase
+        description: "Increase in monthly charge resulting from a package change."
+
+      - name: monthly_charge_decrease
+        description: "Decrease in monthly charge resulting from a package change."
+
+      - name: add_on_name
+        description: "Name of the add-on purchased by the customer."
+
+      - name: add_on_cost
+        description: "Cost of the purchased add-on."
+
+      - name: renewal_discount
+        description: "Discount applied to the customer during contract renewal."
+
+      - name: case_type
+        description: "Type of customer support case."
+
+      - name: resolved_first_contact
+        description: "Indicates whether the support case was resolved during the first contact."
+
+      - name: churn_reason
+        description: "Reason provided for the customer's churn."
