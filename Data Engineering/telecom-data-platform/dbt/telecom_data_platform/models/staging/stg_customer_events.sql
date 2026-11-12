@@ -25,5 +25,5 @@ SELECT
     CAST(case_type AS VARCHAR) AS case_type,
     CAST(resolved_first_contact AS BOOLEAN) AS resolved_first_contact,
     CAST(churn_reason AS VARCHAR) AS churn_reason
-FROM 
+FROM
     {{ source('silver', 'customer_events') }}
