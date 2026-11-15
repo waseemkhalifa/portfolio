@@ -2,7 +2,7 @@
     config(
         materialized='view',
         schema='mart',
-        tags=['silver', 'mart', 'customer_events']
+        tags=['silver', 'mart', 'customer']
     )
 }}
 

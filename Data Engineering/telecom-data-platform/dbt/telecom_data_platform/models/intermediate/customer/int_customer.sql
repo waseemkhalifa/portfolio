@@ -2,7 +2,7 @@
     config(
         materialized='incremental',
         schema='intermediate',
-        tags=['silver', 'intermediate', 'customer_events']
+        tags=['silver', 'intermediate', 'customer']
     )
 }}
 

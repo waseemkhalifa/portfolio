@@ -2,7 +2,7 @@
     config(
         materialized='view',
         schema='staging',
-        tags=['silver', 'staging', 'customer_events']
+        tags=['silver', 'staging', 'customer']
     )
 }}
 
@@ -27,4 +27,4 @@ SELECT
     CAST(resolved_first_contact AS BOOLEAN) AS resolved_first_contact,
     CAST(churn_reason AS VARCHAR) AS churn_reason
 FROM
-    {{ source('silver', 'customer_events') }}
+    {{ source('silver', 'customer') }}
