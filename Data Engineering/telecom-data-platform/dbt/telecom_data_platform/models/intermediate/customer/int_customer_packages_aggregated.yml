@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: int_customer_packages_aggregated
+    description: >
+      Aggregates customer package changes by customer and event date,
+      calculating change flags and the net monthly charge change.
+    columns:
+      - name: customer_id
+        description: "Identifier of the customer associated with the package changes."
+        data_tests:
+          - not_null
+
+      - name: event_date
+        description: "Date on which the package changes occurred."
+        data_tests:
+          - not_null
+
+      - name: is_package
+        description: "Flag indicating that the customer changed a package on this date."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [1]
+
+      - name: is_package_upgrade
+        description: "Flag indicating at least one package upgrade on this date."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: is_package_downgrade
+        description: "Flag indicating at least one package downgrade on this date."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: package_monthly_charge_change
+        description: "Net monthly charge change from package events on this date."
+
+      - name: package_old
+        description: "Package held before the latest package change on this date."
+
+      - name: package_new
+        description: "Package selected in the latest package change on this date."

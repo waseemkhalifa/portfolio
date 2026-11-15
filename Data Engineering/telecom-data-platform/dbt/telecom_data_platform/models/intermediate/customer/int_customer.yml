@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: int_customer
+    description: >
+      Combines customer add-on and package activity into one record per
+      customer and event date, with event-type flags and detail structs.
+    columns:
+      - name: customer_id
+        description: "Identifier of the customer associated with the activity."
+        data_tests:
+          - not_null
+
+      - name: event_date
+        description: "Date on which the customer activity occurred."
+        data_tests:
+          - not_null
+
+      - name: customer_event_type_0
+        description: "Struct containing the add-on and package activity flags."
+
+      - name: customer_event_type_1
+        description: "Struct containing add-on type and package change flags."
+
+      - name: add_on_details
+        description: "Struct containing the total add-on cost for the customer and date."
+
+      - name: package_details
+        description: "Struct containing package transition details for the customer and date."

@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: int_customer_packages
+    description: >
+      Selects customer package upgrade and downgrade events, normalizing the
+      previous and new package fields and calculating the monthly charge change.
+    columns:
+      - name: customer_id
+        description: "Identifier of the customer who changed packages."
+        data_tests:
+          - not_null
+
+      - name: event_id
+        description: "Unique identifier of the package change event."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: event_date
+        description: "Date on which the package change occurred."
+        data_tests:
+          - not_null
+
+      - name: event_timestamp
+        description: "Timestamp at which the package change occurred."
+
+      - name: channel
+        description: "Channel through which the package change was made."
+
+      - name: package_old
+        description: "Package held before the package change."
+
+      - name: package_new
+        description: "Package selected in the package change."
+
+      - name: is_package_upgrade
+        description: "Flag indicating that the event is a package upgrade."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: is_package_downgrade
+        description: "Flag indicating that the event is a package downgrade."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: package_monthly_charge_change
+        description: "Signed change in monthly charge resulting from the package event."

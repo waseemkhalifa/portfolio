@@ -1,0 +1,63 @@
+version: 2
+
+models:
+  - name: int_customer_add_ons
+    description: >
+      Selects customer add-on purchase events and derives indicator columns
+      for the supported add-on types.
+    columns:
+      - name: customer_id
+        description: "Identifier of the customer who purchased the add-on."
+        data_tests:
+          - not_null
+
+      - name: event_id
+        description: "Unique identifier of the add-on purchase event."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: event_date
+        description: "Date on which the add-on purchase occurred."
+        data_tests:
+          - not_null
+
+      - name: event_timestamp
+        description: "Timestamp at which the add-on purchase occurred."
+
+      - name: channel
+        description: "Channel through which the add-on purchase was made."
+
+      - name: add_on_name
+        description: "Name of the purchased add-on."
+
+      - name: add_on_cost
+        description: "Cost of the purchased add-on."
+
+      - name: is_add_on__international_calls
+        description: "Flag indicating whether the add-on purchase was for international calls."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: is_add_on__roaming_pass
+        description: "Flag indicating whether the add-on purchase was for a roaming pass."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: is_add_on__extra_data
+        description: "Flag indicating whether the add-on purchase was for extra data."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: is_add_on__netflix_bundle
+        description: "Flag indicating whether the add-on purchase was for a Netflix bundle."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]

@@ -1,0 +1,55 @@
+version: 2
+
+models:
+  - name: int_customer_add_ons_aggregated
+    description: >
+      Aggregates customer add-on purchases by customer and event date,
+      producing add-on type flags and a total add-on cost.
+    columns:
+      - name: customer_id
+        description: "Identifier of the customer associated with the purchases."
+        data_tests:
+          - not_null
+
+      - name: event_date
+        description: "Date on which the purchases occurred."
+        data_tests:
+          - not_null
+
+      - name: is_add_on
+        description: "Flag indicating that the customer made an add-on purchase on this date."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [1]
+
+      - name: is_add_on__international_calls
+        description: "Flag indicating at least one international calls purchase."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: is_add_on__roaming_pass
+        description: "Flag indicating at least one roaming pass purchase."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: is_add_on__extra_data
+        description: "Flag indicating at least one extra data purchase."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: is_add_on__netflix_bundle
+        description: "Flag indicating at least one Netflix bundle purchase."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: add_on_cost
+        description: "Total cost of add-on purchases for the customer and date."
