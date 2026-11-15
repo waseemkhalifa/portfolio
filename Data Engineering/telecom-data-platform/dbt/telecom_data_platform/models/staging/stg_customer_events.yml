@@ -20,6 +20,9 @@ models:
 
       - name: event_type
         description: "Type of customer event, such as signup, upgrade, downgrade, renewal or churn."
+      
+      - name: event_date
+        description: "Date indicating when the customer event occurred."
 
       - name: event_timestamp
         description: "Timestamp indicating when the customer event occurred."

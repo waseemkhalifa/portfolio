@@ -9,6 +9,7 @@
 SELECT
     customer_id,
     event_id,
+    event_date,
     event_timestamp,
     channel,
     add_on_name,

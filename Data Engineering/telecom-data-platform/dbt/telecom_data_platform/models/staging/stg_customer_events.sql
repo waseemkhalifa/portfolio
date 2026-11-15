@@ -10,6 +10,7 @@ SELECT
     CAST(event_id AS VARCHAR) AS event_id,
     CAST(customer_id AS VARCHAR) AS customer_id,
     CAST(event_type AS VARCHAR) AS event_type,
+    DATE(event_timestamp) AS event_date,
     CAST(event_timestamp AS TIMESTAMP) AS event_timestamp,
     CAST(channel AS VARCHAR) AS channel,
     CAST(package_name AS VARCHAR) AS package_name,
