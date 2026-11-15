@@ -14,10 +14,10 @@ SELECT
     add_on_name,
     add_on_cost,
 
-    IF(LOWER(event_type) = 'international calls', 1, 0) AS is_international_calls,
-    IF(LOWER(event_type) = 'roaming pass', 1, 0) AS is_roaming_pass,
-    IF(LOWER(event_type) = 'extra data', 1, 0) AS is_extra_data,
-    IF(LOWER(event_type) = 'netflix bundle', 1, 0) AS is_netflix_bundle
+    IF(LOWER(add_on_name) = 'international calls', 1, 0) AS is_add_on__international_calls,
+    IF(LOWER(add_on_name) = 'roaming pass', 1, 0) AS is_add_on__roaming_pass,
+    IF(LOWER(add_on_name) = 'extra data', 1, 0) AS is_add_on__extra_data,
+    IF(LOWER(add_on_name) = 'netflix bundle', 1, 0) AS is_add_on__netflix_bundle
 
 FROM
     {{ ref('stg_customer_events') }}
