@@ -22,8 +22,6 @@ SELECT
 
 FROM
     {{ ref('stg_customer_events') }}
-WHERE event_type = 'add_on_purchase'
-    
-    {% if is_incremental() %}
-    AND event_timestamp > (SELECT MAX(event_timestamp) FROM {{ this }})
-    {% endif %}
+WHERE
+    event_type = 'add_on_purchase'
+    AND {{ incremental_date_filter('event_date') }}

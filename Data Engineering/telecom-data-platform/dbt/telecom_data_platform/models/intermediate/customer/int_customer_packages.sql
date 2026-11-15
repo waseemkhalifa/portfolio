@@ -26,8 +26,6 @@ SELECT
 
 FROM
     {{ ref('stg_customer_events') }}
-WHERE event_type IN ('package_upgrade', 'package_downgrade')
-    
-    {% if is_incremental() %}
-    AND event_timestamp > (SELECT MAX(event_timestamp) FROM {{ this }})
-    {% endif %}
+WHERE
+    event_type IN ('package_upgrade', 'package_downgrade')
+    AND {{ incremental_date_filter('event_date') }}
