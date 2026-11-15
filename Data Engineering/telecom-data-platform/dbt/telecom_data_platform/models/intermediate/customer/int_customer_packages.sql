@@ -28,4 +28,4 @@ FROM
     {{ ref('stg_customer') }}
 WHERE
     event_type IN ('package_upgrade', 'package_downgrade')
-    AND {{ incremental_date_filter('event_date') }}
+    {% if is_incremental() %} AND {{ incremental_date_filter('event_date') }} {% endif %}

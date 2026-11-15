@@ -24,4 +24,4 @@ FROM
     {{ ref('stg_customer') }}
 WHERE
     event_type = 'add_on_purchase'
-    AND {{ incremental_date_filter('event_date') }}
+    {% if is_incremental() %} AND {{ incremental_date_filter('event_date') }} {% endif %}

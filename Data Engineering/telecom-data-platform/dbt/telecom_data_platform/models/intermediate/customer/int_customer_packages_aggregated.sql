@@ -12,8 +12,12 @@ WITH latest_package AS (
         package_new
     FROM 
         {{ ref('int_customer_packages') }}
+    
+    {% if is_incremental() %}
     WHERE 
         {{ incremental_date_filter('event_date') }}
+    {% endif %}
+
     QUALIFY
         -- For each customer take the latest package event on the day
         ROW_NUMBER() OVER (PARTITION BY customer_id, event_date ORDER BY event_date DESC) = 1
@@ -29,8 +33,12 @@ packages_aggregated AS (
         SUM(package_monthly_charge_change) AS package_monthly_charge_change
     FROM 
         {{ ref('int_customer_packages') }}
+    
+    {% if is_incremental() %}
     WHERE 
         {{ incremental_date_filter('event_date') }}
+    {% endif %}
+
     GROUP BY 
         customer_id, event_date
 )
@@ -38,10 +46,11 @@ packages_aggregated AS (
 SELECT
     packages_aggregated.customer_id,
     packages_aggregated.event_date,
-
+    1 AS is_package,
     packages_aggregated.is_package_upgrade,
     packages_aggregated.is_package_downgrade,
     packages_aggregated.package_monthly_charge_change,
+
     latest_package.package_old,
     latest_package.package_new
 FROM
