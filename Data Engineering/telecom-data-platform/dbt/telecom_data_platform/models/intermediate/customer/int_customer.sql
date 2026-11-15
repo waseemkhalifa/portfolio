@@ -47,9 +47,11 @@ SELECT
     ) AS package_details
 FROM
     customers
-LEFT JOIN {{ ref('int_customer_add_ons_aggregated') }} AS add_ons
+LEFT JOIN
+    {{ ref('int_customer_add_ons_aggregated') }} AS add_ons
     ON customers.customer_id = add_ons.customer_id
     AND customers.event_date = add_ons.event_date
-LEFT JOIN {{ ref('int_customer_packages_aggregated') }} AS packages
+LEFT JOIN
+    {{ ref('int_customer_packages_aggregated') }} AS packages
     ON customers.customer_id = packages.customer_id
     AND customers.event_date = packages.event_date
