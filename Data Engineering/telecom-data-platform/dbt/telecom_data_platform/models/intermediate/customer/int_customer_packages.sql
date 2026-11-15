@@ -25,7 +25,7 @@ SELECT
     END AS package_monthly_charge_change
 
 FROM
-    {{ ref('stg_customer_events') }}
+    {{ ref('stg_customer') }}
 WHERE
     event_type IN ('package_upgrade', 'package_downgrade')
     AND {{ incremental_date_filter('event_date') }}

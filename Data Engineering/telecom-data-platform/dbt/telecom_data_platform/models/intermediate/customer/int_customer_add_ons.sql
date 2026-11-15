@@ -21,7 +21,7 @@ SELECT
     IF(LOWER(add_on_name) = 'netflix bundle', 1, 0) AS is_add_on__netflix_bundle
 
 FROM
-    {{ ref('stg_customer_events') }}
+    {{ ref('stg_customer') }}
 WHERE
     event_type = 'add_on_purchase'
     AND {{ incremental_date_filter('event_date') }}

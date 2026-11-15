@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: stg_customer_events
+  - name: stg_customer
     description: >
       Staging model for customer events. Standardises data types
       and prepares Silver customer event data for downstream transformations.
