@@ -1,0 +1,9 @@
+telecom_data_platform:
+  target: ci
+
+  outputs:
+    ci:
+      type: duckdb
+      path: "{{ env_var('CI_DUCKDB_PATH') }}"
+      schema: main
+      threads: 4

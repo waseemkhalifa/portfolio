@@ -38,3 +38,19 @@ Runtime Error
 [0m10:49:06.896539 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x755b9deeaa50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x755b9b60d250>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x755b9672f7a0>]}
 [0m10:49:06.896885 [debug] [MainThread]: Flushing usage events
 [0m10:49:07.559618 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m08:29:23.621466 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x756f257a4d70>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x756f237399a0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x756f232af3b0>]}
+
+
+============================== 08:29:23.623897 | d4d101e7-afd6-4fd8-906b-432c7a285fda ==============================
+[0m08:29:23.623897 [info ] [MainThread]: Running with dbt=1.12.6
+[0m08:29:23.624374 [debug] [MainThread]: running dbt with arguments {'hints_enabled': 'True', 'static_parser': 'True', 'write_json': 'True', 'use_colors': 'True', 'no_print': 'None', 'debug': 'False', 'log_cache_events': 'False', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'warn_error': 'None', 'quiet': 'False', 'use_experimental_parser': 'False', 'profiles_dir': '/home/waseem/.dbt', 'fail_fast': 'False', 'target_path': 'None', 'cache_selected_only': 'False', 'version_check': 'True', 'invocation_command': 'dbt build --target ci', 'partial_parse': 'True', 'introspect': 'True', 'log_path': 'logs', 'send_anonymous_usage_stats': 'True', 'printer_width': '80', 'empty': 'False', 'maximum_seed_size_mib': '1', 'log_format': 'default', 'indirect_selection': 'eager'}
+[0m08:29:23.624806 [error] [MainThread]: [[31mERROR[0m]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/telecom-data-platform/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m08:29:23.625485 [debug] [MainThread]: Resource report: {"command_name": "build", "command_success": false, "command_wall_clock_time": 0.0748399, "process_in_blocks": "0", "process_kernel_time": 0.088937, "process_mem_max_rss": "109468", "process_out_blocks": "16", "process_user_time": 1.213147}
+[0m08:29:23.625859 [debug] [MainThread]: Command `dbt build` failed at 08:29:23.625785 after 0.08 seconds
+[0m08:29:23.626150 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x756f22766660>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x756f2279d8b0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x756f233e9400>]}
+[0m08:29:23.626449 [debug] [MainThread]: Flushing usage events
+[0m08:29:24.452332 [debug] [MainThread]: An error was encountered while trying to flush usage events
