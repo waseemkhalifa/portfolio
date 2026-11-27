@@ -1,6 +1,13 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, from_json
-from pyspark.sql.types import *
+from pyspark.sql.types import (
+    BooleanType,
+    DoubleType,
+    IntegerType,
+    StringType,
+    StructField,
+    StructType,
+)
 
 # ==================================================
 # Create Spark Session
