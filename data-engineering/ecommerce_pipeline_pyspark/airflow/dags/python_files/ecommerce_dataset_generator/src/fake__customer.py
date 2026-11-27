@@ -1,6 +1,6 @@
 ## ------------------------ Imports ------------------------ ##
 import sys
-sys.path.append("/home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/ecommerce_pipeline_pyspark/airflow/dags/python_files/ecommerce_dataset_generator/src")
+sys.path.append("/home/waseem/Documents/Self-Development/git_repos/portfolio/data-engineering/ecommerce_pipeline_pyspark/airflow/dags/python_files/ecommerce_dataset_generator/src")
 
 import random
 

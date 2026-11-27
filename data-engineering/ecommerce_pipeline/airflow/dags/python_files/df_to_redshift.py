@@ -5,7 +5,7 @@ import awswrangler as wr
 import boto3
 
 import sys
-sys.path.append("/home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/ecommerce_pipeline/airflow/dags/python_files")
+sys.path.append("/home/waseem/Documents/Self-Development/git_repos/portfolio/data-engineering/ecommerce_pipeline/airflow/dags/python_files")
 import aws_credentials
 
 import transactions_json_to_df as j2f

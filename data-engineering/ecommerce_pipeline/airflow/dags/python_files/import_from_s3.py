@@ -1,6 +1,6 @@
 ## ------------ Imports ------------ ##
 import sys
-sys.path.append("/home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/ecommerce_pipeline/airflow/dags/python_files")
+sys.path.append("/home/waseem/Documents/Self-Development/git_repos/portfolio/data-engineering/ecommerce_pipeline/airflow/dags/python_files")
 import aws_credentials
 import boto3
 import os

@@ -6,12 +6,12 @@
 [0m10:49:06.772597 [debug] [MainThread]: running dbt with arguments {'no_print': 'None', 'log_cache_events': 'False', 'cache_selected_only': 'False', 'write_json': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'profiles_dir': '/home/waseem/.dbt', 'debug': 'False', 'warn_error': 'None', 'introspect': 'True', 'partial_parse': 'True', 'use_experimental_parser': 'False', 'static_parser': 'True', 'log_path': 'logs', 'send_anonymous_usage_stats': 'True', 'use_colors': 'True', 'quiet': 'False', 'printer_width': '80', 'hints_enabled': 'True', 'fail_fast': 'False', 'maximum_seed_size_mib': '1', 'target_path': 'None', 'invocation_command': 'dbt debug', 'indirect_selection': 'eager', 'log_format': 'default', 'version_check': 'True', 'empty': 'None'}
 [0m10:49:06.779184 [info ] [MainThread]: dbt version: 1.12.6
 [0m10:49:06.779639 [info ] [MainThread]: python version: 3.12.3
-[0m10:49:06.779948 [info ] [MainThread]: python path: /home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/telecom-data-platform/.venv/bin/python3
+[0m10:49:06.779948 [info ] [MainThread]: python path: /home/waseem/Documents/Self-Development/git_repos/portfolio/data-engineering/telecom-data-platform/.venv/bin/python3
 [0m10:49:06.780211 [info ] [MainThread]: os info: Linux-7.0.11-76070011-generic-x86_64-with-glibc2.39
 [0m10:49:06.783918 [info ] [MainThread]: Error importing adapter: No module named 'dbt.adapters.redshift'
 [0m10:49:06.889777 [info ] [MainThread]: Using profiles dir at /home/waseem/.dbt
 [0m10:49:06.890227 [info ] [MainThread]: Using profiles.yml file at /home/waseem/.dbt/profiles.yml
-[0m10:49:06.890586 [info ] [MainThread]: Using dbt_project.yml file at /home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/telecom-data-platform/dbt_project.yml
+[0m10:49:06.890586 [info ] [MainThread]: Using dbt_project.yml file at /home/waseem/Documents/Self-Development/git_repos/portfolio/data-engineering/telecom-data-platform/dbt_project.yml
 [0m10:49:06.890939 [info ] [MainThread]: Configuration:
 [0m10:49:06.891214 [info ] [MainThread]:   profiles.yml file [[31mERROR invalid[0m]
 [0m10:49:06.891454 [info ] [MainThread]:   dbt_project.yml file [[31mERROR not found[0m]
@@ -31,7 +31,7 @@ Runtime Error
 
 
 [0m10:49:06.895065 [info ] [MainThread]: Project loading failed for the following reason:
- project path </home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/telecom-data-platform/dbt_project.yml> not found
+ project path </home/waseem/Documents/Self-Development/git_repos/portfolio/data-engineering/telecom-data-platform/dbt_project.yml> not found
 
 [0m10:49:06.895824 [debug] [MainThread]: Resource report: {"command_name": "debug", "command_success": false, "command_wall_clock_time": 0.19069253, "process_in_blocks": "0", "process_kernel_time": 0.093034, "process_mem_max_rss": "124588", "process_out_blocks": "16", "process_user_time": 1.352504}
 [0m10:49:06.896228 [debug] [MainThread]: Command `dbt debug` failed at 10:49:06.896149 after 0.19 seconds
@@ -46,7 +46,7 @@ Runtime Error
 [0m08:29:23.624374 [debug] [MainThread]: running dbt with arguments {'hints_enabled': 'True', 'static_parser': 'True', 'write_json': 'True', 'use_colors': 'True', 'no_print': 'None', 'debug': 'False', 'log_cache_events': 'False', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'warn_error': 'None', 'quiet': 'False', 'use_experimental_parser': 'False', 'profiles_dir': '/home/waseem/.dbt', 'fail_fast': 'False', 'target_path': 'None', 'cache_selected_only': 'False', 'version_check': 'True', 'invocation_command': 'dbt build --target ci', 'partial_parse': 'True', 'introspect': 'True', 'log_path': 'logs', 'send_anonymous_usage_stats': 'True', 'printer_width': '80', 'empty': 'False', 'maximum_seed_size_mib': '1', 'log_format': 'default', 'indirect_selection': 'eager'}
 [0m08:29:23.624806 [error] [MainThread]: [[31mERROR[0m]: Encountered an error:
 Runtime Error
-  No dbt_project.yml found at expected path /home/waseem/Documents/Self-Development/git_repos/portfolio/Data Engineering/telecom-data-platform/dbt_project.yml
+  No dbt_project.yml found at expected path /home/waseem/Documents/Self-Development/git_repos/portfolio/data-engineering/telecom-data-platform/dbt_project.yml
   Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
   
 [0m08:29:23.625485 [debug] [MainThread]: Resource report: {"command_name": "build", "command_success": false, "command_wall_clock_time": 0.0748399, "process_in_blocks": "0", "process_kernel_time": 0.088937, "process_mem_max_rss": "109468", "process_out_blocks": "16", "process_user_time": 1.213147}
