@@ -23,6 +23,7 @@ jobs:
       PROJECT_ROOT: ${{ github.workspace }}/data-engineering/telecom-data-platform
       DBT_PROFILES_DIR: ${{ github.workspace }}/data-engineering/telecom-data-platform/ci
       CI_DUCKDB_PATH: ${{ github.workspace }}/data-engineering/telecom-data-platform/ci.duckdb
+      SILVER_DATA_PATH: ${{ github.workspace }}/data-engineering/telecom-data-platform/data/ci/silver
 
     steps:
       - name: Check out repository
