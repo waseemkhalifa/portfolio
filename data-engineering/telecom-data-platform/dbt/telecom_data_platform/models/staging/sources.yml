@@ -5,7 +5,7 @@ sources:
   - name: silver
     description: "Raw telecom events data ingested from Kafka into the silver layer."
     meta:
-      external_location: "/home/waseem/Documents/Self-Development/git_repos/portfolio/data-engineering/telecom-data-platform/data/silver/{name}/*.parquet"
+      external_location: "{{ env_var('SILVER_DATA_PATH') }}/{name}/*.parquet"
     tables:
 
       - name: customer_events
