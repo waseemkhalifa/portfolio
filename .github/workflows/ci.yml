@@ -1,0 +1,97 @@
+name: Telecom Data Platform CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality-and-dbt:
+    name: Python quality and dbt build
+    runs-on: ubuntu-latest
+
+    env:
+      DBT_PROFILES_DIR: ${{ github.workspace }}/ci
+      CI_DUCKDB_PATH: ${{ github.workspace }}/ci.duckdb
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install CI dependencies
+        run: pip install -r requirements-ci.txt
+
+      - name: Show installed versions
+        run: |
+          python --version
+          dbt --version
+          python -c "import duckdb; print('DuckDB:', duckdb.__version__)"
+
+      - name: Check Python syntax
+        run: |
+          python -m compileall producer spark scripts
+
+      - name: Run Ruff checks
+        run: |
+          ruff check producer spark scripts
+
+      - name: Create CI Silver data and DuckDB views
+        run: |
+          python scripts/create_ci_environment.py
+
+      - name: Validate dbt configuration
+        working-directory: dbt/telecom_data_platform
+        run: |
+          dbt debug --target ci
+
+      - name: Install dbt packages
+        working-directory: dbt/telecom_data_platform
+        run: |
+          if [ -f packages.yml ]; then
+            dbt deps --target ci
+          else
+            echo "No packages.yml file found; skipping dbt deps."
+          fi
+
+      - name: Parse dbt project
+        working-directory: dbt/telecom_data_platform
+        run: |
+          dbt parse --target ci
+
+      - name: Build and test dbt project
+        working-directory: dbt/telecom_data_platform
+        run: |
+          dbt build --target ci
+
+      - name: Generate dbt documentation
+        working-directory: dbt/telecom_data_platform
+        run: |
+          dbt docs generate --target ci
+
+      - name: Upload dbt artefacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt-target
+          path: dbt/telecom_data_platform/target/
+          if-no-files-found: warn
+          retention-days: 7
