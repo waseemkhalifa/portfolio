@@ -3,7 +3,6 @@ from pathlib import Path
 
 import duckdb
 
-
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 CI_DATA_ROOT = PROJECT_ROOT / "data" / "ci" / "silver"
