@@ -56,7 +56,7 @@ jobs:
       - name: Run Ruff checks
         working-directory: data-engineering/telecom-data-platform
         run: |
-          ruff check producer spark scripts
+          ruff check producer spark scripts --diff
 
       - name: Create CI Silver data and DuckDB views
         working-directory: data-engineering/telecom-data-platform
