@@ -2,7 +2,6 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, from_json
 from pyspark.sql.types import *
 
-
 # ==================================================
 # Create Spark Session
 # ==================================================
@@ -18,7 +17,6 @@ spark = (
 )
 
 spark.sparkContext.setLogLevel("WARN")
-
 
 # ==================================================
 # Customer Event Schema
@@ -57,7 +55,6 @@ customer_schema = StructType([
     # Customer churn fields
     StructField("churn_reason", StringType(), True)
 ])
-
 
 # ==================================================
 # Customer Stream
@@ -98,7 +95,6 @@ customer_query = (
     .outputMode("append")
     .start()
 )
-
 
 # ==================================================
 # Keep Streams Running
