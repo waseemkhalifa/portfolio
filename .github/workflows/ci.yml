@@ -54,6 +54,7 @@ jobs:
           python -m compileall producer spark scripts
 
       - name: Run Ruff checks
+        working-directory: data-engineering/telecom-data-platform
         run: |
           ruff check producer spark scripts
 
